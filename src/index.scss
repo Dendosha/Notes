@@ -1,3 +1,6 @@
+@use './styles/reset';
+@use './styles/fonts';
+
 :root {
 	--bg-color: #e2e2e2;
 	--element-color: #ffffff;
@@ -26,6 +29,10 @@
 }
 
 body {
+	font-family: 'Inter', sans-serif;
+	font-weight: 400;
+	font-style: normal;
+
 	background-color: var(--bg-color);
 	color: var(--text-color);
 }

@@ -1,0 +1,17 @@
+@use './_functions.scss' as *;
+
+%font-small {
+	font-size: rem(24);
+}
+
+%font-medium {
+	font-size: rem(32);
+}
+
+%font-big {
+	font-size: rem(48);
+}
+
+%font-huge {
+	font-size: rem(80);
+}
