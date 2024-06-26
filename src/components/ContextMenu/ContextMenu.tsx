@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import TextButton from '../TextButton/TextButton';
 import styles from './ContextMenu.module.scss';
 import { ContextMenuProps } from './ContextMenu.props';
 
@@ -7,12 +8,12 @@ function ContextMenu({ items, className, ...props }: ContextMenuProps) {
 		<ul {...props} className={cn(styles['context-menu'], className)}>
 			{items.map(item => (
 				<li className={styles['context-menu__item']} key={item.name}>
-					<button
+					<TextButton
+						action={item.action}
 						className={styles['context-menu__item-button']}
-						onClick={item.action}
 					>
 						{item.name}
-					</button>
+					</TextButton>
 				</li>
 			))}
 		</ul>
