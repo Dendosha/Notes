@@ -17,6 +17,8 @@
 	--primary-active-color: #ffcc40;
 	--primary-disabled-color: #ffeaaf;
 
+	--transition-duration: 0.2s;
+
 	@media (prefers-color-scheme: dark) {
 		--bg-color: #000000;
 		--element-color: #242424;
