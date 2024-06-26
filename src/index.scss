@@ -4,6 +4,7 @@
 :root {
 	--bg-color: #e2e2e2;
 	--element-color: #ffffff;
+	--context-menu-bg-color: #acacac;
 	--element-hover-color: #c1c1c1;
 	--element-active-color: #8f8f8f;
 	--element-disabled-color: #a6a6a6;
@@ -19,6 +20,7 @@
 	@media (prefers-color-scheme: dark) {
 		--bg-color: #000000;
 		--element-color: #242424;
+		--context-menu-bg-color: #b1b1b1;
 		--element-hover-color: #4b4b4b;
 		--element-active-color: #747474;
 		--element-disabled-color: #a6a6a6;

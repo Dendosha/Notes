@@ -15,3 +15,34 @@
 %font-huge {
 	font-size: rem(80);
 }
+
+%button {
+	cursor: pointer;
+
+	border-radius: rem(10);
+	border: none;
+
+	padding: rem(10) rem(15);
+	background-color: var(--element-color);
+
+	color: var(--text-color);
+
+	transition: background-color 0.2s;
+
+	@media (hover: hover) {
+		&:hover {
+			background-color: var(--element-hover-color);
+		}
+	}
+
+	&:active {
+		background-color: var(--element-active-color);
+	}
+
+	&:disabled {
+		cursor: auto;
+
+		background-color: var(--element-disabled-color);
+		color: var(--text-disabled-color);
+	}
+}
