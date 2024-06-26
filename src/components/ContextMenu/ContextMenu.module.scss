@@ -1,0 +1,28 @@
+@use '../../styles/functions' as *;
+@use '../../styles/general' as *;
+
+.context-menu {
+	max-width: rem(200);
+
+	display: grid;
+	gap: rem(5);
+
+	border-radius: rem(15);
+
+	padding: rem(5);
+
+	background-color: var(--context-menu-bg-color);
+
+	// .context-menu__item
+
+	&__item {
+	}
+
+	// .context-menu__item-button
+
+	&__item-button {
+		text-align: left;
+		width: 100%;
+		@extend %button;
+	}
+}
