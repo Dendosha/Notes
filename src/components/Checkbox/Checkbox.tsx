@@ -9,21 +9,21 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
 ) {
 	return (
 		<>
-			<input
-				id={id}
-				{...props}
-				ref={ref}
-				type='checkbox'
-				className={cn('visually-hidden', styles['native-checkbox'])}
-			/>
-
 			<label
-				htmlFor={id}
 				className={cn(styles['checkbox'], className, {
 					[styles['checkbox_square']]: appearance === 'square',
 					[styles['checkbox_circle']]: appearance === 'circle'
 				})}
-			></label>
+			>
+				<input
+					id={id}
+					{...props}
+					ref={ref}
+					type='checkbox'
+					className={cn('visually-hidden', styles['native-checkbox'])}
+				/>
+				<span className={styles['custom-checkbox']}></span>
+			</label>
 		</>
 	);
 });

@@ -1,22 +1,37 @@
 @use '../../styles/functions' as *;
 
+.checkbox {
+	&_square .custom-checkbox {
+		border-radius: rem(15);
+
+		&::before {
+			border-radius: rem(5);
+		}
+	}
+
+	&_circle .custom-checkbox,
+	&_circle .custom-checkbox::before {
+		border-radius: 50%;
+	}
+}
+
 .native-checkbox {
 	appearance: none;
 
-	&:checked + label::before {
+	&:checked + .custom-checkbox::before {
 		transform: scale(1);
 	}
 
-	&:focus-visible + label {
+	&:focus-visible + .custom-checkbox {
 		background-color: var(--primary-hover-color);
 	}
 
-	&:active + label {
+	&:active + .custom-checkbox {
 		background-color: var(--primary-active-color);
 	}
 }
 
-.checkbox {
+.custom-checkbox {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -50,18 +65,5 @@
 
 	&:active {
 		background-color: var(--primary-active-color);
-	}
-
-	&_square {
-		border-radius: rem(15);
-
-		&::before {
-			border-radius: rem(5);
-		}
-	}
-
-	&_circle,
-	&_circle::before {
-		border-radius: 50%;
 	}
 }
