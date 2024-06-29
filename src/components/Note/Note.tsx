@@ -7,6 +7,7 @@ function Note({
 	children,
 	date,
 	pinned = false,
+	isSelection = false,
 	className,
 	...props
 }: NoteProps) {
@@ -17,10 +18,12 @@ function Note({
 			{pinned && (
 				<img src='/public/icons/pin.svg' className={styles['note__pin']}></img>
 			)}
-			<Checkbox
-				className={styles['note__select-checkbox']}
-				appearance='circle'
-			/>
+			{isSelection && (
+				<Checkbox
+					className={styles['note__select-checkbox']}
+					appearance='circle'
+				/>
+			)}
 		</div>
 	);
 }
