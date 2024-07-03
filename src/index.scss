@@ -1,6 +1,7 @@
 @use './styles/reset';
 @use './styles/general';
 @use './styles/fonts';
+@use './styles/antd-select';
 
 :root {
 	--bg-color: #e2e2e2;

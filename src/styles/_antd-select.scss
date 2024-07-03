@@ -1,0 +1,123 @@
+@use './functions' as *;
+
+.ant-select {
+	display: flex !important;
+	align-items: center !important;
+	width: 100%;
+	height: auto;
+
+	&-open {
+		& .ant-select-arrow svg {
+			transform: rotate(180deg);
+		}
+
+		& .ant-select-selection-item {
+			color: var(--text-color) !important;
+		}
+	}
+
+	&-focused {
+		& .ant-select-selector {
+			background-color: var(--element-active-color) !important;
+		}
+	}
+
+	// .ant-select-dropdown
+
+	&-dropdown {
+		border-radius: rem(15) !important;
+		padding: 0 !important;
+
+		background-color: var(--element-color) !important;
+
+		box-shadow: 0 0 rem(10) 0 var(--shadow-color) !important;
+	}
+
+	// .ant-select-selector
+
+	&-selector {
+		font-family: 'Inter', sans-serif !important;
+
+		border: rem(4) solid var(--text-color) !important;
+		border-radius: rem(15) !important;
+		padding: rem(24) rem(30) !important;
+
+		background-color: var(--element-color) !important;
+
+		transition: background-color var(--transition-duration) !important;
+
+		@media (hover: hover) {
+			&:hover {
+				background-color: var(--element-hover-color) !important;
+
+				& + .ant-select-arrow svg {
+					stroke: var(--primary-hover-color);
+				}
+			}
+		}
+	}
+
+	// .ant-select-selection-item
+
+	&-selection-item {
+		font-family: 'Inter', sans-serif !important;
+
+		display: block !important;
+
+		font-size: rem(48) !important;
+		line-height: rem(48) !important;
+		color: var(--text-color) !important;
+	}
+
+	// .ant-select-arrow
+
+	&-arrow {
+		top: unset !important;
+
+		width: rem(65) !important;
+		height: rem(50) !important;
+		margin-top: 0 !important;
+
+		& svg {
+			transform-origin: center !important;
+			transition: transform var(--transition-duration),
+				fill var(--transition-duration) !important;
+		}
+	}
+
+	// .ant-select-item-option
+
+	&-item-option {
+		font-family: 'Inter', sans-serif !important;
+
+		font-size: rem(48) !important;
+		border-radius: 0 !important;
+		padding: rem(24) rem(30) !important;
+		border-left: rem(4) solid var(--element-color) !important;
+
+		color: var(--text-color) !important;
+
+		background-color: var(--element-color) !important;
+
+		transition: background-color var(--transition-duration),
+			border-left var(--transition-duration) !important;
+
+		@media (hover: hover) {
+			&:hover {
+				border-left: rem(4) solid var(--element-hover-color) !important;
+
+				background-color: var(--element-hover-color) !important;
+			}
+		}
+
+		// .ant-select-item-option-selected
+		// .ant-select-item-option-active
+
+		&-selected,
+		&-active {
+			font-weight: 400 !important;
+			border-left: rem(4) solid var(--element-active-color) !important;
+			background-color: var(--element-active-color) !important;
+		}
+	}
+}
