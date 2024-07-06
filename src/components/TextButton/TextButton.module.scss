@@ -3,4 +3,5 @@
 
 .text-button {
 	@extend %button;
+	@extend %font-medium;
 }
