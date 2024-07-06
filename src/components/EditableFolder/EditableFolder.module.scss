@@ -1,0 +1,43 @@
+@use '../../styles/functions' as *;
+@use '../../styles/general' as *;
+
+.editable-folder {
+	cursor: pointer;
+
+	display: flex;
+	align-items: center;
+	gap: rem(30);
+
+	padding: rem(24) rem(30);
+	border-radius: rem(15);
+	background-color: var(--element-color);
+
+	transition: background-color var(--transition-duration);
+
+	@media (hover: hover) {
+		&:hover {
+			background-color: var(--element-hover-color);
+		}
+	}
+
+	&:focus-visible {
+		background-color: var(--element-hover-color);
+	}
+
+	// .editable-folder__text
+
+	&__text {
+		@extend %font-big;
+		flex: 1;
+	}
+
+	// .editable-folder__pin
+
+	&__pin {
+	}
+
+	// .editable-folder__select-checkbox
+
+	&__select-checkbox {
+	}
+}
