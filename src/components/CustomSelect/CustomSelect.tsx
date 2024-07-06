@@ -1,5 +1,6 @@
 import { Select, SelectProps } from 'antd';
 import ArrowIcon from '../../assets/icons/ArrowIcon';
+import './antd-select.scss';
 
 function CustomSelect({ defaultValue, options }: SelectProps) {
 	return (
@@ -7,7 +8,8 @@ function CustomSelect({ defaultValue, options }: SelectProps) {
 			defaultValue={defaultValue}
 			options={options}
 			suffixIcon={<ArrowIcon />}
-			listHeight={9999}
+			listHeight={270}
+			listItemHeight={123}
 		></Select>
 	);
 }
