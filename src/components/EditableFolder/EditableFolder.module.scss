@@ -31,6 +31,12 @@
 		flex: 1;
 	}
 
+	// .editable-folder__note-count
+
+	&__note-count {
+		@extend %font-small;
+	}
+
 	// .editable-folder__pin
 
 	&__pin {

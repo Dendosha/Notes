@@ -5,6 +5,7 @@ import { EditableFolderProps } from './EditableFolder.props';
 
 function EditableFolder({
 	children,
+	noteCount,
 	pinned = false,
 	isSelection = false,
 	className,
@@ -17,6 +18,7 @@ function EditableFolder({
 			className={cn(styles['editable-folder'], className)}
 		>
 			<span className={styles['editable-folder__text']}>{children}</span>
+			<span className={styles['editable-folder__note-count']}>{noteCount}</span>
 			{pinned && (
 				<img
 					src='/public/icons/pin.svg'
