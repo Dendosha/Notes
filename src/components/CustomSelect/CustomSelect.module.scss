@@ -1,0 +1,100 @@
+@use '../../styles/functions' as *;
+@use '../../styles/general' as *;
+
+.custom-select-wrapper {
+	width: 100%;
+	position: relative;
+}
+
+.custom-select {
+	width: 100%;
+	border: rem(4) solid var(--text-color);
+	border-radius: rem(15);
+	padding: rem(24) rem(30);
+
+	background-color: var(--element-color);
+	color: var(--text-color);
+	text-align: left;
+
+	@extend %font-big;
+
+	transition: background-color var(--transition-duration);
+
+	&:focus {
+		outline: none;
+	}
+
+	&:focus-visible {
+		background-color: var(--element-active-color);
+	}
+
+	@media (hover: hover) {
+		&:hover {
+			background-color: var(--element-hover-color);
+		}
+	}
+
+	&__button {
+		cursor: pointer;
+
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	&__icon {
+		transform: rotate(0);
+		transition: transform var(--transition-duration);
+
+		&_open {
+			transform: rotate(180deg);
+		}
+	}
+
+	&__listbox-wrapper {
+		display: grid;
+		grid-template-rows: 0fr;
+
+		transition: grid-template-rows var(--transition-duration);
+
+		&_open {
+			grid-template-rows: 1fr;
+		}
+	}
+
+	&__listbox {
+		overflow: hidden;
+	}
+
+	&__popup {
+		width: 100%;
+		margin-top: rem(10);
+		border-radius: rem(15);
+		overflow: hidden;
+	}
+
+	&__option {
+		cursor: pointer;
+
+		padding: rem(24) rem(30);
+		background-color: var(--element-color);
+		@extend %font-big;
+
+		transition: background-color var(--transition-duration);
+
+		&:focus {
+			outline: none;
+		}
+
+		&:focus-visible,
+		&[class*='--selected'] {
+			background-color: var(--element-active-color);
+		}
+
+		@media (hover: hover) {
+			&:hover {
+				background-color: var(--element-hover-color);
+			}
+		}
+	}
+}
