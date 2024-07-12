@@ -1,5 +1,18 @@
 @use './_functions.scss' as *;
 
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	border: 0;
+	padding: 0;
+	white-space: nowrap;
+	clip-path: inset(100%);
+	clip: rect(0 0 0 0);
+	overflow: hidden;
+}
+
 %font-small {
 	font-size: rem(24);
 }
@@ -14,4 +27,35 @@
 
 %font-huge {
 	font-size: rem(80);
+}
+
+%button {
+	cursor: pointer;
+
+	border-radius: rem(10);
+	border: none;
+
+	padding: rem(10) rem(15);
+	background-color: var(--element-color);
+
+	color: var(--text-color);
+
+	transition: background-color var(--transition-duration);
+
+	@media (hover: hover) {
+		&:hover {
+			background-color: var(--element-hover-color);
+		}
+	}
+
+	&:active {
+		background-color: var(--element-active-color);
+	}
+
+	&:disabled {
+		cursor: auto;
+
+		background-color: var(--element-disabled-color);
+		color: var(--text-disabled-color);
+	}
 }

@@ -1,0 +1,55 @@
+@use '../../styles/functions' as *;
+@use '../../styles/general' as *;
+
+.icon-button {
+	cursor: pointer;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	padding: rem(10);
+	border: none;
+
+	background-color: var(--element-color);
+
+	transition: background-color var(--transition-duration);
+
+	@media (hover: hover) {
+		&:hover {
+			background-color: var(--element-hover-color);
+		}
+	}
+
+	&:active {
+		background-color: var(--element-active-color);
+	}
+
+	&:disabled {
+		cursor: auto;
+
+		background-color: var(--element-disabled-color);
+	}
+
+	// icon-button_polygon
+
+	&_polygon {
+		width: rem(105);
+		height: rem(105);
+
+		border-radius: rem(15);
+	}
+
+	// icon-button_circle
+
+	&_circle {
+		width: rem(150);
+		height: rem(150);
+
+		border-radius: 50%;
+	}
+
+	& svg {
+		max-width: 100%;
+	}
+}

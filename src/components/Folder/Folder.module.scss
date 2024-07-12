@@ -1,0 +1,6 @@
+@use '../../styles/functions' as *;
+@use '../../styles/general' as *;
+
+.folder {
+	@extend %button;
+}

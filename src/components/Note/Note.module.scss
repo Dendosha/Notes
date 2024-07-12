@@ -1,0 +1,49 @@
+@use '../../styles/functions' as *;
+@use '../../styles/general' as *;
+
+.note {
+	cursor: pointer;
+
+	display: flex;
+	align-items: center;
+	gap: rem(30);
+
+	padding: rem(24) rem(30);
+	border-radius: rem(15);
+	background-color: var(--element-color);
+
+	transition: background-color var(--transition-duration);
+
+	@media (hover: hover) {
+		&:hover {
+			background-color: var(--element-hover-color);
+		}
+	}
+
+	&:focus-visible {
+		background-color: var(--element-hover-color);
+	}
+
+	// .note__date
+
+	&__date {
+		@extend %font-small;
+	}
+
+	// .note__text
+
+	&__text {
+		@extend %font-big;
+		flex: 1;
+	}
+
+	// .note__pin
+
+	&__pin {
+	}
+
+	// .note__select-checkbox
+
+	&__select-checkbox {
+	}
+}

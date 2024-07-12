@@ -1,0 +1,36 @@
+@use '../../styles/functions' as *;
+@use '../../styles/general' as *;
+
+.search {
+	width: 100%;
+
+	border: rem(4) solid var(--text-color);
+	border-radius: rem(15);
+	padding: rem(24) rem(30);
+
+	@extend %font-big;
+	color: inherit;
+	caret-color: currentColor;
+
+	background-color: var(--element-color);
+
+	transition: background-color var(--transition-duration);
+
+	&::placeholder {
+		color: currentColor;
+	}
+
+	&:focus {
+		outline: none;
+	}
+
+	@media (hover: hover) {
+		&:hover {
+			background-color: var(--element-hover-color);
+		}
+	}
+
+	&:focus-visible {
+		background-color: var(--element-active-color);
+	}
+}

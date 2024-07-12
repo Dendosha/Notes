@@ -1,0 +1,7 @@
+@use '../../styles/functions' as *;
+@use '../../styles/general' as *;
+
+.text-button {
+	@extend %button;
+	@extend %font-medium;
+}

@@ -1,11 +1,11 @@
 @use 'sass:math';
 
-@function rem($fontSize) {
-	@return calc($fontSize / 16) + rem;
+@function rem($pxValue) {
+	@return calc($pxValue / 16) + rem;
 }
 
-@function em($fontSize, $rootFontSize: 16) {
-	@return calc($fontSize / $rootFontSize) + em;
+@function em($pxValue, $rootPxValue: 16) {
+	@return calc($pxValue / $rootPxValue) + em;
 }
 
 @function lh($lineHeight, $fontSize) {
