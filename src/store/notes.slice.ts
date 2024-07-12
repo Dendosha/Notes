@@ -44,7 +44,7 @@ export const notesSlice = createSlice({
 					item = {
 						...item,
 						title: action.payload.title,
-						content: action.payload.title,
+						content: action.payload.content,
 						updatedAt: new Date()
 					};
 				}
