@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import notesSlice from './notes.slice';
+import tasksSlice from './tasks.slice';
 
 export const store = configureStore({
 	reducer: {
-		notes: notesSlice
+		notes: notesSlice,
+		tasks: tasksSlice
 	}
 });
 
