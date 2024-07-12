@@ -1,13 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import foldersSlice from './folders.slice';
 import notesSlice from './notes.slice';
+import settingsSlice from './settings.slice';
 import tasksSlice from './tasks.slice';
 
 export const store = configureStore({
 	reducer: {
 		notes: notesSlice,
 		tasks: tasksSlice,
-		folders: foldersSlice
+		folders: foldersSlice,
+		settings: settingsSlice
 	}
 });
 
