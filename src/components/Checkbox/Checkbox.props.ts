@@ -1,5 +1,5 @@
-import { HTMLAttributes } from 'react';
+import { InputHTMLAttributes } from 'react';
 
-export interface CheckboxProps extends HTMLAttributes<HTMLInputElement> {
+export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
 	appearance?: 'circle' | 'square';
 }
