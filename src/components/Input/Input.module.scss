@@ -1,7 +1,7 @@
-@use '../../styles/functions' as *;
-@use '../../styles/general' as *;
+@use '/src/styles/functions' as *;
+@use '/src/styles/general' as *;
 
-.search {
+.input {
 	width: 100%;
 
 	border: rem(4) solid var(--text-color);
