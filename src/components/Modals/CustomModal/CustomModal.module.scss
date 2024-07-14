@@ -1,8 +1,11 @@
-@use '../../styles/functions' as *;
-@use '../../styles/general' as *;
+@use '/src/styles/functions' as *;
+@use '/src/styles/general' as *;
 
 .custom-modal {
 	&__content {
+		display: grid;
+		gap: rem(20);
+
 		padding: rem(20);
 		border-radius: rem(15);
 		box-shadow: 0 0 rem(10) 0 var(--shadow-color);
