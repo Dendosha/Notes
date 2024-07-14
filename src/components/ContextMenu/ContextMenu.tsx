@@ -9,7 +9,7 @@ function ContextMenu({ items, className, ...props }: ContextMenuProps) {
 			{items.map(item => (
 				<li className={styles['context-menu__item']} key={item.name}>
 					<TextButton
-						action={item.action}
+						onClick={item.action}
 						className={styles['context-menu__item-button']}
 					>
 						{item.name}

@@ -2,18 +2,9 @@ import cn from 'classnames';
 import styles from './TextButton.module.scss';
 import { TextButtonProps } from './TextButton.props';
 
-function TextButton({
-	children,
-	action,
-	className,
-	...props
-}: TextButtonProps) {
+function TextButton({ children, className, ...props }: TextButtonProps) {
 	return (
-		<button
-			{...props}
-			className={cn(styles['text-button'], className)}
-			onClick={action}
-		>
+		<button {...props} className={cn(styles['text-button'], className)}>
 			{children}
 		</button>
 	);
