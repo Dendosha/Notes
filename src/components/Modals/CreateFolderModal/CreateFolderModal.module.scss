@@ -1,6 +1,11 @@
 @use '/src/styles/functions' as *;
 @use '/src/styles/general' as *;
 
+.modal-form {
+	display: grid;
+	gap: rem(20);
+}
+
 .modal-buttons {
 	justify-self: end;
 
