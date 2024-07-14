@@ -4,6 +4,6 @@ export interface CustomModalProps
 	extends Omit<ModalOwnProps, 'slots' | 'slotProps'> {
 	className?: string | undefined;
 	handleClose: () => void;
-	'aria-labeledby': string;
+	'aria-labelledby': string;
 	'aria-describedby': string;
 }
