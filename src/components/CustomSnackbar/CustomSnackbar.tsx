@@ -6,25 +6,21 @@ import { CustomSnackbarProps } from './CustomSnackbar.props';
 
 function CustomSnackbar({
 	open,
-	setOpen,
+	handleClose,
 	className,
 	children,
 	autoHideDuration = 2000
 }: CustomSnackbarProps) {
-	const closeSnackbar = () => {
-		setOpen(false);
-	};
-
 	return (
 		<Snackbar
 			autoHideDuration={autoHideDuration}
 			open={open}
-			onClose={closeSnackbar}
+			onClose={handleClose}
 			className={cn(styles['custom-snackbar'], className)}
 		>
 			{children}
 			<button
-				onClick={closeSnackbar}
+				onClick={handleClose}
 				className={styles['custom-snackbar__close-button']}
 			>
 				<CancelButton width='20px' height='20px' />
