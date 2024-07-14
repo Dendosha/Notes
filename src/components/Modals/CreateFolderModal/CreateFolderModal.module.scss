@@ -1,0 +1,13 @@
+@use '/src/styles/functions' as *;
+@use '/src/styles/general' as *;
+
+.modal-buttons {
+	justify-self: end;
+
+	display: flex;
+	gap: rem(20);
+
+	&__button {
+		box-shadow: 0 0 rem(10) 0 var(--shadow-color);
+	}
+}
