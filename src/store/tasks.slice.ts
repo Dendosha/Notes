@@ -12,6 +12,8 @@ export interface TasksState {
 	items: TasksItem[];
 }
 
+export type TasksItemPayload = Pick<TasksItem, 'id' | 'content'>;
+
 const initialState: TasksState = {
 	items: []
 };
@@ -23,10 +25,13 @@ export const tasksSlice = createSlice({
 		clear: state => {
 			state.items = [];
 		},
-		add: (state, action: PayloadAction<TasksItem>) => {
-			const existed = state.items.find(item => item.id === action.payload.id);
-
-			if (existed) return;
+		add: (state, action: PayloadAction<TasksItemPayload>) => {
+			state.items.push({
+				...action.payload,
+				completed: false,
+				createdAt: new Date().toISOString(),
+				updatedAt: new Date().toISOString()
+			});
 		},
 		remove: (state, action: PayloadAction<number>) => {
 			state.items.filter(item => item.id !== action.payload);
@@ -38,10 +43,7 @@ export const tasksSlice = createSlice({
 
 			existed.completed = !existed.completed;
 		},
-		update: (
-			state,
-			action: PayloadAction<Pick<TasksItem, 'id' | 'content'>>
-		) => {
+		update: (state, action: PayloadAction<TasksItemPayload>) => {
 			const existed = state.items.find(item => item.id === action.payload.id);
 
 			if (!existed) return;

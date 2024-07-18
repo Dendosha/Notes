@@ -12,6 +12,8 @@ export interface NotesState {
 	items: NotesItem[];
 }
 
+export type NotesPayload = Omit<NotesItem, 'createdAt' | 'updatedAt'>;
+
 const initialState: NotesState = {
 	items: []
 };
@@ -23,18 +25,17 @@ export const notesSlice = createSlice({
 		clear: state => {
 			state.items = [];
 		},
-		add: (state, action: PayloadAction<NotesItem>) => {
-			const existed = state.items.find(item => item.id === action.payload.id);
-
-			if (existed) return;
+		add: (state, action: PayloadAction<NotesPayload>) => {
+			state.items.push({
+				...action.payload,
+				createdAt: new Date().toISOString(),
+				updatedAt: new Date().toISOString()
+			});
 		},
 		remove: (state, action: PayloadAction<number>) => {
 			state.items.filter(item => item.id !== action.payload);
 		},
-		update: (
-			state,
-			action: PayloadAction<Omit<NotesItem, 'createdAt' | 'updatedAt'>>
-		) => {
+		update: (state, action: PayloadAction<NotesPayload>) => {
 			const existed = state.items.find(item => item.id === action.payload.id);
 
 			if (!existed) return;
