@@ -9,7 +9,7 @@ import CustomModal from '../CustomModal/CustomModal';
 import styles from './RenameFolderModal.module.scss';
 import { RenameFolderModalProps } from './RenameFolderModal.props';
 
-const CREATE_FOLDER_MODAL_TITLE = 'create-folder-modal-title';
+const RENAME_FOLDER_MODAL_TITLE = 'rename-folder-modal-title';
 
 function RenameFolderModal({
 	id,
@@ -72,12 +72,12 @@ function RenameFolderModal({
 		<CustomModal
 			open={modalState}
 			onClose={closeModal}
-			aria-labelledby={CREATE_FOLDER_MODAL_TITLE}
+			aria-labelledby={RENAME_FOLDER_MODAL_TITLE}
 		>
 			<div>
 				<form onSubmit={createFolder} className={styles['modal-form']}>
-					<h2 id={CREATE_FOLDER_MODAL_TITLE} className='visually-hidden'>
-						Создать папку заметок
+					<h2 id={RENAME_FOLDER_MODAL_TITLE} className='visually-hidden'>
+						Переименовать папку заметок
 					</h2>
 					<Input
 						ref={inputRef}
