@@ -1,5 +1,5 @@
 export interface RenameFolderModalProps {
-	id: string;
+	id: number;
 	name: string;
 	modalState: boolean;
 	setModalState: (state: React.SetStateAction<boolean>) => void;

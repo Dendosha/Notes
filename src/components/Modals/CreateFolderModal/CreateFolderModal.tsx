@@ -53,7 +53,7 @@ function CreateFolderModal({
 
 		dispatch(
 			foldersActions.add({
-				id: new Date().toISOString(),
+				id: new Date().getTime(),
 				name: folderName,
 				notes: []
 			})
