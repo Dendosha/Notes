@@ -4,8 +4,8 @@ export interface TasksItem {
 	id: number;
 	content: string;
 	completed: boolean;
-	createdAt: Date;
-	updatedAt: Date;
+	createdAt: string;
+	updatedAt: string;
 }
 
 export interface TasksState {
@@ -51,7 +51,7 @@ export const tasksSlice = createSlice({
 					item = {
 						...item,
 						content: action.payload.content,
-						updatedAt: new Date()
+						updatedAt: new Date().toISOString()
 					};
 				}
 			});

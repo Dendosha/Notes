@@ -4,8 +4,8 @@ export interface NotesItem {
 	id: number;
 	title: string;
 	content: string;
-	createdAt: Date;
-	updatedAt: Date;
+	createdAt: string;
+	updatedAt: string;
 }
 
 export interface NotesState {
@@ -45,7 +45,7 @@ export const notesSlice = createSlice({
 						...item,
 						title: action.payload.title,
 						content: action.payload.content,
-						updatedAt: new Date()
+						updatedAt: new Date().toISOString()
 					};
 				}
 			});
