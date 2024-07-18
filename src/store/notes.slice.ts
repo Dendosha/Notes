@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface NotesItem {
-	id: string;
+	id: number;
 	title: string;
 	content: string;
 	createdAt: Date;
@@ -28,7 +28,7 @@ export const notesSlice = createSlice({
 
 			if (existed) return;
 		},
-		remove: (state, action: PayloadAction<string>) => {
+		remove: (state, action: PayloadAction<number>) => {
 			state.items.filter(item => item.id !== action.payload);
 		},
 		update: (

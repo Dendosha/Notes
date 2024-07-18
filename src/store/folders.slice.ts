@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { NotesItem } from './notes.slice';
 
 export interface FoldersItem {
-	id: string;
+	id: number;
 	name: string;
 	notes: NotesItem[];
 }
@@ -26,7 +26,7 @@ export const foldersSlice = createSlice({
 
 			state.items.push(action.payload);
 		},
-		remove: (state, action: PayloadAction<string>) => {
+		remove: (state, action: PayloadAction<number>) => {
 			state.items.filter(item => item.id !== action.payload);
 		},
 		update: (state, action: PayloadAction<FoldersItem>) => {
