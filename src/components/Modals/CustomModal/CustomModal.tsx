@@ -9,7 +9,7 @@ import { CustomModalProps } from './CustomModal.props';
 function CustomModal({
 	className,
 	open,
-	handleClose,
+	onClose,
 	children,
 	...props
 }: CustomModalProps) {
@@ -17,7 +17,7 @@ function CustomModal({
 		<div>
 			<Modal
 				open={open}
-				onClose={handleClose}
+				onClose={onClose}
 				slots={{ backdrop: Backdrop }}
 				slotProps={{
 					root: {
