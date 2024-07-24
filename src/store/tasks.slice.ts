@@ -10,12 +10,14 @@ export interface TasksItem {
 
 export interface TasksState {
 	items: TasksItem[];
+	selectedItems: TasksItem[];
 }
 
 export type TasksItemPayload = Pick<TasksItem, 'id' | 'content'>;
 
 const initialState: TasksState = {
-	items: []
+	items: [],
+	selectedItems: []
 };
 
 export const tasksSlice = createSlice({

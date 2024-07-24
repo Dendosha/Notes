@@ -10,12 +10,14 @@ export interface NotesItem {
 
 export interface NotesState {
 	items: NotesItem[];
+	selectedItems: NotesItem[];
 }
 
 export type NotesPayload = Omit<NotesItem, 'createdAt' | 'updatedAt'>;
 
 const initialState: NotesState = {
-	items: []
+	items: [],
+	selectedItems: []
 };
 
 export const notesSlice = createSlice({
