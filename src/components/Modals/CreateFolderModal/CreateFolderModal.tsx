@@ -75,6 +75,7 @@ function CreateFolderModal({
 					</h2>
 					<Input
 						ref={inputRef}
+						name='folderName'
 						placeholder='Название папки'
 						onChange={e => setFolderName(e.target.value)}
 					/>
