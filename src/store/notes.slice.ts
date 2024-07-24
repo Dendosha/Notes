@@ -6,6 +6,7 @@ export interface NotesItem {
 	content: string;
 	createdAt: string;
 	updatedAt: string;
+	folderId: number | undefined;
 }
 
 export interface NotesState {
