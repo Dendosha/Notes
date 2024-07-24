@@ -19,6 +19,9 @@ export const foldersSlice = createSlice({
 	name: 'folders',
 	initialState,
 	reducers: {
+		clear: state => {
+			state.items = [];
+		},
 		add: (state, action: PayloadAction<FoldersItem>) => {
 			const existed = state.items.find(item => item.id === action.payload.id);
 
@@ -27,22 +30,28 @@ export const foldersSlice = createSlice({
 			state.items.push(action.payload);
 		},
 		remove: (state, action: PayloadAction<number>) => {
-			state.items.filter(item => item.id !== action.payload);
+			state.items = state.items.filter(item => item.id !== action.payload);
 		},
-		update: (state, action: PayloadAction<FoldersItem>) => {
+		rename: (state, action: PayloadAction<Omit<FoldersItem, 'notes'>>) => {
+			const existed = state.items.find(item => item.id === action.payload.id);
+
+			if (!existed) return;
+
+			existed.name = action.payload.name;
+		},
+		updateNotes: (state, action: PayloadAction<Omit<FoldersItem, 'name'>>) => {
 			const existed = state.items.find(item => item.id === action.payload.id);
 
 			if (!existed) return;
 
 			state.items.map(item => {
 				if (item.id === action.payload.id) {
-					item = {
-						...item,
-						name: action.payload.name,
-						notes: action.payload.notes
-					};
+					item.notes = action.payload.notes;
+				} else {
+					item.notes = item.notes.filter(note =>
+						action.payload.notes.includes(note)
+					);
 				}
-
 				return item;
 			});
 		}

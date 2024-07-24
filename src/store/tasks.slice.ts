@@ -36,7 +36,7 @@ export const tasksSlice = createSlice({
 			});
 		},
 		remove: (state, action: PayloadAction<number>) => {
-			state.items.filter(item => item.id !== action.payload);
+			state.items = state.items.filter(item => item.id !== action.payload);
 		},
 		toggleComplete: (state, action: PayloadAction<number>) => {
 			const existed = state.items.find(item => item.id === action.payload);
@@ -50,15 +50,8 @@ export const tasksSlice = createSlice({
 
 			if (!existed) return;
 
-			state.items.map(item => {
-				if (item.id === action.payload.id) {
-					item = {
-						...item,
-						content: action.payload.content,
-						updatedAt: new Date().toISOString()
-					};
-				}
-			});
+			existed.content = action.payload.content;
+			existed.updatedAt = new Date().toISOString();
 		}
 	}
 });

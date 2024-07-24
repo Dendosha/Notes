@@ -36,7 +36,7 @@ export const notesSlice = createSlice({
 			});
 		},
 		remove: (state, action: PayloadAction<number>) => {
-			state.items.filter(item => item.id !== action.payload);
+			state.items = state.items.filter(item => item.id !== action.payload);
 		},
 		update: (state, action: PayloadAction<NotesPayload>) => {
 			const existed = state.items.find(item => item.id === action.payload.id);
@@ -45,13 +45,13 @@ export const notesSlice = createSlice({
 
 			state.items.map(item => {
 				if (item.id === action.payload.id) {
-					item = {
-						...item,
-						title: action.payload.title,
-						content: action.payload.content,
-						updatedAt: new Date().toISOString()
-					};
+					item.title = action.payload.title;
+					item.content = action.payload.content;
+					item.updatedAt = new Date().toISOString();
+					item.folderId = action.payload.folderId;
 				}
+
+				return item;
 			});
 		}
 	}
