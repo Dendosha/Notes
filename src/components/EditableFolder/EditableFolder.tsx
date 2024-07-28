@@ -1,7 +1,16 @@
 import cn from 'classnames';
 import Checkbox from '../Checkbox/Checkbox';
+import { MenuItem } from '../ContextMenu/ContextMenu.props';
+import InteractiveListItem from '../InteractiveListItem/InteractiveListItem';
 import styles from './EditableFolder.module.scss';
 import { EditableFolderProps } from './EditableFolder.props';
+
+const CONTEXT_MENU_ITEMS: MenuItem[] = [
+	{ name: 'Выделить', action: () => console.log('Выделить') },
+	{ name: 'Закрепить', action: () => console.log('Закрепить') },
+	{ name: 'Переименовать', action: () => console.log('Переименовать') },
+	{ name: 'Удалить', action: () => console.log('Удалить') }
+];
 
 function EditableFolder({
 	children,
@@ -12,8 +21,9 @@ function EditableFolder({
 	...props
 }: EditableFolderProps) {
 	return (
-		<div
+		<InteractiveListItem
 			{...props}
+			contextMenuItems={CONTEXT_MENU_ITEMS}
 			tabIndex={0}
 			className={cn(styles['editable-folder'], className)}
 		>
@@ -31,7 +41,7 @@ function EditableFolder({
 					appearance='circle'
 				/>
 			)}
-		</div>
+		</InteractiveListItem>
 	);
 }
 

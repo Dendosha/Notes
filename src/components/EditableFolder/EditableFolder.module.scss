@@ -21,6 +21,10 @@
 		}
 	}
 
+	&:focus {
+		outline: none;
+	}
+
 	&:focus-visible {
 		background-color: var(--element-hover-color);
 	}
