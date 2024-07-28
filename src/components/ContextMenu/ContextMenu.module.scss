@@ -1,10 +1,15 @@
 @use '../../styles/functions' as *;
 @use '../../styles/general' as *;
 
-.context-menu {
-	max-width: rem(200);
+.context-menu-backdrop {
+	position: absolute;
+	inset: 0;
+}
 
-	display: grid;
+.context-menu {
+	position: fixed;
+
+	display: inline-grid;
 	gap: rem(5);
 
 	border-radius: rem(15);
@@ -16,6 +21,7 @@
 	// .context-menu__item
 
 	&__item {
+		user-select: none;
 	}
 
 	// .context-menu__item-button
