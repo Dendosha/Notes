@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import TextButton from '../TextButton/TextButton';
 import styles from './ContextMenu.module.scss';
-import { ContextMenuProps } from './ContextMenu.props';
+import { ContextMenuProps, MenuItem } from './ContextMenu.props';
 
 const X_OFFSET = 5;
 const Y_OFFSET = 5;
@@ -54,6 +54,11 @@ function ContextMenu({
 		}
 	}, [contextMenuRef, coordinates.x, coordinates.y]);
 
+	const handleMenuItemClick = (item: MenuItem) => {
+		item.action();
+		setMenuState(false);
+	};
+
 	const handleBackdropMouseDown = (
 		e: React.MouseEvent<HTMLDivElement, MouseEvent>
 	) => {
@@ -90,13 +95,15 @@ function ContextMenu({
 		} else {
 			currentElementRef.current = currentElementRef.current.parentElement
 				?.nextElementSibling?.firstElementChild as HTMLButtonElement;
-
 			currentElementRef.current.focus();
 		}
 	};
 
 	const focusPreviousMenuButton = () => {
-		if (currentElementRef.current === firstElementRef.current) {
+		if (
+			!currentElementRef.current ||
+			currentElementRef.current === firstElementRef.current
+		) {
 			currentElementRef.current = lastElementRef.current;
 			currentElementRef.current?.focus();
 		} else if (currentElementRef.current) {
@@ -127,7 +134,7 @@ function ContextMenu({
 								(index === array.length - 1 && lastElementRef) ||
 								null
 							}
-							onClick={item.action}
+							onClick={() => handleMenuItemClick(item)}
 							className={styles['context-menu__item-button']}
 						>
 							{item.name}
