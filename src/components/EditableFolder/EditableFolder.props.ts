@@ -1,8 +1,8 @@
 import { HTMLAttributes } from 'react';
+import { FoldersItem } from '../../store/folders.slice';
 
 export interface EditableFolderProps extends HTMLAttributes<HTMLDivElement> {
 	children: string;
-	noteCount: number;
-	pinned?: boolean;
+	data: FoldersItem;
 	isSelection?: boolean;
 }

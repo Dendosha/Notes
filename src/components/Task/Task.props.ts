@@ -1,7 +1,8 @@
 import { HTMLAttributes } from 'react';
+import { TasksItem } from '../../store/tasks.slice';
 
 export interface TaskProps extends HTMLAttributes<HTMLDivElement> {
 	children: string;
-	pinned?: boolean;
+	data: TasksItem;
 	isSelection?: boolean;
 }

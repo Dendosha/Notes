@@ -1,8 +1,8 @@
 import { HTMLAttributes } from 'react';
+import { NotesItem } from '../../store/notes.slice';
 
 export interface NoteProps extends HTMLAttributes<HTMLDivElement> {
 	children: string;
-	date: string;
-	pinned?: boolean;
+	data: NotesItem;
 	isSelection?: boolean;
 }
