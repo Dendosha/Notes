@@ -4,21 +4,24 @@ export interface NotesItem {
 	id: number;
 	title: string;
 	content: string;
+	selected: boolean;
+	pinned: boolean;
+	folderId?: number;
 	createdAt: string;
 	updatedAt: string;
-	folderId?: number;
 }
 
 export interface NotesState {
 	items: NotesItem[];
-	selectedItems: NotesItem[];
 }
 
-export type NotesPayload = Omit<NotesItem, 'createdAt' | 'updatedAt'>;
+export type NotesPayload = Pick<
+	NotesItem,
+	'id' | 'title' | 'content' | 'folderId'
+>;
 
 const initialState: NotesState = {
-	items: [],
-	selectedItems: []
+	items: []
 };
 
 export const notesSlice = createSlice({
@@ -27,35 +30,29 @@ export const notesSlice = createSlice({
 	reducers: {
 		clear: state => {
 			state.items = [];
-			state.selectedItems = [];
 		},
 		add: (state, action: PayloadAction<NotesPayload>) => {
 			state.items.push({
 				...action.payload,
+				selected: false,
+				pinned: false,
 				createdAt: new Date().toISOString(),
 				updatedAt: new Date().toISOString()
 			});
 		},
-		select: (state, action: PayloadAction<number>) => {
+		toggleSelect: (state, action: PayloadAction<number>) => {
 			const existed = state.items.find(item => item.id === action.payload);
-			const alreadySelected = state.selectedItems.find(
-				item => item.id === action.payload
-			);
-
-			if (!existed || alreadySelected) return;
-
-			state.selectedItems.push(existed);
-		},
-		unselect: (state, action: PayloadAction<number>) => {
-			const existed = state.selectedItems.find(
-				item => item.id === action.payload
-			);
 
 			if (!existed) return;
 
-			state.selectedItems = state.selectedItems.filter(
-				item => item.id !== existed.id
-			);
+			existed.selected = !existed.selected;
+		},
+		togglePin: (state, action: PayloadAction<number>) => {
+			const existed = state.items.find(item => item.id === action.payload);
+
+			if (!existed) return;
+
+			existed.pinned = !existed.pinned;
 		},
 		remove: (state, action: PayloadAction<number>) => {
 			state.items = state.items.filter(item => item.id !== action.payload);

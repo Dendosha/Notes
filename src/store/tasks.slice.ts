@@ -4,20 +4,20 @@ export interface TasksItem {
 	id: number;
 	content: string;
 	completed: boolean;
+	selected: boolean;
+	pinned: boolean;
 	createdAt: string;
 	updatedAt: string;
 }
 
 export interface TasksState {
 	items: TasksItem[];
-	selectedItems: TasksItem[];
 }
 
 export type TasksItemPayload = Pick<TasksItem, 'id' | 'content'>;
 
 const initialState: TasksState = {
-	items: [],
-	selectedItems: []
+	items: []
 };
 
 export const tasksSlice = createSlice({
@@ -26,12 +26,13 @@ export const tasksSlice = createSlice({
 	reducers: {
 		clear: state => {
 			state.items = [];
-			state.selectedItems = [];
 		},
 		add: (state, action: PayloadAction<TasksItemPayload>) => {
 			state.items.push({
 				...action.payload,
 				completed: false,
+				selected: false,
+				pinned: false,
 				createdAt: new Date().toISOString(),
 				updatedAt: new Date().toISOString()
 			});
@@ -39,26 +40,19 @@ export const tasksSlice = createSlice({
 		remove: (state, action: PayloadAction<number>) => {
 			state.items = state.items.filter(item => item.id !== action.payload);
 		},
-		select: (state, action: PayloadAction<number>) => {
+		toggleSelect: (state, action: PayloadAction<number>) => {
 			const existed = state.items.find(item => item.id === action.payload);
-			const alreadySelected = state.selectedItems.find(
-				item => item.id === action.payload
-			);
-
-			if (!existed || alreadySelected) return;
-
-			state.selectedItems.push(existed);
-		},
-		unselect: (state, action: PayloadAction<number>) => {
-			const existed = state.selectedItems.find(
-				item => item.id === action.payload
-			);
 
 			if (!existed) return;
 
-			state.selectedItems = state.selectedItems.filter(
-				item => item.id !== existed.id
-			);
+			existed.selected = !existed.selected;
+		},
+		togglePin: (state, action: PayloadAction<number>) => {
+			const existed = state.items.find(item => item.id === action.payload);
+
+			if (!existed) return;
+
+			existed.pinned = !existed.pinned;
 		},
 		toggleComplete: (state, action: PayloadAction<number>) => {
 			const existed = state.items.find(item => item.id === action.payload);
