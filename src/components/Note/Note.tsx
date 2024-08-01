@@ -1,11 +1,13 @@
 import cn from 'classnames';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
+import { useAppSelector } from '../../hooks/useAppSelector.hook';
 import { notesActions } from '../../store/notes.slice';
 import Checkbox from '../Checkbox/Checkbox';
 import { MenuItem } from '../ContextMenu/ContextMenu.props';
 import InteractiveListItem from '../InteractiveListItem/InteractiveListItem';
 import styles from './Note.module.scss';
 import { NoteProps } from './Note.props';
+import { formatDate } from './helpers';
 
 function Note({
 	children,
@@ -15,6 +17,10 @@ function Note({
 	...props
 }: NoteProps) {
 	const dispatch = useAppDispatch();
+	const settings = useAppSelector(state => state.settings);
+
+	const date =
+		settings.notesSort === 'createDate' ? data.createdAt : data.updatedAt;
 
 	const setContextMenuItems = (): MenuItem[] => {
 		const selectButtonName = data.selected ? 'Снять выделение' : 'Выделить';
@@ -43,7 +49,7 @@ function Note({
 			className={cn(styles['note'], className)}
 		>
 			<span className={styles['note__text']}>{children}</span>
-			<span className={styles['note__date']}>{data.updatedAt}</span>
+			<span className={styles['note__date']}>{formatDate(date)}</span>
 			{data.pinned && (
 				<img src='/public/icons/pin.svg' className={styles['note__pin']}></img>
 			)}
