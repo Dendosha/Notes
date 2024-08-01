@@ -24,13 +24,13 @@ function RenameFolderModal({
 
 	const [folderNamesCollision, setFolderNamesCollision] = useState(false);
 	const [folderName, setFolderName] = useState(name);
-	const [createButtonDisabled, setCreateButtonDisabled] = useState(true);
+	const [renameButtonDisabled, setRenameButtonDisabled] = useState(true);
 
 	useEffect(() => {
 		if (folderName !== '') {
-			setCreateButtonDisabled(false);
+			setRenameButtonDisabled(false);
 		} else {
-			setCreateButtonDisabled(true);
+			setRenameButtonDisabled(true);
 		}
 	}, [folderName]);
 
@@ -43,7 +43,7 @@ function RenameFolderModal({
 		setModalState(false);
 	};
 
-	const createFolder = (e: FormEvent<HTMLFormElement>) => {
+	const renameFolder = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
 		if (folderName === name) {
@@ -75,7 +75,7 @@ function RenameFolderModal({
 			aria-labelledby={RENAME_FOLDER_MODAL_TITLE}
 		>
 			<div>
-				<form onSubmit={createFolder} className={styles['modal-form']}>
+				<form onSubmit={renameFolder} className={styles['modal-form']}>
 					<h2 id={RENAME_FOLDER_MODAL_TITLE} className='visually-hidden'>
 						Переименовать папку заметок
 					</h2>
@@ -97,7 +97,7 @@ function RenameFolderModal({
 						<TextButton
 							type='submit'
 							className={styles['modal-buttons__button']}
-							disabled={createButtonDisabled}
+							disabled={renameButtonDisabled}
 						>
 							Переименовать
 						</TextButton>
