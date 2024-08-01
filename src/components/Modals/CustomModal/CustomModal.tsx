@@ -14,31 +14,25 @@ function CustomModal({
 	...props
 }: CustomModalProps) {
 	return (
-		<div>
-			<Modal
-				open={open}
-				onClose={onClose}
-				slots={{ backdrop: Backdrop }}
-				slotProps={{
-					root: {
-						className: cn(styles['custom-modal'], className)
-					},
-					backdrop: {
-						className: cn(styles['custom-modal__backdrop'])
-					}
-				}}
-				closeAfterTransition
-				{...props}
-			>
-				<Fade
-					in={open}
-					timeout={200}
-					className={styles['custom-modal__content']}
-				>
-					{children}
-				</Fade>
-			</Modal>
-		</div>
+		<Modal
+			open={open}
+			onClose={onClose}
+			slots={{ backdrop: Backdrop }}
+			slotProps={{
+				root: {
+					className: cn(styles['custom-modal'], className)
+				},
+				backdrop: {
+					className: cn(styles['custom-modal__backdrop'])
+				}
+			}}
+			closeAfterTransition
+			{...props}
+		>
+			<Fade in={open} timeout={200} className={styles['custom-modal__content']}>
+				{children}
+			</Fade>
+		</Modal>
 	);
 }
 
