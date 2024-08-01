@@ -81,7 +81,7 @@ function RenameFolderModal({
 					</h2>
 					<Input
 						ref={inputRef}
-						name='newFodlerName'
+						name='new-folder-name'
 						placeholder='Название папки'
 						value={folderName}
 						onChange={e => setFolderName(e.target.value)}

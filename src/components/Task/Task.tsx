@@ -51,6 +51,7 @@ function Task({
 		>
 			{!isSelection && (
 				<Checkbox
+					name='task-complete'
 					className={styles['task__complete-checkbox']}
 					checked={data.completed}
 					onChange={() => dispatch(tasksActions.toggleComplete(data.id))}
@@ -62,6 +63,7 @@ function Task({
 			)}
 			{isSelection && (
 				<Checkbox
+					name='task-select'
 					className={styles['task__select-checkbox']}
 					appearance='circle'
 					checked={data.selected}

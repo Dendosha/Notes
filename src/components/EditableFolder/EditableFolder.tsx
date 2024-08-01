@@ -59,6 +59,7 @@ function EditableFolder({
 			)}
 			{isSelection && (
 				<Checkbox
+					name='folder-select'
 					className={styles['editable-folder__select-checkbox']}
 					appearance='circle'
 					checked={data.selected}

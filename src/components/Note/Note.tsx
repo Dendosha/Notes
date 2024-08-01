@@ -49,6 +49,7 @@ function Note({
 			)}
 			{isSelection && (
 				<Checkbox
+					name='note-select'
 					className={styles['note__select-checkbox']}
 					appearance='circle'
 					checked={data.selected}
