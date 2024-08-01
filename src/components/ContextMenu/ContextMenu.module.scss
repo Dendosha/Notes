@@ -17,6 +17,8 @@
 	padding: rem(5);
 	max-height: rem(450);
 	overflow-y: auto;
+	scroll-behavior: smooth;
+	overscroll-behavior: none;
 
 	background-color: var(--context-menu-bg-color);
 

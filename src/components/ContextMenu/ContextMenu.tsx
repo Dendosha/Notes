@@ -24,6 +24,7 @@ function ContextMenu({
 		if (contextMenuRef.current) {
 			contextMenuRef.current.focus();
 			setPosition(contextMenuRef.current.getBoundingClientRect());
+			document.addEventListener('wheel', handleWheelEvent, { passive: false });
 		}
 
 		function setPosition(contextMenuRect: DOMRect) {
@@ -52,7 +53,21 @@ function ContextMenu({
 			contextMenuRef.current.style.left = `${calculatedX}px`;
 			contextMenuRef.current.style.top = `${calculatedY}px`;
 		}
-	}, [contextMenuRef, coordinates.x, coordinates.y]);
+
+		function handleWheelEvent(e: WheelEvent) {
+			if (contextMenuRef.current?.contains(e.target as Node | null)) {
+				e.preventDefault();
+				e.stopPropagation();
+				return false;
+			}
+
+			setMenuState(false);
+		}
+
+		return () => {
+			document.removeEventListener('wheel', handleWheelEvent);
+		};
+	}, [contextMenuRef, coordinates.x, coordinates.y, setMenuState]);
 
 	const handleMenuItemClick = (item: MenuItem) => {
 		item.action();
@@ -68,15 +83,13 @@ function ContextMenu({
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
+		e.preventDefault();
 		switch (e.key) {
 			case 'ArrowDown':
 				focusNextMenuButton();
 				break;
 			case 'ArrowUp':
 				focusPreviousMenuButton();
-				break;
-			case 'Tab':
-				e.preventDefault();
 				break;
 			case 'Escape': {
 				setMenuState(false);
