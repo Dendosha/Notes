@@ -56,7 +56,8 @@ function ContextMenu({
 
 		function handleWheelEvent(e: WheelEvent) {
 			if (contextMenuRef.current?.contains(e.target as Node | null)) {
-				e.preventDefault();
+				contextMenuRef.current.scrollHeight ===
+					contextMenuRef.current.clientHeight && e.preventDefault();
 				e.stopPropagation();
 				return false;
 			}
