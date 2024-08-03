@@ -7,7 +7,7 @@ import { MenuItem } from '../ContextMenu/ContextMenu.props';
 import InteractiveListItem from '../InteractiveListItem/InteractiveListItem';
 import styles from './Note.module.scss';
 import { NoteProps } from './Note.props';
-import { formatDate } from './helpers';
+import { formatDate, ISOStringToDate } from './helpers';
 
 function Note({
 	children,
@@ -49,7 +49,9 @@ function Note({
 			className={cn(styles['note'], className)}
 		>
 			<span className={styles['note__text']}>{children}</span>
-			<span className={styles['note__date']}>{formatDate(date)}</span>
+			<span className={styles['note__date']}>
+				{formatDate(ISOStringToDate(date))}
+			</span>
 			{data.pinned && (
 				<img src='/public/icons/pin.svg' className={styles['note__pin']}></img>
 			)}
