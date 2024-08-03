@@ -29,14 +29,12 @@ function getIntlOptions(
 	}
 }
 
-export function formatDate(ISODate: string): string {
-	const parsedDate = new Date(Date.parse(ISODate));
-	const currentDate = new Date();
+export function ISOStringToDate(ISOString: string): Date {
+	return new Date(Date.parse(ISOString));
+}
 
-	return new Intl.DateTimeFormat(
-		'ru-RU',
-		getIntlOptions(parsedDate, currentDate)
-	)
-		.format(Date.parse(ISODate))
-		.split('г')[0];
+export function formatDate(date: Date): string {
+	return new Intl.DateTimeFormat('ru-RU', getIntlOptions(date, new Date()))
+		.format(date)
+		.split(' г.')[0];
 }
