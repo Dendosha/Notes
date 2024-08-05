@@ -15,20 +15,53 @@
 
 	transition: background-color var(--transition-duration);
 
+	& svg {
+		--color: var(--primary-color);
+	}
+
+	&_fill svg {
+		fill: var(--color);
+		transition: fill var(--transition-duration);
+	}
+
+	&_stroke svg {
+		stroke: var(--color);
+		transition: stroke var(--transition-duration);
+	}
+
+	&_fill-and-stroke svg {
+		fill: var(--color);
+		stroke: var(--color);
+		transition: fill var(--transition-duration),
+			stroke var(--transition-duration);
+	}
+
 	@media (hover: hover) {
 		&:hover {
 			background-color: var(--element-hover-color);
+
+			& svg {
+				--color: var(--primary-hover-color);
+			}
 		}
 	}
 
 	&:active {
 		background-color: var(--element-active-color);
+
+		& svg {
+			--color: var(--primary-active-color);
+		}
 	}
 
 	&:disabled {
 		cursor: auto;
 
 		background-color: var(--element-disabled-color);
+
+		& svg {
+			--color: var(--primary-disabled-color);
+		}
 	}
 
 	// icon-button_polygon
