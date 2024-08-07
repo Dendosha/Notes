@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import { formatDate, ISOStringToDate } from '../../helpers/dateTime';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../hooks/useAppSelector.hook';
 import { notesActions } from '../../store/notes.slice';
@@ -7,7 +8,6 @@ import { MenuItem } from '../ContextMenu/ContextMenu.props';
 import InteractiveListItem from '../InteractiveListItem/InteractiveListItem';
 import styles from './Note.module.scss';
 import { NoteProps } from './Note.props';
-import { formatDate, ISOStringToDate } from './helpers';
 
 function Note({
 	children,
