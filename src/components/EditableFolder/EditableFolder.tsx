@@ -12,6 +12,7 @@ import { EditableFolderProps } from './EditableFolder.props';
 function EditableFolder({
 	children,
 	data,
+	isSelectable = true,
 	isSelection = false,
 	className,
 	...props
@@ -47,17 +48,7 @@ function EditableFolder({
 			tabIndex={0}
 			className={cn(styles['editable-folder'], className)}
 		>
-			<span className={styles['editable-folder__text']}>{children}</span>
-			<span className={styles['editable-folder__note-count']}>
-				{data.notes.length}
-			</span>
-			{data.pinned && (
-				<img
-					src='/public/icons/pin.svg'
-					className={styles['editable-folder__pin']}
-				></img>
-			)}
-			{isSelection && (
+			{isSelectable && isSelection && (
 				<Checkbox
 					name='folder-select'
 					className={styles['editable-folder__select-checkbox']}
@@ -66,6 +57,18 @@ function EditableFolder({
 					onChange={() => dispatch(foldersActions.toggleSelect(data.id))}
 				/>
 			)}
+			<div className={styles['editable-folder__text']}>
+				<span className={styles['editable-folder__title']}>{children}</span>
+				<span className={styles['editable-folder__note-count']}>
+					Заметок: {data.notes.length}
+				</span>
+				{data.pinned && (
+					<img
+						src='/public/icons/pin.svg'
+						className={styles['editable-folder__pin']}
+					></img>
+				)}
+			</div>
 			<RenameFolderModal
 				modalState={renameModalState}
 				setModalState={setRenameModalState}

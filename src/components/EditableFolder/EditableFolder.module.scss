@@ -32,8 +32,19 @@
 	// .editable-folder__text
 
 	&__text {
-		@extend %font-big;
 		flex: 1;
+
+		display: grid;
+		grid-template-columns: auto 1fr;
+		align-items: center;
+		gap: rem(5) rem(10);
+	}
+
+	// .editable-folder__title
+
+	&__title {
+		grid-column: 1 / -1;
+		@extend %font-big;
 	}
 
 	// .editable-folder__note-count

@@ -4,5 +4,6 @@ import { FoldersItem } from '../../store/folders.slice';
 export interface EditableFolderProps extends HTMLAttributes<HTMLDivElement> {
 	children: string;
 	data: FoldersItem;
+	isSelectable?: boolean;
 	isSelection?: boolean;
 }
