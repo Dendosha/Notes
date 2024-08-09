@@ -1,6 +1,6 @@
 import { Snackbar } from '@mui/base';
 import cn from 'classnames';
-import CancelButton from '../../assets/icons/CancelButtonIcon';
+import CancelButtonIcon from '../../assets/icons/CancelButtonIcon';
 import styles from './CustomSnackbar.module.scss';
 import { CustomSnackbarProps } from './CustomSnackbar.props';
 
@@ -23,7 +23,7 @@ function CustomSnackbar({
 				onClick={handleClose}
 				className={styles['custom-snackbar__close-button']}
 			>
-				<CancelButton width='20px' height='20px' />
+				<CancelButtonIcon width='20px' height='20px' />
 			</button>
 		</Snackbar>
 	);
