@@ -14,7 +14,8 @@
 
 	background-color: var(--element-color);
 
-	transition: background-color var(--transition-duration);
+	transition: background-color var(--transition-duration),
+		color var(--transition-duration), border var(--transition-duration);
 
 	&::placeholder {
 		color: currentColor;
@@ -32,5 +33,11 @@
 
 	&:focus-visible {
 		background-color: var(--element-active-color);
+	}
+
+	&:disabled {
+		background-color: var(--element-disabled-color);
+		border-color: var(--text-disabled-color);
+		color: var(--text-disabled-color);
 	}
 }
