@@ -1,6 +1,6 @@
 import { SVGAttributes } from 'react';
 
-function UnpinButton(props: SVGAttributes<SVGElement>) {
+function UnpinButtonIcon(props: SVGAttributes<SVGElement>) {
 	return (
 		<svg
 			width='81'
@@ -21,4 +21,4 @@ function UnpinButton(props: SVGAttributes<SVGElement>) {
 	);
 }
 
-export default UnpinButton;
+export default UnpinButtonIcon;

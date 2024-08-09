@@ -1,6 +1,6 @@
 import { SVGAttributes } from 'react';
 
-function BackButton(props: SVGAttributes<SVGElement>) {
+function BackButtonIcon(props: SVGAttributes<SVGElement>) {
 	return (
 		<svg
 			width='81'
@@ -19,4 +19,4 @@ function BackButton(props: SVGAttributes<SVGElement>) {
 	);
 }
 
-export default BackButton;
+export default BackButtonIcon;

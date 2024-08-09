@@ -1,6 +1,6 @@
 import { SVGAttributes } from 'react';
 
-function CancelButton(props: SVGAttributes<SVGElement>) {
+function CancelButtonIcon(props: SVGAttributes<SVGElement>) {
 	return (
 		<svg
 			width='60'
@@ -15,4 +15,4 @@ function CancelButton(props: SVGAttributes<SVGElement>) {
 	);
 }
 
-export default CancelButton;
+export default CancelButtonIcon;

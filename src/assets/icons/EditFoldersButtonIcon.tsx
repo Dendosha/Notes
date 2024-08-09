@@ -1,6 +1,6 @@
 import { SVGAttributes } from 'react';
 
-function CreateFolderButtonIcon(props: SVGAttributes<SVGElement>) {
+function EditFoldersButtonIcon(props: SVGAttributes<SVGElement>) {
 	return (
 		<svg
 			width='49'
@@ -21,4 +21,4 @@ function CreateFolderButtonIcon(props: SVGAttributes<SVGElement>) {
 	);
 }
 
-export default CreateFolderButtonIcon;
+export default EditFoldersButtonIcon;
