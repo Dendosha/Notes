@@ -1,21 +1,28 @@
 import cn from 'classnames';
-import { MouseEvent } from 'react';
+import { NavLink } from 'react-router-dom';
 import styles from './Folder.module.scss';
 import { FolderProps } from './Folder.props';
 
-function Folder({ children, className, ...props }: FolderProps) {
-	const selectFolder = (e: MouseEvent) => {
-		console.log(e.target);
-	};
-
+function Folder({
+	to,
+	children,
+	disabled = false,
+	className,
+	...props
+}: FolderProps) {
 	return (
-		<button
+		<NavLink
+			to={to}
+			className={({ isActive }) =>
+				cn(styles['folder'], className, {
+					[styles['folder_active']]: isActive,
+					[styles['folder_disabled']]: disabled
+				})
+			}
 			{...props}
-			className={cn(styles['folder'], className)}
-			onClick={selectFolder}
 		>
 			{children}
-		</button>
+		</NavLink>
 	);
 }
 

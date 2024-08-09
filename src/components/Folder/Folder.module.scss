@@ -2,5 +2,20 @@
 @use '../../styles/general' as *;
 
 .folder {
+	text-decoration: none;
+	display: inline-block;
 	@extend %button;
+	@extend %font-medium;
+
+	&_disabled {
+		user-select: none;
+		pointer-events: none;
+		background-color: var(--element-disabled-color);
+		color: var(--text-disabled-color);
+	}
+
+	&_active {
+		background-color: var(--element-active-color);
+		color: var(--text-color);
+	}
 }
