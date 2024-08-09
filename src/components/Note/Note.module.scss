@@ -9,7 +9,7 @@
 	align-items: center;
 	gap: rem(30);
 
-	padding: rem(24) rem(30);
+	padding: rem(23) rem(30);
 	border-radius: rem(15);
 	background-color: var(--element-color);
 
@@ -29,22 +29,35 @@
 		background-color: var(--element-hover-color);
 	}
 
+	// .note__text
+
+	&__text {
+		flex: 1;
+
+		display: grid;
+		grid-template-columns: auto 1fr;
+		align-items: center;
+		gap: rem(5) rem(10);
+	}
+
+	// .note__title
+
+	&__title {
+		grid-column: 1 / -1;
+		@extend %font-big;
+	}
+
 	// .note__date
 
 	&__date {
 		@extend %font-small;
 	}
 
-	// .note__text
-
-	&__text {
-		@extend %font-big;
-		flex: 1;
-	}
-
 	// .note__pin
 
 	&__pin {
+		width: rem(20);
+		height: rem(20);
 	}
 
 	// .note__select-checkbox

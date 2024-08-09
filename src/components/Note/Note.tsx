@@ -48,13 +48,6 @@ function Note({
 			tabIndex={0}
 			className={cn(styles['note'], className)}
 		>
-			<span className={styles['note__text']}>{children}</span>
-			<span className={styles['note__date']}>
-				{formatDate(ISOStringToDate(date))}
-			</span>
-			{data.pinned && (
-				<img src='/public/icons/pin.svg' className={styles['note__pin']}></img>
-			)}
 			{isSelection && (
 				<Checkbox
 					name='note-select'
@@ -64,6 +57,18 @@ function Note({
 					onChange={() => dispatch(notesActions.toggleSelect(data.id))}
 				/>
 			)}
+			<div className={styles['note__text']}>
+				<span className={styles['note__title']}>{children}</span>
+				<span className={styles['note__date']}>
+					{formatDate(ISOStringToDate(date))}
+				</span>
+				{data.pinned && (
+					<img
+						src='/public/icons/pin.svg'
+						className={styles['note__pin']}
+					></img>
+				)}
+			</div>
 		</InteractiveListItem>
 	);
 }
