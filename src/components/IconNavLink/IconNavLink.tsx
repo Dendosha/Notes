@@ -4,6 +4,7 @@ import styles from './IconNavLink.module.scss';
 import { IconNavLinkProps } from './IconNavLink.props';
 
 function IconNavLink({
+	disabled = false,
 	appearance = 'polygon',
 	iconType = 'fill',
 	children,
@@ -16,6 +17,7 @@ function IconNavLink({
 			className={({ isActive }) =>
 				cn(styles['icon-nav-link'], className, {
 					[styles['icon-nav-link_active']]: isActive,
+					[styles['icon-nav-link_disabled']]: disabled,
 					[styles['icon-nav-link_polygon']]: appearance === 'polygon',
 					[styles['icon-nav-link_circle']]: appearance === 'circle',
 					[styles['icon-nav-link_fill']]: iconType === 'fill',

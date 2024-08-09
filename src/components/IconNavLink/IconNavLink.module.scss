@@ -46,22 +46,24 @@
 		}
 	}
 
+	&_disabled {
+		cursor: auto;
+		user-select: none;
+		pointer-events: none;
+
+		background-color: var(--element-disabled-color);
+
+		& svg {
+			--color: var(--primary-disabled-color);
+		}
+	}
+
 	&:active,
 	&_active {
 		background-color: var(--element-active-color);
 
 		& svg {
 			--color: var(--primary-active-color);
-		}
-	}
-
-	&:disabled {
-		cursor: auto;
-
-		background-color: var(--element-disabled-color);
-
-		& svg {
-			--color: var(--primary-disabled-color);
 		}
 	}
 
