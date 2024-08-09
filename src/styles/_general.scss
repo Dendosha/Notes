@@ -40,7 +40,8 @@
 
 	color: var(--text-color);
 
-	transition: background-color var(--transition-duration);
+	transition: background-color var(--transition-duration),
+		color var(--transition-duration);
 
 	@media (hover: hover) {
 		&:hover {
