@@ -3,8 +3,8 @@ import { useAppDispatch } from '../../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../../hooks/useAppSelector.hook';
 import { foldersActions } from '../../../store/folders.slice';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
-import Input from '../../Input/Input';
 import TextButton from '../../TextButton/TextButton';
+import TextField from '../../TextField/TextField';
 import CustomModal from '../CustomModal/CustomModal';
 import styles from './CreateFolderModal.module.scss';
 import { CreateFolderModalProps } from './CreateFolderModal.props';
@@ -73,7 +73,7 @@ function CreateFolderModal({
 					<h2 id={CREATE_FOLDER_MODAL_TITLE} className='visually-hidden'>
 						Создать папку заметок
 					</h2>
-					<Input
+					<TextField
 						ref={inputRef}
 						name='folder-name'
 						placeholder='Название папки'

@@ -3,8 +3,8 @@ import { useAppDispatch } from '../../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../../hooks/useAppSelector.hook';
 import { foldersActions } from '../../../store/folders.slice';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
-import Input from '../../Input/Input';
 import TextButton from '../../TextButton/TextButton';
+import TextField from '../../TextField/TextField';
 import CustomModal from '../CustomModal/CustomModal';
 import styles from './RenameFolderModal.module.scss';
 import { RenameFolderModalProps } from './RenameFolderModal.props';
@@ -79,7 +79,7 @@ function RenameFolderModal({
 					<h2 id={RENAME_FOLDER_MODAL_TITLE} className='visually-hidden'>
 						Переименовать папку заметок
 					</h2>
-					<Input
+					<TextField
 						ref={inputRef}
 						name='new-folder-name'
 						placeholder='Название папки'
