@@ -1,0 +1,21 @@
+@use '../../styles/functions' as *;
+@use '../../styles/general' as *;
+
+.root-layout {
+	height: 100vh;
+	padding: rem(40);
+
+	display: grid;
+	grid-template-rows: auto 1fr;
+	row-gap: rem(40);
+
+	&__header,
+	&__navigation {
+		display: flex;
+		column-gap: rem(40);
+	}
+
+	&__settings-link {
+		flex-shrink: 0;
+	}
+}
