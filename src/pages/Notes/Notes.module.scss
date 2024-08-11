@@ -1,0 +1,142 @@
+@use '../../styles/functions' as *;
+@use '../../styles/general' as *;
+
+.notes {
+	height: 100%;
+	overflow: hidden;
+
+	display: grid;
+	grid-template-rows: auto 1fr;
+	row-gap: rem(20);
+
+	&__folders {
+		position: relative;
+		overflow: hidden;
+
+		display: flex;
+		column-gap: rem(10);
+	}
+
+	&__edit-folders {
+		flex-shrink: 0;
+		max-height: rem(60);
+
+		padding: rem(8);
+		border-radius: rem(15);
+		padding: rem(10);
+		background-color: var(--element-color);
+
+		transition: background-color var(--transition-duration);
+
+		& svg {
+			stroke: var(--primary-color);
+			width: 100%;
+			height: 100%;
+
+			transition: stroke var(--transition-duration);
+		}
+
+		&:focus {
+			outline: none;
+		}
+
+		&:focus-visible {
+			background-color: var(--element-hover-color);
+
+			& svg {
+				--color: var(--primary-hover-color);
+			}
+		}
+
+		@media (hover: hover) {
+			&:hover {
+				background-color: var(--element-hover-color);
+
+				& svg {
+					--color: var(--primary-hover-color);
+				}
+			}
+		}
+
+		&:active {
+			background-color: var(--element-active-color);
+
+			& svg {
+				--color: var(--primary-active-color);
+			}
+		}
+
+		&_disabled {
+			user-select: none;
+			pointer-events: none;
+			background-color: var(--element-disabled-color);
+
+			& svg {
+				stroke: var(--primary-disabled-color);
+			}
+		}
+	}
+
+	&__folders-list {
+		overflow-x: auto;
+
+		flex-grow: 1;
+		display: flex;
+		column-gap: rem(10);
+		border-radius: rem(10);
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
+
+		& > * {
+			flex-shrink: 0;
+			width: max-content;
+		}
+	}
+
+	&__content {
+		height: 100%;
+		overflow: hidden;
+
+		display: flex;
+		column-gap: rem(40);
+	}
+
+	&__sidebar {
+		height: fit-content;
+		max-height: 100%;
+		overflow-y: auto;
+		overflow-x: hidden;
+
+		flex-shrink: 0;
+
+		display: grid;
+		row-gap: rem(20);
+	}
+
+	&__list {
+		border-radius: rem(15);
+
+		height: 100%;
+		overflow-y: auto;
+		overflow-x: hidden;
+
+		flex-grow: 1;
+
+		display: grid;
+		grid-auto-rows: min-content;
+		row-gap: rem(20);
+	}
+
+	&__buttons {
+		position: fixed;
+		right: rem(40);
+		bottom: rem(40);
+	}
+
+	&__add-button,
+	&__remove-button {
+		box-shadow: 0 0 rem(10) var(--shadow-color);
+	}
+}
