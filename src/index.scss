@@ -1,6 +1,7 @@
-@use './styles/reset';
-@use './styles/general';
-@use './styles/fonts';
+@use './styles/reset' as *;
+@use './styles/functions' as *;
+@use './styles/general' as *;
+@use './styles/fonts' as *;
 
 :root {
 	--bg-color: #e2e2e2;
@@ -31,6 +32,33 @@
 		--text-disabled-color: #d3d3d3;
 		--shadow-color: #ffffff;
 	}
+}
+
+@media screen and (min-width: em(768)) {
+	::-webkit-scrollbar {
+		width: rem(4);
+		height: rem(4);
+	}
+
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: #888;
+		border-radius: rem(2);
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: #555;
+	}
+}
+
+html,
+body,
+#root {
+	height: 100vh;
+	// overflow: hidden;
 }
 
 body {
