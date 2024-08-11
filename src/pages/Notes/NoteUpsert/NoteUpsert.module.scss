@@ -1,0 +1,40 @@
+@use '/src/styles/functions' as *;
+@use '/src/styles/general' as *;
+
+.note-edit {
+	position: fixed;
+	z-index: 3;
+	inset: 0;
+	padding: rem(40);
+
+	display: grid;
+	grid-template-rows: auto 1fr;
+	gap: rem(40);
+
+	background-color: var(--bg-color);
+
+	&__header {
+		display: flex;
+		gap: rem(40);
+	}
+
+	&__description {
+		@extend %font-big;
+		padding: rem(24) rem(30);
+
+		background-color: var(--element-color);
+		color: var(--text-color);
+
+		min-width: 100%;
+		min-height: 100%;
+		resize: none;
+
+		&:focus {
+			outline: none;
+		}
+
+		&::placeholder {
+			color: currentColor;
+		}
+	}
+}
