@@ -148,7 +148,10 @@ function ContextMenu({
 								(index === array.length - 1 && lastElementRef) ||
 								null
 							}
-							onClick={() => handleMenuItemClick(item)}
+							onClick={e => {
+								e.stopPropagation();
+								handleMenuItemClick(item);
+							}}
 							className={styles['context-menu__item-button']}
 						>
 							{item.name}
