@@ -36,6 +36,18 @@
 			stroke var(--transition-duration);
 	}
 
+	&:focus {
+		outline: none;
+	}
+
+	&:focus-visible {
+		background-color: var(--element-hover-color);
+
+		& svg {
+			--color: var(--primary-hover-color);
+		}
+	}
+
 	@media (hover: hover) {
 		&:hover {
 			background-color: var(--element-hover-color);
