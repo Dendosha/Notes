@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import { useNavigate } from 'react-router-dom';
 import { formatDate, ISOStringToDate } from '../../helpers/dateTime';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../hooks/useAppSelector.hook';
@@ -19,6 +20,8 @@ function Note({
 	const dispatch = useAppDispatch();
 	const settings = useAppSelector(state => state.settings);
 
+	const navigate = useNavigate();
+
 	const date =
 		settings.notesSort === 'createDate' ? data.createdAt : data.updatedAt;
 
@@ -35,8 +38,11 @@ function Note({
 				name: pinButtonName,
 				action: () => dispatch(notesActions.togglePin(data.id))
 			},
-			//! Дописать после создания страницы редактирования заметок ↓
-			{ name: 'Редактировать', action: () => console.log('Редактировать') },
+			{
+				name: 'Редактировать',
+				action: () =>
+					navigate(`/notes/folder-${data.folderId[1]}/note-${data.id}/edit`)
+			},
 			{ name: 'Удалить', action: () => dispatch(notesActions.remove(data.id)) }
 		];
 	};
