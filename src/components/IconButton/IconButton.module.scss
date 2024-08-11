@@ -2,6 +2,28 @@
 @use '../../styles/general' as *;
 
 .icon-button {
+	--button-bg-color: var(--element-color);
+	--button-bg-hover-color: var(--element-hover-color);
+	--button-bg-active-color: var(--element-active-color);
+	--button-bg-disabled-color: var(--element-disabled-color);
+
+	--button-icon-color: var(--primary-color);
+	--button-icon-hover-color: var(--primary-hover-color);
+	--button-icon-active-color: var(--primary-active-color);
+	--button-icon-disabled-color: var(--primary-disabled-color);
+
+	&_primary-color-scheme {
+		--button-bg-color: var(--primary-color);
+		--button-bg-hover-color: var(--primary-hover-color);
+		--button-bg-active-color: var(--primary-active-color);
+		--button-bg-disabled-color: var(--primary-disabled-color);
+
+		--button-icon-color: #fff;
+		--button-icon-hover-color: #fff;
+		--button-icon-active-color: #fff;
+		--button-icon-disabled-color: #fff;
+	}
+
 	cursor: pointer;
 
 	display: flex;
@@ -11,12 +33,12 @@
 	padding: rem(10);
 	border: none;
 
-	background-color: var(--element-color);
+	background-color: var(--button-bg-color);
 
 	transition: background-color var(--transition-duration);
 
 	& svg {
-		--color: var(--primary-color);
+		--color: var(--button-icon-color);
 	}
 
 	&_fill svg {
@@ -36,31 +58,43 @@
 			stroke var(--transition-duration);
 	}
 
+	&:focus {
+		outline: none;
+	}
+
+	&:focus-visible {
+		background-color: var(--button-bg-hover-color);
+
+		& svg {
+			--color: var(--button-icon-hover-color);
+		}
+	}
+
 	@media (hover: hover) {
 		&:hover {
-			background-color: var(--element-hover-color);
+			background-color: var(--button-bg-hover-color);
 
 			& svg {
-				--color: var(--primary-hover-color);
+				--color: var(--button-icon-hover-color);
 			}
 		}
 	}
 
 	&:active {
-		background-color: var(--element-active-color);
+		background-color: var(--button-bg-active-color);
 
 		& svg {
-			--color: var(--primary-active-color);
+			--color: var(--button-icon-active-color);
 		}
 	}
 
 	&:disabled {
 		cursor: auto;
 
-		background-color: var(--element-disabled-color);
+		background-color: var(--button-bg-disabled-color);
 
 		& svg {
-			--color: var(--primary-disabled-color);
+			--color: var(--button-icon-disabled-color);
 		}
 	}
 
