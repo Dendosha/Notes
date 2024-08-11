@@ -1,10 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { NotesItem } from './notes.slice';
 
 export interface FoldersItem {
 	id: number;
 	name: string;
-	notes: NotesItem[];
+	notes: number[];
 	pinned: boolean;
 	selected: boolean;
 	createdAt: string;
@@ -75,11 +74,12 @@ export const foldersSlice = createSlice({
 			if (!existed) return;
 
 			state.items.map(item => {
-				if (item.id === action.payload.id) {
-					item.notes = action.payload.notes;
-				} else {
-					item.notes = item.notes.filter(note =>
-						action.payload.notes.includes(note)
+				if (item.id === action.payload.id || item.id === 1) {
+					const set = new Set([...item.notes, ...action.payload.notes]);
+					item.notes = Array.from(set);
+				} else if (item.id !== 1) {
+					item.notes = item.notes.filter(
+						note => !action.payload.notes.includes(note)
 					);
 				}
 				return item;
