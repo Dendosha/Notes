@@ -6,7 +6,7 @@ export interface NotesItem {
 	content: string;
 	selected: boolean;
 	pinned: boolean;
-	folderId?: number;
+	folderId: [number, number | undefined];
 	createdAt: string;
 	updatedAt: string;
 }
@@ -15,10 +15,9 @@ export interface NotesState {
 	items: NotesItem[];
 }
 
-export type NotesPayload = Pick<
-	NotesItem,
-	'id' | 'title' | 'content' | 'folderId'
->;
+export type NotesPayload = {
+	folderId?: number;
+} & Pick<NotesItem, 'id' | 'title' | 'content'>;
 
 const initialState: NotesState = {
 	items: []
@@ -34,6 +33,7 @@ export const notesSlice = createSlice({
 		add: (state, action: PayloadAction<NotesPayload>) => {
 			state.items.push({
 				...action.payload,
+				folderId: [1, action.payload.folderId],
 				selected: false,
 				pinned: false,
 				createdAt: new Date().toISOString(),
@@ -67,7 +67,7 @@ export const notesSlice = createSlice({
 					item.title = action.payload.title;
 					item.content = action.payload.content;
 					item.updatedAt = new Date().toISOString();
-					item.folderId = action.payload.folderId;
+					item.folderId[1] = action.payload.folderId ?? item.folderId[1];
 				}
 
 				return item;
