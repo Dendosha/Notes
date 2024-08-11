@@ -18,7 +18,7 @@ function CustomSnackbar({
 			onClose={handleClose}
 			className={cn(styles['custom-snackbar'], className)}
 		>
-			{children}
+			<span>{children}</span>
 			<button
 				onClick={handleClose}
 				className={styles['custom-snackbar__close-button']}
