@@ -38,14 +38,14 @@ function ChangeFolderModal({
 		dispatch(
 			foldersActions.updateNotes({
 				id: folderId,
-				notes: notes
+				notes: notes.map(note => note.id)
 			})
 		);
 
-		notes.forEach(item => {
+		notes.forEach(note => {
 			dispatch(
 				notesActions.update({
-					...item,
+					...note,
 					folderId: folderId
 				})
 			);
