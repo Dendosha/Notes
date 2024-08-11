@@ -5,7 +5,8 @@ import { InteractiveListItemProps } from './InteractiveListItem.props';
 function InteractiveListItem({
 	contextMenuItems,
 	className,
-	children
+	children,
+	...props
 }: InteractiveListItemProps) {
 	const [contextMenuVisible, setContextMenuVisible] = useState(false);
 	const pointerCoordinates = useRef<{ x: number; y: number }>({
@@ -33,7 +34,7 @@ function InteractiveListItem({
 	};
 
 	return (
-		<div onContextMenu={handleContextMenu} className={className}>
+		<div onContextMenu={handleContextMenu} className={className} {...props}>
 			{children}
 			{contextMenuVisible && (
 				<ContextMenu
