@@ -57,7 +57,9 @@ function ContextMenu({
 		function handleWheelEvent(e: WheelEvent) {
 			if (contextMenuRef.current?.contains(e.target as Node | null)) {
 				contextMenuRef.current.scrollHeight ===
-					contextMenuRef.current.clientHeight && e.preventDefault();
+					contextMenuRef.current.clientHeight;
+
+				e.preventDefault();
 				e.stopPropagation();
 				return false;
 			}
@@ -84,15 +86,17 @@ function ContextMenu({
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
-		e.preventDefault();
 		switch (e.key) {
 			case 'ArrowDown':
+				e.preventDefault();
 				focusNextMenuButton();
 				break;
 			case 'ArrowUp':
+				e.preventDefault();
 				focusPreviousMenuButton();
 				break;
 			case 'Escape': {
+				e.preventDefault();
 				setMenuState(false);
 				break;
 			}
