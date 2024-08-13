@@ -23,6 +23,8 @@ function Sidebar({
 				<IconButton
 					iconType='fill'
 					className={styles['sidebar__button']}
+					ref={closeSidebar.ref}
+					disabled={closeSidebar.disabled}
 					onClick={closeSidebar.action}
 				>
 					<CancelButtonIcon />
@@ -32,6 +34,8 @@ function Sidebar({
 				<IconButton
 					iconType='both'
 					className={styles['sidebar__button']}
+					ref={toggleSelectState.ref}
+					disabled={toggleSelectState.disabled}
 					onClick={toggleSelectState.action}
 				>
 					{!toggleSelectState.selectAllButtonState ? (
@@ -45,6 +49,8 @@ function Sidebar({
 				<IconButton
 					iconType='stroke'
 					className={styles['sidebar__button']}
+					ref={togglePinState.ref}
+					disabled={togglePinState.disabled}
 					onClick={togglePinState.action}
 				>
 					<PinButtonIcon />
@@ -54,6 +60,8 @@ function Sidebar({
 				<IconButton
 					iconType='stroke'
 					className={styles['sidebar__button']}
+					ref={changeFolder.ref}
+					disabled={changeFolder.disabled}
 					onClick={changeFolder.action}
 				>
 					<ChangeFolderButtonIcon />

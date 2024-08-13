@@ -1,8 +1,10 @@
 import { HTMLAttributes } from 'react';
 
 export interface SidebarButton {
-	exist: true;
-	action: () => void;
+	exist: boolean;
+	disabled?: boolean;
+	ref?: React.RefObject<HTMLButtonElement>;
+	action?: () => void;
 }
 
 export interface SidebarProps extends HTMLAttributes<HTMLElement> {
