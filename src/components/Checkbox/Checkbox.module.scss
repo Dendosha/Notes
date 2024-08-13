@@ -16,6 +16,7 @@
 }
 
 .native-checkbox {
+	position: fixed;
 	appearance: none;
 
 	&:checked + .custom-checkbox::before {

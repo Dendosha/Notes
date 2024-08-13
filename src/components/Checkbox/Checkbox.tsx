@@ -14,6 +14,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
 					[styles['checkbox_square']]: appearance === 'square',
 					[styles['checkbox_circle']]: appearance === 'circle'
 				})}
+				onClick={e => e.stopPropagation()}
 			>
 				<input
 					id={id}
