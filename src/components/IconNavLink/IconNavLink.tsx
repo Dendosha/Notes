@@ -25,6 +25,7 @@ function IconNavLink({
 					[styles['icon-nav-link_fill-and-stroke']]: iconType === 'both'
 				})
 			}
+			tabIndex={disabled ? -1 : 0}
 			to={to}
 			{...props}
 		>
