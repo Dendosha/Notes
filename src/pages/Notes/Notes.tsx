@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom';
 import AddButtonIcon from '../../assets/icons/AddButtonIcon';
 import EditFoldersButtonIcon from '../../assets/icons/EditFoldersButtonIcon';
@@ -18,8 +18,11 @@ import FolderList from './FolderList/FolderList';
 import styles from './Notes.module.scss';
 
 function Notes() {
+	const [isAnyNoteSelected, setIsAnyNoteSelected] = useState(false);
 	const [selectAllButtonState, setSelectAllButtonState] = useState(false);
 	const [modalState, setModalState] = useState(false);
+
+	const firstSidebarButtonRef = useRef<HTMLButtonElement>(null);
 
 	const { searchValue, isSelection, setIsSelection } = useRootContext();
 
@@ -31,8 +34,15 @@ function Notes() {
 	const folderId = parseInt(folder?.split('-')[1] ?? '1');
 
 	useEffect(() => {
+		if (isSelection && firstSidebarButtonRef.current) {
+			firstSidebarButtonRef.current.focus();
+		}
+	}, [isSelection, firstSidebarButtonRef]);
+
+	useEffect(() => {
 		if (notes.items.find(note => note.selected)) {
 			setIsSelection(true);
+			setIsAnyNoteSelected(true);
 
 			if (
 				!notes.items
@@ -43,7 +53,23 @@ function Notes() {
 			} else {
 				setSelectAllButtonState(false);
 			}
+		} else {
+			setIsAnyNoteSelected(false);
 		}
+
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key !== 'Escape') {
+				return;
+			}
+
+			closeSidebar();
+		};
+
+		document.addEventListener('keydown', handleKeyDown);
+
+		return () => {
+			document.removeEventListener('keydown', handleKeyDown);
+		};
 	}, [notes.items]);
 
 	const upsertNote = () => {
@@ -104,6 +130,7 @@ function Notes() {
 					className={cn(styles['notes__edit-folders'], {
 						[styles['notes__edit-folders_disabled']]: isSelection
 					})}
+					tabIndex={isSelection ? -1 : 0}
 				>
 					<EditFoldersButtonIcon />
 				</NavLink>
@@ -113,14 +140,26 @@ function Notes() {
 				{isSelection && (
 					<Sidebar
 						className={styles['notes__sidebar']}
-						closeSidebar={{ exist: true, action: closeSidebar }}
+						closeSidebar={{
+							exist: true,
+							action: closeSidebar,
+							ref: firstSidebarButtonRef
+						}}
 						toggleSelectState={{
 							exist: true,
 							action: toggleNotesSelectState,
 							selectAllButtonState: selectAllButtonState
 						}}
-						togglePinState={{ exist: true, action: toggleNotesPinState }}
-						changeFolder={{ exist: true, action: changeNotesFolder }}
+						togglePinState={{
+							exist: true,
+							action: toggleNotesPinState,
+							disabled: !isAnyNoteSelected
+						}}
+						changeFolder={{
+							exist: true,
+							action: changeNotesFolder,
+							disabled: !isAnyNoteSelected
+						}}
 					/>
 				)}
 				<div className={styles['notes__list']}>
@@ -151,6 +190,7 @@ function Notes() {
 						colorScheme='primary'
 						className={styles['notes__remove-button']}
 						onClick={removeNotes}
+						disabled={!isAnyNoteSelected}
 					>
 						<RemoveButtonIcon />
 					</IconButton>
