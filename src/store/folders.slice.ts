@@ -14,7 +14,16 @@ export interface FoldersState {
 }
 
 const initialState: FoldersState = {
-	items: []
+	items: [
+		{
+			id: 1,
+			name: 'Все',
+			notes: [],
+			createdAt: new Date().toISOString(),
+			pinned: false,
+			selected: false
+		}
+	]
 };
 
 export type FoldersItemPayload = Pick<FoldersItem, 'id' | 'name' | 'notes'>;
