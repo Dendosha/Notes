@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import Folder from '../../../components/Folder/Folder';
+import { handleListFocus } from '../../../helpers/handleListFocus';
 import { useAppSelector } from '../../../hooks/useAppSelector.hook';
 import { useRootContext } from '../../../layout/RootLayout/RootLayout';
 import { FolderListProps } from './FolderList.props';
@@ -14,14 +15,6 @@ function FolderList<T extends HTMLElement, K extends HTMLElement>({
 
 	const { isSelection } = useRootContext();
 	const folders = useAppSelector(state => state.folders);
-
-	const handleFocus = (e: React.FocusEvent) => {
-		if (e.currentTarget.contains(e.relatedTarget)) {
-			return;
-		}
-
-		firstFolderRef.current?.focus();
-	};
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		switch (e.key) {
@@ -60,7 +53,7 @@ function FolderList<T extends HTMLElement, K extends HTMLElement>({
 	};
 
 	return (
-		<div className={className} onFocus={handleFocus}>
+		<div className={className} onFocus={handleListFocus}>
 			{folders.items.map((folder, index, array) => {
 				let ref = null;
 

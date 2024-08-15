@@ -7,6 +7,7 @@ import RemoveButtonIcon from '../../assets/icons/RemoveButtonIcon';
 import IconButton from '../../components/IconButton/IconButton';
 import ChangeFolderModal from '../../components/Modals/ChangeFolderModal/ChangeFolderModal';
 import Sidebar from '../../components/Sidebar/Sidebar';
+import { handleListFocus } from '../../helpers/handleListFocus';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../hooks/useAppSelector.hook';
 import {
@@ -73,14 +74,6 @@ function Notes() {
 			document.removeEventListener('keydown', handleKeyDown);
 		};
 	}, [notes.items]);
-
-	const handleNoteListFocus = (e: React.FocusEvent) => {
-		if (e.currentTarget.contains(e.relatedTarget)) {
-			return;
-		}
-
-		(e.currentTarget.firstElementChild as HTMLElement | null)?.focus();
-	};
 
 	const upsertNote = () => {
 		const newNoteId = new Date().getTime();
@@ -180,7 +173,7 @@ function Notes() {
 				<div
 					className={styles['notes__list']}
 					tabIndex={-1}
-					onFocus={handleNoteListFocus}
+					onFocus={handleListFocus}
 				>
 					<Outlet
 						context={
