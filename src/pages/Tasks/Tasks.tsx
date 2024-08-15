@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import AddButtonIcon from '../../assets/icons/AddButtonIcon';
 import RemoveButtonIcon from '../../assets/icons/RemoveButtonIcon';
 import IconButton from '../../components/IconButton/IconButton';
@@ -28,16 +28,7 @@ function Tasks() {
 	const uncompletedTasks = tasks.items.filter(task => !task.completed);
 	const completedTasks = tasks.items.filter(task => task.completed);
 
-	const { task } = useParams();
-
 	const navigate = useNavigate();
-	const location = useLocation();
-
-	useEffect(() => {
-		if (task && isSelection) {
-			closeSidebar();
-		}
-	}, [task]);
 
 	useEffect(() => {
 		if (isSelection && firstSidebarButtonRef.current) {
@@ -85,6 +76,9 @@ function Tasks() {
 		selectedTasks.forEach(task => {
 			dispatch(tasksActions.remove(task.id));
 		});
+
+		setSelectAllButtonState(false);
+		setIsSelection(false);
 	};
 
 	const closeSidebar = () => {
