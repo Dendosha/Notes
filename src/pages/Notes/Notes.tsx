@@ -23,6 +23,8 @@ function Notes() {
 	const [modalState, setModalState] = useState(false);
 
 	const firstSidebarButtonRef = useRef<HTMLButtonElement>(null);
+	const foldersPageAnchorRef = useRef<HTMLAnchorElement>(null);
+	const foldersParentRef = useRef<HTMLDivElement>(null);
 
 	const { searchValue, isSelection, setIsSelection } = useRootContext();
 
@@ -71,6 +73,14 @@ function Notes() {
 			document.removeEventListener('keydown', handleKeyDown);
 		};
 	}, [notes.items]);
+
+	const handleNoteListFocus = (e: React.FocusEvent) => {
+		if (e.currentTarget.contains(e.relatedTarget)) {
+			return;
+		}
+
+		(e.currentTarget.firstElementChild as HTMLElement | null)?.focus();
+	};
 
 	const upsertNote = () => {
 		const newNoteId = new Date().getTime();
@@ -124,8 +134,9 @@ function Notes() {
 
 	return (
 		<div className={styles['notes']}>
-			<div className={styles['notes__folders']}>
+			<div ref={foldersParentRef} className={styles['notes__folders']}>
 				<NavLink
+					ref={foldersPageAnchorRef}
 					to={'/folders'}
 					className={cn(styles['notes__edit-folders'], {
 						[styles['notes__edit-folders_disabled']]: isSelection
@@ -134,7 +145,11 @@ function Notes() {
 				>
 					<EditFoldersButtonIcon />
 				</NavLink>
-				<FolderList className={styles['notes__folders-list']} />
+				<FolderList
+					parentElementRef={foldersParentRef}
+					prevElementRef={foldersPageAnchorRef}
+					className={styles['notes__folders-list']}
+				/>
 			</div>
 			<div className={styles['notes__content']}>
 				{isSelection && (
@@ -162,7 +177,11 @@ function Notes() {
 						}}
 					/>
 				)}
-				<div className={styles['notes__list']}>
+				<div
+					className={styles['notes__list']}
+					tabIndex={-1}
+					onFocus={handleNoteListFocus}
+				>
 					<Outlet
 						context={
 							{

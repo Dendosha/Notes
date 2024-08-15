@@ -127,6 +127,10 @@
 		display: grid;
 		grid-auto-rows: min-content;
 		row-gap: rem(20);
+
+		&:focus {
+			outline: none;
+		}
 	}
 
 	&__buttons {
