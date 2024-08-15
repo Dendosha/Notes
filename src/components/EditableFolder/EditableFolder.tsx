@@ -51,6 +51,7 @@ function EditableFolder({
 		<InteractiveListItem
 			{...props}
 			contextMenuItems={isSelectable ? setContextMenuItems() : undefined}
+			isSelection={isSelection}
 			tabIndex={0}
 			className={cn(styles['editable-folder'], className)}
 			onClick={() => data.id !== 1 && setRenameFolderModalState(true)}

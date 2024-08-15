@@ -63,6 +63,7 @@ function Note({
 		<InteractiveListItem
 			{...props}
 			contextMenuItems={setContextMenuItems()}
+			isSelection={isSelection}
 			tabIndex={0}
 			className={cn(styles['note'], className)}
 		>

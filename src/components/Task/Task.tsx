@@ -50,6 +50,7 @@ function Task({
 		<InteractiveListItem
 			{...props}
 			contextMenuItems={setContextMenuItems()}
+			isSelection={isSelection}
 			tabIndex={0}
 			className={cn(styles['task'], className)}
 		>

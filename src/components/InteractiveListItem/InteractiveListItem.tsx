@@ -4,6 +4,7 @@ import { InteractiveListItemProps } from './InteractiveListItem.props';
 
 function InteractiveListItem({
 	contextMenuItems,
+	isSelection,
 	className,
 	children,
 	...props
@@ -21,6 +22,10 @@ function InteractiveListItem({
 			x: e.clientX + 20,
 			y: e.clientY + 10
 		};
+
+		if (isSelection) {
+			return;
+		}
 
 		showContextMenu();
 	};
