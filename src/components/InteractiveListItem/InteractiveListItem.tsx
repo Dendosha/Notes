@@ -36,7 +36,7 @@ function InteractiveListItem({
 	return (
 		<div onContextMenu={handleContextMenu} className={className} {...props}>
 			{children}
-			{contextMenuVisible && (
+			{contextMenuVisible && contextMenuItems && (
 				<ContextMenu
 					setMenuState={setContextMenuVisible}
 					items={contextMenuItems}

@@ -3,6 +3,6 @@ import { MenuItem } from '../ContextMenu/ContextMenu.props';
 
 export interface InteractiveListItemProps
 	extends HTMLAttributes<HTMLDivElement> {
-	contextMenuItems: MenuItem[];
+	contextMenuItems?: MenuItem[];
 	children: React.ReactNode;
 }
