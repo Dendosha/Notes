@@ -13,7 +13,7 @@ import { useAppSelector } from '../../hooks/useAppSelector.hook';
 import { foldersActions } from '../../store/folders.slice';
 import styles from './Folders.module.scss';
 
-function Notes() {
+function Folders() {
 	const [isAnyNoteSelected, setIsAnyNoteSelected] = useState(false);
 	const [selectAllButtonState, setSelectAllButtonState] = useState(false);
 	const [createFolderModalState, setCreateFolderModalState] = useState(false);
@@ -188,4 +188,4 @@ function Notes() {
 	);
 }
 
-export default Notes;
+export default Folders;
