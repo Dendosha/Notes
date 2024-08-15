@@ -14,7 +14,7 @@ import { foldersActions } from '../../store/folders.slice';
 import styles from './Folders.module.scss';
 
 function Folders() {
-	const [isAnyNoteSelected, setIsAnyNoteSelected] = useState(false);
+	const [isAnyFolderSelected, setIsAnyFolderSelected] = useState(false);
 	const [selectAllButtonState, setSelectAllButtonState] = useState(false);
 	const [createFolderModalState, setCreateFolderModalState] = useState(false);
 
@@ -36,7 +36,7 @@ function Folders() {
 	useEffect(() => {
 		if (folders.items.find(folder => folder.selected)) {
 			setIsSelection(true);
-			setIsAnyNoteSelected(true);
+			setIsAnyFolderSelected(true);
 
 			if (
 				!folders.items
@@ -48,7 +48,7 @@ function Folders() {
 				setSelectAllButtonState(false);
 			}
 		} else {
-			setIsAnyNoteSelected(false);
+			setIsAnyFolderSelected(false);
 		}
 
 		const handleKeyDown = (e: KeyboardEvent) => {
@@ -138,7 +138,7 @@ function Folders() {
 						togglePinState={{
 							exist: true,
 							action: toggleFoldersPinState,
-							disabled: !isAnyNoteSelected
+							disabled: !isAnyFolderSelected
 						}}
 						changeFolder={{
 							exist: false
@@ -174,7 +174,7 @@ function Folders() {
 						colorScheme='primary'
 						className={styles['folders__remove-button']}
 						onClick={removeFolder}
-						disabled={!isAnyNoteSelected}
+						disabled={!isAnyFolderSelected}
 					>
 						<RemoveButtonIcon />
 					</IconButton>
