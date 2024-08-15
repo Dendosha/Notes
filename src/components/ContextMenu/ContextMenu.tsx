@@ -138,6 +138,7 @@ function ContextMenu({
 		<div
 			className={styles['context-menu-backdrop']}
 			onMouseDown={handleBackdropMouseDown}
+			onFocus={e => e.stopPropagation()}
 		>
 			<ul
 				ref={contextMenuRef}
