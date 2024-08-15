@@ -33,9 +33,15 @@ function Notes() {
 	const dispatch = useAppDispatch();
 	const notes = useAppSelector(state => state.notes);
 
-	const { folder } = useParams();
+	const { folder, note } = useParams();
 	const navigate = useNavigate();
 	const folderId = parseInt(folder?.split('-')[1] ?? '1');
+
+	useEffect(() => {
+		if (note && isSelection) {
+			closeSidebar();
+		}
+	}, [note]);
 
 	useEffect(() => {
 		if (isSelection && firstSidebarButtonRef.current) {
