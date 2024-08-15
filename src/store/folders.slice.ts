@@ -48,6 +48,28 @@ export const foldersSlice = createSlice({
 			});
 		},
 		remove: (state, action: PayloadAction<number>) => {
+			const existed = state.items.find(item => item.id === action.payload);
+
+			if (!existed) return;
+
+			const allFolder = state.items.find(item => item.id === 1);
+			let allFolderNotes: number[];
+
+			if (allFolder?.notes) {
+				allFolderNotes = [...allFolder?.notes];
+
+				existed.notes.forEach(noteId => {
+					allFolderNotes.splice(
+						allFolderNotes.findIndex(
+							allFolderNoteId => allFolderNoteId === noteId
+						),
+						1
+					);
+
+					allFolder!.notes = allFolderNotes;
+				});
+			}
+
 			state.items = state.items.filter(item => item.id !== action.payload);
 		},
 		toggleSelect: (state, action: PayloadAction<number>) => {
