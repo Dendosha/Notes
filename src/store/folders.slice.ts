@@ -96,25 +96,44 @@ export const foldersSlice = createSlice({
 
 			existed.name = action.payload.name;
 		},
-		updateNotes: (
+		addNotes: (
 			state,
-			action: PayloadAction<Omit<FoldersItemPayload, 'name'>>
+			action: PayloadAction<{ id: number; notes: number[] }>
 		) => {
 			const existed = state.items.find(item => item.id === action.payload.id);
 
 			if (!existed) return;
 
-			state.items.map(item => {
-				if (item.id === action.payload.id || item.id === 1) {
-					const set = new Set([...item.notes, ...action.payload.notes]);
-					item.notes = Array.from(set);
-				} else if (item.id !== 1) {
-					item.notes = item.notes.filter(
-						note => !action.payload.notes.includes(note)
-					);
-				}
-				return item;
-			});
+			addNotesToFolder(existed);
+
+			if (action.payload.id !== 1) {
+				addNotesToFolder(state.items[0]);
+			}
+
+			function addNotesToFolder(folder: FoldersItem) {
+				const notesSet = new Set([...folder.notes, ...action.payload.notes]);
+				folder.notes = Array.from(notesSet);
+			}
+		},
+		removeNotes: (
+			state,
+			action: PayloadAction<{ id: number; notes: number[] }>
+		) => {
+			const existed = state.items.find(item => item.id === action.payload.id);
+
+			if (!existed) return;
+
+			removeNotesFromFolder(existed);
+
+			if (action.payload.id !== 1) {
+				removeNotesFromFolder(state.items[0]);
+			}
+
+			function removeNotesFromFolder(folder: FoldersItem) {
+				action.payload.notes.forEach(note => {
+					folder.notes.splice(folder.notes.indexOf(note), 1);
+				});
+			}
 		}
 	}
 });
