@@ -2,6 +2,7 @@ import cn from 'classnames';
 import { useState } from 'react';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
 import { foldersActions } from '../../store/folders.slice';
+import { notesActions } from '../../store/notes.slice';
 import Checkbox from '../Checkbox/Checkbox';
 import { MenuItem } from '../ContextMenu/ContextMenu.props';
 import InteractiveListItem from '../InteractiveListItem/InteractiveListItem';
@@ -36,7 +37,12 @@ function EditableFolder({
 			{ name: 'Переименовать', action: () => setRenameFolderModalState(true) },
 			{
 				name: 'Удалить',
-				action: () => dispatch(foldersActions.remove(data.id))
+				action: () => {
+					data.notes.forEach(noteId => {
+						dispatch(notesActions.remove(noteId));
+					});
+					dispatch(foldersActions.remove(data.id));
+				}
 			}
 		];
 	};
