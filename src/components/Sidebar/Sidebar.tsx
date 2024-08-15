@@ -4,6 +4,7 @@ import ChangeFolderButtonIcon from '../../assets/icons/ChangeFolderButtonIcon';
 import PinButtonIcon from '../../assets/icons/PinButtonIcon';
 import SelectAllButtonIcon from '../../assets/icons/SelectAllButtonIcon';
 import UnselectAllButtonIcon from '../../assets/icons/UnselectAllButtonIcon';
+import { handleListFocus } from '../../helpers/handleListFocus';
 import IconButton from '../IconButton/IconButton';
 import styles from './Sidebar.module.scss';
 import { SidebarProps } from './Sidebar.props';
@@ -18,7 +19,11 @@ function Sidebar({
 	...props
 }: SidebarProps) {
 	return (
-		<div className={cn(styles['sidebar'], className)} {...props}>
+		<div
+			onFocus={handleListFocus}
+			className={cn(styles['sidebar'], className)}
+			{...props}
+		>
 			{closeSidebar.exist && (
 				<IconButton
 					iconType='fill'
