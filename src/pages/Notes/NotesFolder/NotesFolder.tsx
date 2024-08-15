@@ -48,6 +48,7 @@ function NotesFolder() {
 						data={note}
 						isSelection={isSelection}
 						onClick={() => editNote(note)}
+						onKeyDown={e => e.key === 'Enter' && editNote(note)}
 						key={note.id}
 					>
 						{note.title}
