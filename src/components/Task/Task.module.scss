@@ -34,6 +34,11 @@
 	&__complete-checkbox {
 	}
 
+	// .task__content
+
+	&__content {
+	}
+
 	// .task__text
 
 	&__text {
@@ -44,6 +49,8 @@
 	// .task__pin
 
 	&__pin {
+		width: rem(20);
+		height: rem(20);
 	}
 
 	// .task__select-checkbox

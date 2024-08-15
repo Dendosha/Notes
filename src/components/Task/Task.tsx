@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
 import { tasksActions } from '../../store/tasks.slice';
 import Checkbox from '../Checkbox/Checkbox';
@@ -15,6 +16,7 @@ function Task({
 	...props
 }: TaskProps) {
 	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
 
 	const setContextMenuItems = (): MenuItem[] => {
 		const selectButtonName = data.selected ? 'Снять выделение' : 'Выделить';
@@ -36,8 +38,10 @@ function Task({
 				name: pinButtonName,
 				action: () => dispatch(tasksActions.togglePin(data.id))
 			},
-			//! Дописать после создания страницы редактирования заметок ↓
-			{ name: 'Редактировать', action: () => console.log('Редактировать') },
+			{
+				name: 'Редактировать',
+				action: () => navigate(`/tasks/task-${data.id}/edit`)
+			},
 			{ name: 'Удалить', action: () => dispatch(tasksActions.remove(data.id)) }
 		];
 	};
@@ -49,19 +53,14 @@ function Task({
 			tabIndex={0}
 			className={cn(styles['task'], className)}
 		>
-			{!isSelection && (
+			{!isSelection ? (
 				<Checkbox
 					name='task-complete'
 					className={styles['task__complete-checkbox']}
 					checked={data.completed}
 					onChange={() => dispatch(tasksActions.toggleComplete(data.id))}
 				/>
-			)}
-			<span className={styles['task__text']}>{children}</span>
-			{data.pinned && (
-				<img src='/public/icons/pin.svg' className={styles['task__pin']}></img>
-			)}
-			{isSelection && (
+			) : (
 				<Checkbox
 					name='task-select'
 					className={styles['task__select-checkbox']}
@@ -70,6 +69,15 @@ function Task({
 					onChange={() => dispatch(tasksActions.toggleSelect(data.id))}
 				/>
 			)}
+			<p className={styles['task__content']}>
+				<span className={styles['task__text']}>{children}</span>
+				{data.pinned && (
+					<img
+						src='/public/icons/pin.svg'
+						className={styles['task__pin']}
+					></img>
+				)}
+			</p>
 		</InteractiveListItem>
 	);
 }
