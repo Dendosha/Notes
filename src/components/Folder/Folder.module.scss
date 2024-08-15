@@ -2,6 +2,8 @@
 @use '../../styles/general' as *;
 
 .folder {
+	user-select: none;
+
 	text-decoration: none;
 	display: inline-block;
 	@extend %button;
