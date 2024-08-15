@@ -1,8 +1,9 @@
 import cn from 'classnames';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { formatDate, ISOStringToDate } from '../../helpers/dateTime';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../hooks/useAppSelector.hook';
+import { foldersActions } from '../../store/folders.slice';
 import { notesActions } from '../../store/notes.slice';
 import Checkbox from '../Checkbox/Checkbox';
 import { MenuItem } from '../ContextMenu/ContextMenu.props';
@@ -21,6 +22,7 @@ function Note({
 	const settings = useAppSelector(state => state.settings);
 
 	const navigate = useNavigate();
+	const { folder } = useParams();
 
 	const date =
 		settings.notesSort === 'createDate' ? data.createdAt : data.updatedAt;
@@ -40,10 +42,20 @@ function Note({
 			},
 			{
 				name: 'Редактировать',
-				action: () =>
-					navigate(`/notes/folder-${data.folderId[1]}/note-${data.id}/edit`)
+				action: () => navigate(`/notes/${folder}/note-${data.id}/edit`)
 			},
-			{ name: 'Удалить', action: () => dispatch(notesActions.remove(data.id)) }
+			{
+				name: 'Удалить',
+				action: () => {
+					dispatch(notesActions.remove(data.id));
+					dispatch(
+						foldersActions.removeNotes({
+							id: data.folderId[1] ?? data.folderId[0],
+							notes: [data.id]
+						})
+					);
+				}
+			}
 		];
 	};
 

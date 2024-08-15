@@ -14,6 +14,7 @@ import {
 	RootContextType,
 	useRootContext
 } from '../../layout/RootLayout/RootLayout';
+import { foldersActions } from '../../store/folders.slice';
 import { notesActions } from '../../store/notes.slice';
 import FolderList from './FolderList/FolderList';
 import styles from './Notes.module.scss';
@@ -85,7 +86,16 @@ function Notes() {
 
 		selectedNotes.forEach(note => {
 			dispatch(notesActions.remove(note.id));
+			dispatch(
+				foldersActions.removeNotes({
+					id: note.folderId[1] ?? note.folderId[0],
+					notes: [note.id]
+				})
+			);
 		});
+
+		setSelectAllButtonState(false);
+		setIsSelection(false);
 	};
 
 	const closeSidebar = () => {

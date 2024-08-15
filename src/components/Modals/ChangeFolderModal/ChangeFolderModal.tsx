@@ -35,8 +35,19 @@ function ChangeFolderModal({
 		const formData = new FormData(e.currentTarget);
 		const folderId = parseInt(formData.get('folder') as string);
 
+		notes.forEach(note => {
+			if (note.folderId[1]) {
+				dispatch(
+					foldersActions.removeNotes({
+						id: note.folderId[1],
+						notes: [note.id]
+					})
+				);
+			}
+		});
+
 		dispatch(
-			foldersActions.updateNotes({
+			foldersActions.addNotes({
 				id: folderId,
 				notes: notes.map(note => note.id)
 			})

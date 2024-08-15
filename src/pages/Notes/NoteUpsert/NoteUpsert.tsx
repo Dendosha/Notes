@@ -25,8 +25,6 @@ function NoteUpsert() {
 	const descriptionRef = useRef<HTMLTextAreaElement>(null);
 
 	useEffect(() => {
-		const createButton = document.activeElement as HTMLButtonElement | null;
-
 		titleRef.current?.focus();
 
 		function handleEscape(e: KeyboardEvent) {
@@ -38,10 +36,9 @@ function NoteUpsert() {
 		document.addEventListener('keydown', handleEscape);
 
 		return () => {
-			createButton?.focus();
 			document.removeEventListener('keydown', handleEscape);
 		};
-	}, []);
+	}, [titleRef.current]);
 
 	const createNote = () => {
 		dispatch(
@@ -54,7 +51,7 @@ function NoteUpsert() {
 		);
 
 		dispatch(
-			foldersActions.updateNotes({
+			foldersActions.addNotes({
 				id: folderId,
 				notes: [noteId]
 			})
