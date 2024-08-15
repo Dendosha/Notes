@@ -110,8 +110,8 @@ function NoteUpsert() {
 	};
 
 	return (
-		<div className={styles['note-edit']} onKeyDown={handleKeyDown}>
-			<div className={styles['note-edit__header']}>
+		<div className={styles['note-upsert']} onKeyDown={handleKeyDown}>
+			<div className={styles['note-upsert__header']}>
 				<IconButton iconType='stroke' onClick={handleExit} ref={buttonRef}>
 					<BackButtonIcon />
 				</IconButton>
@@ -124,14 +124,14 @@ function NoteUpsert() {
 					placeholder='Заголовок'
 				/>
 			</div>
-			<div className={styles['note-edit__content']}>
+			<div className={styles['note-upsert__content']}>
 				<TextField
 					as='textarea'
 					ref={descriptionRef}
 					name='note-description'
 					defaultValue={noteExist?.content}
 					placeholder='Описание'
-					className={styles['note-edit__description']}
+					className={styles['note-upsert__description']}
 				/>
 			</div>
 		</div>

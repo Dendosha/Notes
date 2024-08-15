@@ -1,7 +1,7 @@
 @use '/src/styles/functions' as *;
 @use '/src/styles/general' as *;
 
-.note-edit {
+.note-upsert {
 	position: fixed;
 	z-index: 3;
 	inset: 0;
