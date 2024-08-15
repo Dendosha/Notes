@@ -95,11 +95,13 @@ function ContextMenu({
 				e.preventDefault();
 				focusPreviousMenuButton();
 				break;
-			case 'Escape': {
+			case 'Escape':
 				e.preventDefault();
 				setMenuState(false);
 				break;
-			}
+			case 'Enter':
+				e.stopPropagation();
+				break;
 		}
 	};
 
