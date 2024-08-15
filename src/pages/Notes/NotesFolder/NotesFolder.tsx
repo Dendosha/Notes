@@ -27,7 +27,7 @@ function NotesFolder() {
 		) {
 			navigate(-1);
 		}
-	}, []);
+	}, [folder]);
 
 	const editNote = (note: NotesItem) => {
 		if (isSelection) {
