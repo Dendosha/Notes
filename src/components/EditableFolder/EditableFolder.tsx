@@ -18,7 +18,7 @@ function EditableFolder({
 	...props
 }: EditableFolderProps) {
 	const dispatch = useAppDispatch();
-	const [renameModalState, setRenameModalState] = useState(false);
+	const [renameFolderModalState, setRenameFolderModalState] = useState(false);
 
 	const setContextMenuItems = (): MenuItem[] => {
 		const selectButtonName = data.selected ? 'Снять выделение' : 'Выделить';
@@ -33,7 +33,7 @@ function EditableFolder({
 				name: pinButtonName,
 				action: () => dispatch(foldersActions.togglePin(data.id))
 			},
-			{ name: 'Переименовать', action: () => setRenameModalState(true) },
+			{ name: 'Переименовать', action: () => setRenameFolderModalState(true) },
 			{
 				name: 'Удалить',
 				action: () => dispatch(foldersActions.remove(data.id))
@@ -44,9 +44,10 @@ function EditableFolder({
 	return (
 		<InteractiveListItem
 			{...props}
-			contextMenuItems={setContextMenuItems()}
+			contextMenuItems={isSelectable ? setContextMenuItems() : undefined}
 			tabIndex={0}
 			className={cn(styles['editable-folder'], className)}
+			onClick={() => data.id !== 1 && setRenameFolderModalState(true)}
 		>
 			{isSelectable && isSelection && (
 				<Checkbox
@@ -70,8 +71,8 @@ function EditableFolder({
 				)}
 			</div>
 			<RenameFolderModal
-				modalState={renameModalState}
-				setModalState={setRenameModalState}
+				modalState={renameFolderModalState}
+				setModalState={setRenameFolderModalState}
 				id={data.id}
 				name={data.name}
 			/>
