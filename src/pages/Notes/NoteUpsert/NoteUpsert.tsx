@@ -79,6 +79,13 @@ function NoteUpsert() {
 		}
 
 		if (noteExist) {
+			if (
+				titleRef.current?.value === noteExist.title &&
+				descriptionRef.current?.value === noteExist.content
+			) {
+				return;
+			}
+
 			updateNote();
 		} else {
 			createNote();
