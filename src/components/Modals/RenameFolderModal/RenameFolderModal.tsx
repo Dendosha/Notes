@@ -39,7 +39,8 @@ function RenameFolderModal({
 		inputRef.current?.focus();
 	};
 
-	const closeModal = () => {
+	const closeModal = (e: React.KeyboardEvent | React.MouseEvent) => {
+		e.stopPropagation();
 		setModalState(false);
 	};
 
@@ -47,7 +48,7 @@ function RenameFolderModal({
 		e.preventDefault();
 
 		if (folderName === name) {
-			closeModal();
+			setModalState(false);
 			return;
 		}
 
@@ -65,7 +66,7 @@ function RenameFolderModal({
 			})
 		);
 
-		closeModal();
+		setModalState(false);
 	};
 
 	return (
@@ -84,11 +85,15 @@ function RenameFolderModal({
 						name='new-folder-name'
 						placeholder='Название папки'
 						value={folderName}
-						onChange={e => setFolderName(e.target.value)}
+						onFocus={e => e.stopPropagation()}
+						onChange={e =>
+							setFolderName((e.target as EventTarget & HTMLInputElement).value)
+						}
 					/>
 					<div className={styles['modal-buttons']}>
 						<TextButton
 							type='button'
+							onFocus={e => e.stopPropagation()}
 							onClick={closeModal}
 							className={styles['modal-buttons__button']}
 						>
@@ -98,6 +103,7 @@ function RenameFolderModal({
 							type='submit'
 							className={styles['modal-buttons__button']}
 							disabled={renameButtonDisabled}
+							onFocus={e => e.stopPropagation()}
 						>
 							Переименовать
 						</TextButton>
