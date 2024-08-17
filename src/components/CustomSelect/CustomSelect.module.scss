@@ -2,6 +2,7 @@
 @use '../../styles/general' as *;
 
 .custom-select-wrapper {
+	--select-color: var(--element-color);
 	width: 100%;
 	position: relative;
 }
@@ -12,7 +13,7 @@
 	border-radius: rem(15);
 	padding: rem(24) rem(30);
 
-	background-color: var(--element-color);
+	background-color: var(--select-color);
 	color: var(--text-color);
 	text-align: left;
 
@@ -25,12 +26,12 @@
 	}
 
 	&:focus-visible {
-		background-color: var(--element-active-color);
+		--select-color: var(--element-active-color);
 	}
 
 	@media (hover: hover) {
 		&:hover {
-			background-color: var(--element-hover-color);
+			--select-color: var(--element-hover-color);
 		}
 	}
 
@@ -54,34 +55,52 @@
 
 	&__listbox-wrapper {
 		display: grid;
-		grid-template-rows: 0fr;
+		max-height: rem(400);
+		overflow: auto;
+		opacity: 0;
 
-		transition: grid-template-rows var(--transition-duration);
+		border-radius: rem(15);
+		border: rem(4) solid transparent;
+		background-color: var(--select-color);
+
+		box-shadow: 0 0 rem(10) transparent;
+
+		transition: opacity var(--transition-duration),
+			border-color var(--transition-duration),
+			box-shadow var(--transition-duration);
 
 		&_open {
-			grid-template-rows: 1fr;
+			opacity: 1;
+			border-color: var(--text-color);
+			box-shadow: 0 0 rem(10) var(--shadow-color);
 		}
 	}
 
 	&__listbox {
-		overflow: hidden;
 	}
 
 	&__popup {
+		z-index: 9999;
 		width: 100%;
 		margin-top: rem(10);
-		border-radius: rem(15);
-		overflow: hidden;
 	}
 
 	&__option {
 		cursor: pointer;
 
 		padding: rem(24) rem(30);
-		background-color: var(--element-color);
+		background-color: var(--select-color);
 		@extend %font-big;
 
 		transition: background-color var(--transition-duration);
+
+		&:first-child {
+			border-radius: rem(11) rem(11) 0 0;
+		}
+
+		&:last-child {
+			border-radius: 0 0 rem(11) rem(11);
+		}
 
 		&:focus {
 			outline: none;
@@ -89,12 +108,12 @@
 
 		&:focus-visible,
 		&[class*='--selected'] {
-			background-color: var(--element-active-color);
+			--select-color: var(--element-active-color);
 		}
 
 		@media (hover: hover) {
 			&:hover {
-				background-color: var(--element-hover-color);
+				--select-color: var(--element-hover-color);
 			}
 		}
 	}
