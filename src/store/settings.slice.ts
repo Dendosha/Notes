@@ -6,6 +6,13 @@ export interface SettingsState {
 	actionConfirmations: boolean;
 }
 
+export type SettingsPayload = {
+	[Key in keyof SettingsState]: {
+		key: Key;
+		value: SettingsState[Key];
+	};
+}[keyof SettingsState];
+
 const initialState: SettingsState = {
 	notesSort: 'createDate',
 	notesLayout: 'list',
@@ -16,8 +23,18 @@ export const settingsSlice = createSlice({
 	name: 'settings',
 	initialState,
 	reducers: {
-		update: (state, action: PayloadAction<SettingsState>) => {
-			state = action.payload;
+		update: (state, action: PayloadAction<SettingsPayload>) => {
+			switch (action.payload.key) {
+				case 'notesSort':
+					state.notesSort = action.payload.value;
+					break;
+				case 'notesLayout':
+					state.notesLayout = action.payload.value;
+					break;
+				case 'actionConfirmations':
+					state.actionConfirmations = action.payload.value;
+					break;
+			}
 		}
 	}
 });
