@@ -1,0 +1,15 @@
+@use '/src//styles/functions' as *;
+@use '/src//styles/general' as *;
+
+.settings-list-item {
+	display: grid;
+	align-items: center;
+	grid-template-columns: 1fr rem(700);
+
+	&__title {
+		@extend %font-big;
+	}
+
+	&__select {
+	}
+}
