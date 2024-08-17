@@ -106,15 +106,18 @@
 			outline: none;
 		}
 
-		&:focus-visible,
 		&[class*='--selected'] {
-			--select-color: var(--element-active-color);
+			--select-color: var(--element-selected-color);
 		}
 
 		@media (hover: hover) {
 			&:hover {
 				--select-color: var(--element-hover-color);
 			}
+		}
+
+		&:focus-visible {
+			--select-color: var(--element-active-color);
 		}
 	}
 }
