@@ -1,0 +1,54 @@
+@use '../../styles/functions' as *;
+@use '../../styles/general' as *;
+
+.settings {
+	padding: rem(40);
+	height: 100%;
+	overflow: hidden;
+
+	display: grid;
+	grid-template-rows: auto 1fr;
+	row-gap: rem(40);
+
+	&__header {
+		display: flex;
+		align-items: center;
+		column-gap: rem(40);
+	}
+
+	&__title {
+		flex-grow: 1;
+		@extend %font-huge;
+	}
+
+	&__content {
+		height: 100%;
+		overflow: hidden;
+
+		display: flex;
+		column-gap: rem(40);
+	}
+
+	&__sidebar {
+		height: fit-content;
+		max-height: 100%;
+		overflow-y: auto;
+		overflow-x: hidden;
+
+		flex-shrink: 0;
+
+		display: grid;
+		row-gap: rem(20);
+	}
+
+	&__buttons {
+		position: fixed;
+		right: rem(40);
+		bottom: rem(40);
+	}
+
+	&__add-button,
+	&__remove-button {
+		box-shadow: 0 0 rem(10) var(--shadow-color);
+	}
+}
