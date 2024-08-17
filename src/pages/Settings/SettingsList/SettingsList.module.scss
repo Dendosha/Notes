@@ -1,0 +1,21 @@
+@use '/src//styles/functions' as *;
+@use '/src//styles/general' as *;
+
+.settings-list {
+	border-radius: rem(15);
+	overflow-y: auto;
+	overflow-x: hidden;
+
+	flex-grow: 1;
+
+	display: grid;
+	grid-auto-rows: min-content;
+	row-gap: rem(20);
+
+	&__separator {
+		height: rem(6);
+		background-color: var(--element-color);
+
+		border-radius: rem(4);
+	}
+}
