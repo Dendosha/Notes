@@ -9,6 +9,7 @@ function InteractiveListItem({
 	children,
 	...props
 }: InteractiveListItemProps) {
+	const interactiveListItemRef = useRef<HTMLLIElement>(null);
 	const [contextMenuVisible, setContextMenuVisible] = useState(false);
 	const pointerCoordinates = useRef<{ x: number; y: number }>({
 		x: 0,
@@ -38,17 +39,28 @@ function InteractiveListItem({
 		setContextMenuVisible(true);
 	};
 
+	const onContextMenuClose = () => {
+		setContextMenuVisible(false);
+		interactiveListItemRef.current?.focus();
+	};
+
 	return (
-		<div onContextMenu={handleContextMenu} className={className} {...props}>
+		<li
+			ref={interactiveListItemRef}
+			onContextMenu={handleContextMenu}
+			tabIndex={-1}
+			className={className}
+			{...props}
+		>
 			{children}
 			{contextMenuVisible && contextMenuItems && (
 				<ContextMenu
-					setMenuState={setContextMenuVisible}
+					onMenuClose={onContextMenuClose}
 					items={contextMenuItems}
 					coordinates={pointerCoordinates.current}
 				/>
 			)}
-		</div>
+		</li>
 	);
 }
 
