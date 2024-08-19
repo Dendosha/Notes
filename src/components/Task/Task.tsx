@@ -58,6 +58,7 @@ function Task({
 					name='task-complete'
 					className={styles['task__complete-checkbox']}
 					checked={data.completed}
+					tabIndex={-1}
 					onChange={() => dispatch(tasksActions.toggleComplete(data.id))}
 				/>
 			) : (
