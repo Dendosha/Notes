@@ -1,61 +1,81 @@
 import { useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import Folder from '../../../components/Folder/Folder';
+import InteractiveList from '../../../components/InteractiveList/InteractiveList';
 import { handleListFocus } from '../../../helpers/handleListFocus';
 import { useAppSelector } from '../../../hooks/useAppSelector.hook';
 import { useRootContext } from '../../../layout/RootLayout/RootLayout';
 import { FolderListProps } from './FolderList.props';
 
 function FolderList<T extends HTMLElement, K extends HTMLElement>({
-	parentElementRef,
-	prevElementRef,
 	className
 }: FolderListProps<T, K>) {
+	const location = useLocation();
+
 	const firstFolderRef = useRef<HTMLAnchorElement>(null);
 	const lastFolderRef = useRef<HTMLAnchorElement>(null);
+	const activeFolderRef = useRef<HTMLAnchorElement | null>(null);
 
 	const { isSelection } = useRootContext();
 	const folders = useAppSelector(state => state.folders);
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
-		switch (e.key) {
-			case 'Tab':
-				e.preventDefault();
-				if (e.shiftKey) {
-					prevElementRef.current?.focus();
-				} else {
-					const nextElement = parentElementRef.current?.nextElementSibling
-						?.firstElementChild as HTMLElement | null;
+		if (!e.currentTarget.contains(e.target as Node | null)) {
+			return;
+		}
 
-					nextElement?.focus();
+		const currentLink = e.target as HTMLAnchorElement;
+		const currentListItem = currentLink.parentElement as HTMLLIElement;
+
+		switch (e.key) {
+			case 'ArrowUp':
+			case 'ArrowLeft':
+				if (currentListItem === e.currentTarget.firstElementChild) {
+					lastFolderRef.current?.focus();
+				} else {
+					(
+						currentListItem.previousElementSibling
+							?.firstElementChild as HTMLAnchorElement
+					).focus();
 				}
 				break;
-			case 'ArrowLeft':
-				e.preventDefault();
-				e.stopPropagation();
-				const previousElementSibling = e.currentTarget
-					.previousElementSibling as HTMLAnchorElement | null;
-
-				previousElementSibling
-					? previousElementSibling.focus()
-					: lastFolderRef.current?.focus();
-				break;
+			case 'ArrowDown':
 			case 'ArrowRight':
-				e.preventDefault();
-				e.stopPropagation();
-				const nextElementSibling = e.currentTarget
-					.nextElementSibling as HTMLAnchorElement | null;
-
-				nextElementSibling
-					? nextElementSibling.focus()
-					: firstFolderRef.current?.focus();
+				if (currentListItem === e.currentTarget.lastElementChild) {
+					firstFolderRef.current?.focus();
+				} else {
+					(currentListItem.nextElementSibling as HTMLLIElement).focus();
+				}
 				break;
 		}
 	};
 
+	const handleFocus = (e: React.FocusEvent) => {
+		if (!activeFolderRef.current) {
+			for (const listItem of e.currentTarget.childNodes) {
+				const anchorItem = listItem.firstChild as HTMLAnchorElement;
+
+				if (anchorItem.href.includes(location.pathname)) {
+					activeFolderRef.current = anchorItem;
+					break;
+				}
+			}
+		}
+
+		handleListFocus(e, activeFolderRef.current);
+	};
+
 	return (
-		<div className={className} onFocus={handleListFocus}>
+		<InteractiveList
+			isNotFocusable={isSelection}
+			className={className}
+			onKeyDown={handleKeyDown}
+			onFocus={handleFocus}
+		>
 			{folders.items.map((folder, index, array) => {
 				let ref = null;
+				const href =
+					folder.id === 1 ? '/notes/all' : `/notes/folder-${folder.id}`;
 
 				if (index === 0) {
 					ref = firstFolderRef;
@@ -64,18 +84,26 @@ function FolderList<T extends HTMLElement, K extends HTMLElement>({
 				}
 
 				return (
-					<Folder
-						ref={ref}
-						to={folder.id === 1 ? '/notes/all' : `/notes/folder-${folder.id}`}
-						disabled={isSelection}
+					<li
 						key={folder.id}
-						onKeyDown={handleKeyDown}
+						tabIndex={-1}
+						onFocus={e =>
+							(e.currentTarget.firstElementChild as HTMLAnchorElement).focus()
+						}
 					>
-						{folder.name}
-					</Folder>
+						<Folder
+							ref={ref}
+							to={href}
+							disabled={isSelection}
+							tabIndex={-1}
+							onClick={e => (activeFolderRef.current = e.currentTarget)}
+						>
+							{folder.name}
+						</Folder>
+					</li>
 				);
 			})}
-		</div>
+		</InteractiveList>
 	);
 }
 

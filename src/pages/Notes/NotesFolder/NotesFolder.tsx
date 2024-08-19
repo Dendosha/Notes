@@ -1,13 +1,16 @@
 import { useEffect } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import InteractiveList from '../../../components/InteractiveList/InteractiveList';
 import Note from '../../../components/Note/Note';
 import { useAppDispatch } from '../../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../../hooks/useAppSelector.hook';
-import { useRootContext } from '../../../layout/RootLayout/RootLayout';
 import { notesActions, NotesItem } from '../../../store/notes.slice';
+import { NotesContextType, useNotesContext } from '../Notes';
+import style from './NotesFolder.module.scss';
 
 function NotesFolder() {
-	const { searchValue, isSelection } = useRootContext();
+	const { searchValue, isSelection, focusFromUpsertNoteRef } =
+		useNotesContext();
 
 	const dispatch = useAppDispatch();
 	const folders = useAppSelector(state => state.folders);
@@ -17,6 +20,9 @@ function NotesFolder() {
 	const folderId = parseInt(folder?.split('-')[1] ?? '1');
 
 	const notes = useAppSelector(state => state.notes);
+	const folderNotes = notes.items.filter(note =>
+		note.folderId.includes(folderId)
+	);
 
 	useEffect(() => {
 		if (
@@ -29,32 +35,40 @@ function NotesFolder() {
 		}
 	}, [folder]);
 
-	const editNote = (note: NotesItem) => {
+	const editNote = (
+		e: React.MouseEvent | React.KeyboardEvent,
+		note: NotesItem
+	) => {
 		if (isSelection) {
 			dispatch(notesActions.toggleSelect(note.id));
 			return;
 		}
 
+		focusFromUpsertNoteRef.current = e.currentTarget as HTMLLIElement;
 		navigate(`/notes/${folder}/note-${note.id}/edit`);
 	};
 
 	return (
 		<>
-			{notes.items
-				.filter(note => note.folderId.includes(folderId))
-				.filter(note => note.title.toLowerCase().includes(searchValue))
-				.map(note => (
-					<Note
-						data={note}
-						isSelection={isSelection}
-						onClick={() => editNote(note)}
-						onKeyDown={e => e.key === 'Enter' && editNote(note)}
-						key={note.id}
-					>
-						{note.title}
-					</Note>
-				))}
-			<Outlet />
+			<InteractiveList
+				className={style['notes-list']}
+				isNotFocusable={folderNotes.length === 0}
+			>
+				{folderNotes
+					.filter(note => note.title.toLowerCase().includes(searchValue))
+					.map(note => (
+						<Note
+							data={note}
+							isSelection={isSelection}
+							onClick={e => editNote(e, note)}
+							onKeyDown={e => e.key === 'Enter' && editNote(e, note)}
+							key={note.id}
+						>
+							{note.title}
+						</Note>
+					))}
+			</InteractiveList>
+			<Outlet context={{ focusFromUpsertNoteRef } satisfies NotesContextType} />
 		</>
 	);
 }

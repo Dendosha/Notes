@@ -1,13 +1,18 @@
 import cn from 'classnames';
 import { useEffect, useRef, useState } from 'react';
-import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom';
+import {
+	NavLink,
+	Outlet,
+	useNavigate,
+	useOutletContext,
+	useParams
+} from 'react-router-dom';
 import AddButtonIcon from '../../assets/icons/AddButtonIcon';
 import EditFoldersButtonIcon from '../../assets/icons/EditFoldersButtonIcon';
 import RemoveButtonIcon from '../../assets/icons/RemoveButtonIcon';
 import IconButton from '../../components/IconButton/IconButton';
 import ChangeFolderModal from '../../components/Modals/ChangeFolderModal/ChangeFolderModal';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import { handleListFocus } from '../../helpers/handleListFocus';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../hooks/useAppSelector.hook';
 import {
@@ -19,6 +24,14 @@ import { notesActions } from '../../store/notes.slice';
 import FolderList from './FolderList/FolderList';
 import styles from './Notes.module.scss';
 
+export interface NotesContextType {
+	focusFromUpsertNoteRef: React.MutableRefObject<HTMLElement | null>;
+}
+
+export function useNotesContext() {
+	return useOutletContext<RootContextType & NotesContextType>();
+}
+
 function Notes() {
 	const [isAnyNoteSelected, setIsAnyNoteSelected] = useState(false);
 	const [selectAllButtonState, setSelectAllButtonState] = useState(false);
@@ -27,6 +40,7 @@ function Notes() {
 	const firstSidebarButtonRef = useRef<HTMLButtonElement>(null);
 	const foldersPageAnchorRef = useRef<HTMLAnchorElement>(null);
 	const foldersParentRef = useRef<HTMLDivElement>(null);
+	const focusFromUpsertNoteRef = useRef<HTMLElement | null>(null);
 
 	const { searchValue, isSelection, setIsSelection } = useRootContext();
 
@@ -76,8 +90,9 @@ function Notes() {
 		};
 	}, [notes.items]);
 
-	const upsertNote = () => {
+	const createNote = (e: React.MouseEvent) => {
 		const newNoteId = new Date().getTime();
+		focusFromUpsertNoteRef.current = e.currentTarget as HTMLButtonElement;
 		navigate(`/notes/${folder}/note-${newNoteId}/edit`);
 	};
 
@@ -180,21 +195,16 @@ function Notes() {
 						}}
 					/>
 				)}
-				<div
-					className={styles['notes__list']}
-					tabIndex={-1}
-					onFocus={handleListFocus}
-				>
-					<Outlet
-						context={
-							{
-								searchValue,
-								isSelection,
-								setIsSelection
-							} satisfies RootContextType
-						}
-					/>
-				</div>
+				<Outlet
+					context={
+						{
+							searchValue,
+							isSelection,
+							setIsSelection,
+							focusFromUpsertNoteRef
+						} satisfies RootContextType & NotesContextType
+					}
+				/>
 			</div>
 			<div className={styles['notes__buttons']}>
 				{!isSelection ? (
@@ -202,7 +212,7 @@ function Notes() {
 						appearance='circle'
 						colorScheme='primary'
 						className={styles['notes__add-button']}
-						onClick={upsertNote}
+						onClick={createNote}
 					>
 						<AddButtonIcon />
 					</IconButton>

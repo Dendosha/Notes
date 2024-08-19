@@ -7,11 +7,14 @@ import { useAppDispatch } from '../../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../../hooks/useAppSelector.hook';
 import { foldersActions } from '../../../store/folders.slice';
 import { notesActions } from '../../../store/notes.slice';
+import { useNotesContext } from '../Notes';
 import styles from './NoteUpsert.module.scss';
 
 function NoteUpsert() {
 	const dispatch = useAppDispatch();
 	const notes = useAppSelector(state => state.notes);
+
+	const { focusFromUpsertNoteRef } = useNotesContext();
 
 	const navigate = useNavigate();
 	const { folder, note } = useParams();
@@ -70,6 +73,7 @@ function NoteUpsert() {
 
 	const handleExit = () => {
 		navigate(-1);
+		focusFromUpsertNoteRef.current?.focus();
 
 		if (!titleRef.current?.value && !descriptionRef.current?.value) {
 			return;
