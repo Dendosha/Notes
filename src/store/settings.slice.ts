@@ -6,10 +6,15 @@ export interface SettingsState {
 	actionConfirmations: boolean;
 }
 
+type SettingValue<
+	T extends SettingsState,
+	K extends keyof T = keyof T
+> = T[K] extends keyof SettingsState ? T[K] : never;
+
 export type SettingsPayload = {
 	[Key in keyof SettingsState]: {
 		key: Key;
-		value: SettingsState[Key];
+		value: SettingValue<SettingsState, Key>;
 	};
 }[keyof SettingsState];
 
@@ -24,17 +29,7 @@ export const settingsSlice = createSlice({
 	initialState,
 	reducers: {
 		update: (state, action: PayloadAction<SettingsPayload>) => {
-			switch (action.payload.key) {
-				case 'notesSort':
-					state.notesSort = action.payload.value;
-					break;
-				case 'notesLayout':
-					state.notesLayout = action.payload.value;
-					break;
-				case 'actionConfirmations':
-					state.actionConfirmations = action.payload.value;
-					break;
-			}
+			state[action.payload.key] = action.payload.value;
 		}
 	}
 });
