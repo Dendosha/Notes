@@ -1,0 +1,8 @@
+@use '/src/styles/functions' as *;
+@use '/src/styles/general' as *;
+
+.interactive-list {
+	&:focus {
+		outline: none;
+	}
+}
