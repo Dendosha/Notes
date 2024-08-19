@@ -7,43 +7,47 @@ import TextField from '../../../components/TextField/TextField';
 import { useAppDispatch } from '../../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../../hooks/useAppSelector.hook';
 import { tasksActions } from '../../../store/tasks.slice';
+import { useTasksContext } from '../Tasks';
 import styles from './TaskUpsert.module.scss';
 
 function TaskUpsert() {
 	const dispatch = useAppDispatch();
 	const tasks = useAppSelector(state => state.tasks);
-	const [inputValue, setInputValue] = useState('');
+
+	const { focusFromUpsertTaskRef } = useTasksContext();
 
 	const navigate = useNavigate();
 	const { task } = useParams();
 	const taskId = parseInt(task?.split('-')[1]!);
-
 	const taskExist = tasks.items.find(item => item.id === taskId);
+
+	const [inputValue, setInputValue] = useState(taskExist?.content ?? '');
 
 	const taskUpsertParentRef = useRef<HTMLDivElement>(null);
 	const cancelButtonRef = useRef<HTMLButtonElement>(null);
 	const confirmButtonRef = useRef<HTMLButtonElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
 
+	const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
 	useEffect(() => {
 		inputRef.current?.focus();
-
-		if (taskExist) {
-			setInputValue(taskExist.content);
-		}
 
 		const handleDocumentEscape = (e: KeyboardEvent) => {
 			if (e.key !== 'Escape') {
 				return;
 			}
 
-			handleCancel();
+			handleExit();
 		};
 
 		document.addEventListener('keydown', handleDocumentEscape);
 
 		return () => {
 			document.removeEventListener('keydown', handleDocumentEscape);
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+			}
 		};
 	}, [taskExist]);
 
@@ -93,8 +97,11 @@ function TaskUpsert() {
 		);
 	};
 
-	const handleCancel = () => {
+	const handleExit = () => {
 		navigate('/tasks');
+		setTimeout(() => {
+			focusFromUpsertTaskRef.current?.focus();
+		}, 0.5);
 	};
 
 	const handleConfirm = () => {
@@ -104,7 +111,7 @@ function TaskUpsert() {
 			createTask();
 		}
 
-		navigate(-1);
+		handleExit();
 	};
 
 	return (
@@ -112,7 +119,7 @@ function TaskUpsert() {
 			ref={taskUpsertParentRef}
 			className={styles['task-upsert']}
 			onKeyDown={handleKeyDown}
-			onClick={e => e.currentTarget === e.target && handleCancel()}
+			onClick={e => e.currentTarget === e.target && handleExit()}
 		>
 			<div className={styles['task-upsert__content']}>
 				<TextField
@@ -132,7 +139,7 @@ function TaskUpsert() {
 					colorScheme='primary'
 					appearance='circle'
 					className={styles['task-upsert__button']}
-					onClick={handleCancel}
+					onClick={handleExit}
 				>
 					<CancelButtonIcon />
 				</IconButton>

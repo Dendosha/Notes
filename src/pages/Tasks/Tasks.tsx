@@ -1,19 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useOutletContext } from 'react-router-dom';
 import AddButtonIcon from '../../assets/icons/AddButtonIcon';
 import RemoveButtonIcon from '../../assets/icons/RemoveButtonIcon';
 import IconButton from '../../components/IconButton/IconButton';
+import InteractiveList from '../../components/InteractiveList/InteractiveList';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import Task from '../../components/Task/Task';
-import { handleListFocus } from '../../helpers/handleListFocus';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../hooks/useAppSelector.hook';
 import {
 	RootContextType,
 	useRootContext
 } from '../../layout/RootLayout/RootLayout';
-import { tasksActions } from '../../store/tasks.slice';
+import { tasksActions, TasksItem } from '../../store/tasks.slice';
 import styles from './Tasks.module.scss';
+
+export interface TasksContextType {
+	focusFromUpsertTaskRef: React.MutableRefObject<HTMLElement | null>;
+}
+
+export function useTasksContext() {
+	return useOutletContext<RootContextType & TasksContextType>();
+}
 
 function Tasks() {
 	const [isAnyTaskSelected, setIsAnyTaskSelected] = useState(false);
@@ -22,6 +30,8 @@ function Tasks() {
 	const { searchValue, isSelection, setIsSelection } = useRootContext();
 
 	const firstSidebarButtonRef = useRef<HTMLButtonElement>(null);
+	const focusFromUpsertTaskRef = useRef<HTMLElement | null>(null);
+	const newlyUpdatedTask = useRef<HTMLLIElement | null>(null);
 
 	const dispatch = useAppDispatch();
 	const tasks = useAppSelector(state => state.tasks);
@@ -65,8 +75,21 @@ function Tasks() {
 		};
 	}, [tasks.items]);
 
-	const upsertTask = (taskId?: number) => {
+	useEffect(() => {
+		if (newlyUpdatedTask.current) {
+			const taskToFocus = document.querySelector(
+				`[data-key="${newlyUpdatedTask.current.dataset.key}"]`
+			) as HTMLLIElement | null;
+			taskToFocus?.focus();
+		}
+	}, [newlyUpdatedTask.current]);
+
+	const upsertTask = (
+		e: React.MouseEvent | React.KeyboardEvent,
+		taskId?: number
+	) => {
 		const newTaskId = new Date().getTime();
+		focusFromUpsertTaskRef.current = e.currentTarget as HTMLElement;
 		navigate(`/tasks/task-${taskId ?? newTaskId}/edit`);
 	};
 
@@ -110,6 +133,21 @@ function Tasks() {
 		});
 	};
 
+	const handleTaskKeyDown = (e: React.KeyboardEvent, task: TasksItem) => {
+		if (isSelection) {
+			return;
+		}
+
+		if (e.key === 'Enter') {
+			upsertTask(e, task.id);
+		}
+
+		if (e.key === 'c' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+			newlyUpdatedTask.current = e.currentTarget as HTMLLIElement;
+			dispatch(tasksActions.toggleComplete(task.id));
+		}
+	};
+
 	return (
 		<div className={styles['tasks']}>
 			<div className={styles['tasks__content']}>
@@ -136,36 +174,52 @@ function Tasks() {
 						}}
 					/>
 				)}
-				<div className={styles['tasks__list']} onFocus={handleListFocus}>
-					{uncompletedTasks
-						.filter(task => task.content.toLowerCase().includes(searchValue))
-						.map(task => (
-							<Task
-								data={task}
-								isSelection={isSelection}
-								key={task.id}
-								onKeyDown={e => e.key === 'Enter' && upsertTask(task.id)}
-								onClick={() => upsertTask(task.id)}
-							>
-								{task.content}
-							</Task>
-						))}
+				<div className={styles['tasks__list-wrapper']}>
+					<InteractiveList
+						className={styles['tasks__list']}
+						isNotFocusable={uncompletedTasks.length === 0}
+					>
+						{uncompletedTasks
+							.filter(task => task.content.toLowerCase().includes(searchValue))
+							.map(task => (
+								<Task
+									data={task}
+									isSelection={isSelection}
+									key={task.id}
+									data-key={task.id}
+									onKeyDown={e => handleTaskKeyDown(e, task)}
+									onClick={e => upsertTask(e, task.id)}
+								>
+									{task.content}
+								</Task>
+							))}
+					</InteractiveList>
 					{completedTasks.length !== 0 && (
-						<h2 className={styles['tasks__list-title']}>Выполненные:</h2>
-					)}
-					{completedTasks
-						.filter(task => task.content.toLowerCase().includes(searchValue))
-						.map(task => (
-							<Task
-								data={task}
-								isSelection={isSelection}
-								key={task.id}
-								onKeyDown={e => e.key === 'Enter' && upsertTask(task.id)}
-								onClick={() => upsertTask(task.id)}
+						<>
+							<h2 className={styles['tasks__list-title']}>Выполненные:</h2>
+							<InteractiveList
+								className={styles['tasks__list']}
+								isNotFocusable={completedTasks.length === 0}
 							>
-								{task.content}
-							</Task>
-						))}
+								{completedTasks
+									.filter(task =>
+										task.content.toLowerCase().includes(searchValue)
+									)
+									.map(task => (
+										<Task
+											data={task}
+											isSelection={isSelection}
+											key={task.id}
+											data-key={task.id}
+											onKeyDown={e => handleTaskKeyDown(e, task)}
+											onClick={e => upsertTask(e, task.id)}
+										>
+											{task.content}
+										</Task>
+									))}
+							</InteractiveList>
+						</>
+					)}
 				</div>
 			</div>
 			<div className={styles['tasks__buttons']}>
@@ -174,7 +228,7 @@ function Tasks() {
 						appearance='circle'
 						colorScheme='primary'
 						className={styles['tasks__add-button']}
-						onClick={() => upsertTask()}
+						onClick={upsertTask}
 					>
 						<AddButtonIcon />
 					</IconButton>
@@ -192,10 +246,11 @@ function Tasks() {
 			</div>
 			<Outlet
 				context={
-					{ isSelection, setIsSelection } satisfies Omit<
-						RootContextType,
-						'searchValue'
-					>
+					{
+						isSelection,
+						setIsSelection,
+						focusFromUpsertTaskRef
+					} satisfies Omit<RootContextType, 'searchValue'> & TasksContextType
 				}
 			/>
 		</div>
