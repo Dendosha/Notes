@@ -11,5 +11,5 @@ export interface ContextMenuProps extends HTMLAttributes<HTMLUListElement> {
 		x: number;
 		y: number;
 	};
-	setMenuState: (state: React.SetStateAction<boolean>) => void;
+	onMenuClose: () => void;
 }

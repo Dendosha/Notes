@@ -11,7 +11,7 @@ const Y_OFFSET = 5;
 function ContextMenu({
 	items,
 	coordinates,
-	setMenuState,
+	onMenuClose,
 	className,
 	...props
 }: ContextMenuProps) {
@@ -64,29 +64,32 @@ function ContextMenu({
 				return false;
 			}
 
-			setMenuState(false);
+			onMenuClose();
 		}
 
 		return () => {
 			document.removeEventListener('wheel', handleWheelEvent);
 		};
-	}, [contextMenuRef, coordinates.x, coordinates.y, setMenuState]);
+	}, [contextMenuRef, coordinates.x, coordinates.y]);
 
 	const handleMenuItemClick = (item: MenuItem) => {
 		item.action();
-		setMenuState(false);
+		onMenuClose();
 	};
 
 	const handleBackdropMouseDown = (
 		e: React.MouseEvent<HTMLDivElement, MouseEvent>
 	) => {
 		if (e.target === e.currentTarget) {
-			setMenuState(false);
+			onMenuClose();
 		}
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		switch (e.key) {
+			case 'Tab':
+				e.preventDefault();
+				break;
 			case 'ArrowDown':
 				e.preventDefault();
 				focusNextMenuButton();
@@ -97,7 +100,7 @@ function ContextMenu({
 				break;
 			case 'Escape':
 				e.preventDefault();
-				setMenuState(false);
+				onMenuClose();
 				break;
 			case 'Enter':
 				e.stopPropagation();
@@ -156,6 +159,7 @@ function ContextMenu({
 								(index === array.length - 1 && lastElementRef) ||
 								null
 							}
+							tabIndex={-1}
 							onClick={e => {
 								e.stopPropagation();
 								handleMenuItemClick(item);
