@@ -1,7 +1,15 @@
-export const handleListFocus = (e: React.FocusEvent) => {
-	if (e.currentTarget.contains(e.relatedTarget) || e.relatedTarget === null) {
+export const handleListFocus = (
+	e: React.FocusEvent,
+	elementToFocus: HTMLElement | null = null
+) => {
+	if (
+		e.currentTarget.contains(e.relatedTarget) ||
+		(e.currentTarget.contains(e.target) && e.currentTarget !== e.target)
+	) {
 		return;
 	}
 
-	(e.currentTarget.firstElementChild as HTMLElement | null)?.focus();
+	elementToFocus
+		? elementToFocus.focus()
+		: (e.currentTarget.firstElementChild as HTMLElement | null)?.focus();
 };
