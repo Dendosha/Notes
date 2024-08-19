@@ -51,7 +51,6 @@ function Task({
 			{...props}
 			contextMenuItems={setContextMenuItems()}
 			isSelection={isSelection}
-			tabIndex={0}
 			className={cn(styles['task'], className)}
 		>
 			{!isSelection ? (
@@ -67,6 +66,7 @@ function Task({
 					className={styles['task__select-checkbox']}
 					appearance='circle'
 					checked={data.selected}
+					tabIndex={-1}
 					onChange={() => dispatch(tasksActions.toggleSelect(data.id))}
 				/>
 			)}
