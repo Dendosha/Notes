@@ -5,9 +5,9 @@ import BackButtonIcon from '../../assets/icons/BackButtonIcon';
 import RemoveButtonIcon from '../../assets/icons/RemoveButtonIcon';
 import EditableFolder from '../../components/EditableFolder/EditableFolder';
 import IconButton from '../../components/IconButton/IconButton';
+import InteractiveList from '../../components/InteractiveList/InteractiveList';
 import CreateFolderModal from '../../components/Modals/CreateFolderModal/CreateFolderModal';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import { handleListFocus } from '../../helpers/handleListFocus';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../hooks/useAppSelector.hook';
 import { foldersActions } from '../../store/folders.slice';
@@ -145,7 +145,7 @@ function Folders() {
 						}}
 					/>
 				)}
-				<div className={styles['folders__list']} onFocus={handleListFocus}>
+				<InteractiveList className={styles['folders__list']}>
 					{folders.items.map(folder => (
 						<EditableFolder
 							data={folder}
@@ -156,7 +156,7 @@ function Folders() {
 							{folder.name}
 						</EditableFolder>
 					))}
-				</div>
+				</InteractiveList>
 			</div>
 			<div className={styles['folders__buttons']}>
 				{!isSelection ? (
