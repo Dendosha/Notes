@@ -64,7 +64,6 @@ function Note({
 			{...props}
 			contextMenuItems={setContextMenuItems()}
 			isSelection={isSelection}
-			tabIndex={0}
 			className={cn(styles['note'], className)}
 		>
 			{isSelection && (
@@ -73,6 +72,7 @@ function Note({
 					className={styles['note__select-checkbox']}
 					appearance='circle'
 					checked={data.selected}
+					tabIndex={-1}
 					onChange={() => dispatch(notesActions.toggleSelect(data.id))}
 				/>
 			)}
