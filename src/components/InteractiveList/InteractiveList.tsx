@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { handleListFocus } from '../../helpers/handleListFocus';
 import styles from './InteractiveList.module.scss';
 import { InteractiveListProps } from './InteractiveList.props';
@@ -12,6 +12,14 @@ function InteractiveList({
 	children
 }: InteractiveListProps) {
 	const [tabIndex, setTabIndex] = useState<0 | -1>(0);
+
+	useEffect(() => {
+		if (React.Children.toArray(children).length !== 0) {
+			setTabIndex(0);
+		} else {
+			setTabIndex(-1);
+		}
+	}, [children]);
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		if (!e.currentTarget.contains(e.target as Node | null)) {
