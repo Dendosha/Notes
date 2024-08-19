@@ -47,14 +47,18 @@ function EditableFolder({
 		];
 	};
 
+	const openRenameFolderModal = () => {
+		data.id !== 1 && setRenameFolderModalState(true);
+	};
+
 	return (
 		<InteractiveListItem
 			{...props}
 			contextMenuItems={isSelectable ? setContextMenuItems() : undefined}
 			isSelection={isSelection}
-			tabIndex={0}
 			className={cn(styles['editable-folder'], className)}
-			onClick={() => data.id !== 1 && setRenameFolderModalState(true)}
+			onClick={openRenameFolderModal}
+			onKeyDown={e => e.key === 'Enter' && openRenameFolderModal()}
 		>
 			{isSelectable && isSelection && (
 				<Checkbox
@@ -62,6 +66,7 @@ function EditableFolder({
 					className={styles['editable-folder__select-checkbox']}
 					appearance='circle'
 					checked={data.selected}
+					tabIndex={-1}
 					onChange={() => dispatch(foldersActions.toggleSelect(data.id))}
 				/>
 			)}
