@@ -18,7 +18,6 @@ const Folder = forwardRef<HTMLAnchorElement, FolderProps>(function Folder(
 					[styles['folder_disabled']]: disabled
 				})
 			}
-			tabIndex={disabled ? -1 : 0}
 			{...props}
 		>
 			{children}
