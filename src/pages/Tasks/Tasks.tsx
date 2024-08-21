@@ -80,7 +80,11 @@ function Tasks() {
 			const taskToFocus = document.querySelector(
 				`[data-key="${newlyUpdatedTask.current.dataset.key}"]`
 			) as HTMLLIElement | null;
-			taskToFocus?.focus();
+
+			if (taskToFocus) {
+				taskToFocus.focus();
+				taskToFocus.parentElement!.tabIndex = -1;
+			}
 		}
 	}, [newlyUpdatedTask.current]);
 
@@ -138,12 +142,13 @@ function Tasks() {
 			return;
 		}
 
-		if (e.key === 'Enter') {
+		if (e.code === 'Enter') {
 			upsertTask(e, task.id);
 		}
 
-		if (e.key === 'c' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+		if (e.code === 'KeyC' && !e.ctrlKey && !e.altKey && !e.metaKey) {
 			newlyUpdatedTask.current = e.currentTarget as HTMLLIElement;
+			newlyUpdatedTask.current.parentElement!.tabIndex = 0;
 			dispatch(tasksActions.toggleComplete(task.id));
 		}
 	};
