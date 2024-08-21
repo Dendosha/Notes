@@ -24,8 +24,7 @@ function Note({
 	const navigate = useNavigate();
 	const { folder } = useParams();
 
-	const date =
-		settings.notesSort === 'createDate' ? data.createdAt : data.updatedAt;
+	const date = settings.sort === 'createDate' ? data.createdAt : data.updatedAt;
 
 	const setContextMenuItems = (): MenuItem[] => {
 		const selectButtonName = data.selected ? 'Снять выделение' : 'Выделить';
