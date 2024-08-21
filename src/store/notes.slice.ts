@@ -13,6 +13,7 @@ export interface NotesItem {
 
 export interface NotesState {
 	items: NotesItem[];
+	pinnedItems: NotesItem[];
 }
 
 export type NotesPayload = {
@@ -20,7 +21,8 @@ export type NotesPayload = {
 } & Pick<NotesItem, 'id' | 'title' | 'content'>;
 
 const initialState: NotesState = {
-	items: []
+	items: [],
+	pinnedItems: []
 };
 
 export const notesSlice = createSlice({
@@ -51,6 +53,15 @@ export const notesSlice = createSlice({
 			const existed = state.items.find(item => item.id === action.payload);
 
 			if (!existed) return;
+
+			if (existed.pinned) {
+				const existedIndex = state.pinnedItems.findIndex(
+					item => item.id === existed.id
+				);
+				state.pinnedItems.splice(existedIndex, 1);
+			} else {
+				state.pinnedItems.unshift(existed);
+			}
 
 			existed.pinned = !existed.pinned;
 		},

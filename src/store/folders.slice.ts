@@ -7,10 +7,12 @@ export interface FoldersItem {
 	pinned: boolean;
 	selected: boolean;
 	createdAt: string;
+	updatedAt: string;
 }
 
 export interface FoldersState {
 	items: FoldersItem[];
+	pinnedItems: FoldersItem[];
 }
 
 const initialState: FoldersState = {
@@ -20,10 +22,12 @@ const initialState: FoldersState = {
 			name: 'Все',
 			notes: [],
 			createdAt: new Date().toISOString(),
+			updatedAt: new Date().toISOString(),
 			pinned: false,
 			selected: false
 		}
-	]
+	],
+	pinnedItems: []
 };
 
 export type FoldersItemPayload = Pick<FoldersItem, 'id' | 'name' | 'notes'>;
@@ -44,7 +48,8 @@ export const foldersSlice = createSlice({
 				...action.payload,
 				pinned: false,
 				selected: false,
-				createdAt: new Date().toISOString()
+				createdAt: new Date().toISOString(),
+				updatedAt: new Date().toISOString()
 			});
 		},
 		remove: (state, action: PayloadAction<number>) => {
@@ -84,6 +89,15 @@ export const foldersSlice = createSlice({
 
 			if (!existed) return;
 
+			if (existed.pinned) {
+				const existedIndex = state.pinnedItems.findIndex(
+					item => item.id === existed.id
+				);
+				state.pinnedItems.splice(existedIndex, 1);
+			} else {
+				state.pinnedItems.unshift(existed);
+			}
+
 			existed.pinned = !existed.pinned;
 		},
 		rename: (
@@ -95,6 +109,7 @@ export const foldersSlice = createSlice({
 			if (!existed) return;
 
 			existed.name = action.payload.name;
+			existed.updatedAt = new Date().toISOString();
 		},
 		addNotes: (
 			state,
@@ -113,6 +128,7 @@ export const foldersSlice = createSlice({
 			function addNotesToFolder(folder: FoldersItem) {
 				const notesSet = new Set([...folder.notes, ...action.payload.notes]);
 				folder.notes = Array.from(notesSet);
+				folder.updatedAt = new Date().toISOString();
 			}
 		},
 		removeNotes: (
@@ -133,6 +149,7 @@ export const foldersSlice = createSlice({
 				action.payload.notes.forEach(note => {
 					folder.notes.splice(folder.notes.indexOf(note), 1);
 				});
+				folder.updatedAt = new Date().toISOString();
 			}
 		}
 	}

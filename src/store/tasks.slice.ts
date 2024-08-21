@@ -12,12 +12,14 @@ export interface TasksItem {
 
 export interface TasksState {
 	items: TasksItem[];
+	pinnedItems: TasksItem[];
 }
 
 export type TasksItemPayload = Pick<TasksItem, 'id' | 'content'>;
 
 const initialState: TasksState = {
-	items: []
+	items: [],
+	pinnedItems: []
 };
 
 export const tasksSlice = createSlice({
@@ -51,6 +53,15 @@ export const tasksSlice = createSlice({
 			const existed = state.items.find(item => item.id === action.payload);
 
 			if (!existed) return;
+
+			if (existed.pinned) {
+				const existedIndex = state.pinnedItems.findIndex(
+					item => item.id === existed.id
+				);
+				state.pinnedItems.splice(existedIndex, 1);
+			} else {
+				state.pinnedItems.unshift(existed);
+			}
 
 			existed.pinned = !existed.pinned;
 		},
