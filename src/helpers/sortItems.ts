@@ -8,7 +8,8 @@ type ItemType = NotesItem | TasksItem | FoldersItem;
 
 export const sortItems = <T extends ItemType>(
 	state: T[],
-	sort: SettingsState['sort']
+	sort: SettingsState['sort'],
+	increasing: boolean = false
 ) => {
 	const sortType = sort === 'createDate' ? 'createdAt' : 'updatedAt';
 
@@ -19,7 +20,9 @@ export const sortItems = <T extends ItemType>(
 		const firstDate = ISOStringToDate(firstItem[sortType]);
 		const secondDate = ISOStringToDate(secondItem[sortType]);
 
-		return secondDate.getTime() - firstDate.getTime();
+		return increasing
+			? firstDate.getTime() - secondDate.getTime()
+			: secondDate.getTime() - firstDate.getTime();
 	}
 
 	return [...state].sort(compareItemsDates);
