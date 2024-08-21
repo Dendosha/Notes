@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Folder from '../../../components/Folder/Folder';
 import InteractiveList from '../../../components/InteractiveList/InteractiveList';
 import { handleListFocus } from '../../../helpers/handleListFocus';
+import { sortItems } from '../../../helpers/sortItems';
 import { useAppSelector } from '../../../hooks/useAppSelector.hook';
 import { useRootContext } from '../../../layout/RootLayout/RootLayout';
 import { FolderListProps } from './FolderList.props';
@@ -18,6 +19,15 @@ function FolderList<T extends HTMLElement, K extends HTMLElement>({
 
 	const { isSelection } = useRootContext();
 	const folders = useAppSelector(state => state.folders);
+	const settings = useAppSelector(state => state.settings);
+
+	const folderAll = folders.items.find(folder => folder.id === 1)!;
+	const pinnedFolders = folders.pinnedItems;
+	const unpinnedFolders = folders.items.filter(folder => !folder.pinned);
+	const folderList = [
+		...pinnedFolders,
+		...sortItems(unpinnedFolders, settings.sort, true)
+	].filter(folder => folder.id !== 1);
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		if (!e.currentTarget.contains(e.target as Node | null)) {
@@ -50,7 +60,7 @@ function FolderList<T extends HTMLElement, K extends HTMLElement>({
 		}
 	};
 
-	const handleFocus = (e: React.FocusEvent) => {
+	const handleFolderListFocus = (e: React.FocusEvent) => {
 		if (!activeFolderRef.current) {
 			for (const listItem of e.currentTarget.childNodes) {
 				const anchorItem = listItem.firstChild as HTMLAnchorElement;
@@ -65,39 +75,51 @@ function FolderList<T extends HTMLElement, K extends HTMLElement>({
 		handleListFocus(e, activeFolderRef.current);
 	};
 
+	const handleListItemFocus = (e: React.FocusEvent) => {
+		(e.currentTarget.firstElementChild as HTMLAnchorElement).focus();
+	};
+
+	const handleFolderClick = (
+		e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+	) => {
+		activeFolderRef.current = e.currentTarget;
+	};
+
 	return (
 		<InteractiveList
 			isNotFocusable={isSelection}
 			className={className}
 			onKeyDown={handleKeyDown}
-			onFocus={handleFocus}
+			onFocus={handleFolderListFocus}
 		>
-			{folders.items.map((folder, index, array) => {
+			<li tabIndex={-1} onFocus={handleListItemFocus}>
+				<Folder
+					ref={firstFolderRef}
+					to={'/notes/all'}
+					disabled={isSelection}
+					tabIndex={-1}
+					onClick={handleFolderClick}
+				>
+					{folderAll.name}
+				</Folder>
+			</li>
+			{folderList.map((folder, index, array) => {
 				let ref = null;
-				const href =
-					folder.id === 1 ? '/notes/all' : `/notes/folder-${folder.id}`;
+				const href = `/notes/folder-${folder.id}`;
 
-				if (index === 0) {
-					ref = firstFolderRef;
-				} else if (index === array.length - 1) {
+				if (index === array.length - 1) {
 					ref = lastFolderRef;
 				}
 
 				return (
-					<li
-						key={folder.id}
-						tabIndex={-1}
-						onFocus={e =>
-							(e.currentTarget.firstElementChild as HTMLAnchorElement).focus()
-						}
-					>
+					<li key={folder.id} tabIndex={-1} onFocus={handleListItemFocus}>
 						<Folder
 							ref={ref}
 							to={href}
 							disabled={isSelection}
 							pinned={folder.pinned}
 							tabIndex={-1}
-							onClick={e => (activeFolderRef.current = e.currentTarget)}
+							onClick={handleFolderClick}
 						>
 							{folder.name}
 						</Folder>
