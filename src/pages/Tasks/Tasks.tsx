@@ -105,6 +105,11 @@ function Tasks() {
 		e: React.MouseEvent | React.KeyboardEvent,
 		taskId?: number
 	) => {
+		if (isSelection && taskId) {
+			dispatch(tasksActions.toggleSelect(taskId));
+			return;
+		}
+
 		const newTaskId = new Date().getTime();
 		focusFromUpsertTaskRef.current = e.currentTarget as HTMLElement;
 		navigate(`/tasks/task-${taskId ?? newTaskId}/edit`);
@@ -151,10 +156,6 @@ function Tasks() {
 	};
 
 	const handleTaskKeyDown = (e: React.KeyboardEvent, task: TasksItem) => {
-		if (isSelection) {
-			return;
-		}
-
 		if (e.code === 'Enter') {
 			upsertTask(e, task.id);
 		}
@@ -195,7 +196,11 @@ function Tasks() {
 				<div className={styles['tasks__list-wrapper']}>
 					<InteractiveList
 						className={styles['tasks__list']}
-						isNotFocusable={unpinnedUncompletedTasks.length === 0}
+						isNotFocusable={
+							pinnedUncompletedTasks.length +
+								unpinnedUncompletedTasks.length ===
+							0
+						}
 					>
 						{[...pinnedUncompletedTasks, ...unpinnedUncompletedTasks]
 							.filter(task => task.content.toLowerCase().includes(searchValue))
