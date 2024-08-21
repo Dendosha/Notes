@@ -8,6 +8,7 @@ import IconButton from '../../components/IconButton/IconButton';
 import InteractiveList from '../../components/InteractiveList/InteractiveList';
 import CreateFolderModal from '../../components/Modals/CreateFolderModal/CreateFolderModal';
 import Sidebar from '../../components/Sidebar/Sidebar';
+import { sortItems } from '../../helpers/sortItems';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../hooks/useAppSelector.hook';
 import { foldersActions } from '../../store/folders.slice';
@@ -24,6 +25,15 @@ function Folders() {
 
 	const dispatch = useAppDispatch();
 	const folders = useAppSelector(state => state.folders);
+	const settings = useAppSelector(state => state.settings);
+
+	const folderAll = folders.items.find(folder => folder.id === 1)!;
+	const pinnedFolders = folders.pinnedItems;
+	const unpinnedFolders = folders.items.filter(folder => !folder.pinned);
+	const folderList = [
+		...pinnedFolders,
+		...sortItems(unpinnedFolders, settings.sort, true)
+	].filter(folder => folder.id !== 1);
 
 	const navigate = useNavigate();
 
@@ -146,11 +156,18 @@ function Folders() {
 					/>
 				)}
 				<InteractiveList className={styles['folders__list']}>
-					{folders.items.map(folder => (
+					<EditableFolder
+						data={folderAll}
+						isSelection={isSelection}
+						isSelectable={false}
+						key={folderAll.id}
+					>
+						{folderAll.name}
+					</EditableFolder>
+					{folderList.map(folder => (
 						<EditableFolder
 							data={folder}
 							isSelection={isSelection}
-							isSelectable={folder.id !== 1}
 							key={folder.id}
 						>
 							{folder.name}
