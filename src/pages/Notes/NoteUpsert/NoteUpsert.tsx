@@ -73,7 +73,9 @@ function NoteUpsert() {
 
 	const handleExit = () => {
 		navigate(-1);
-		focusFromUpsertNoteRef.current?.focus();
+		setTimeout(() => {
+			focusFromUpsertNoteRef.current?.focus();
+		}, 0.5);
 
 		if (!titleRef.current?.value && !descriptionRef.current?.value) {
 			return;
