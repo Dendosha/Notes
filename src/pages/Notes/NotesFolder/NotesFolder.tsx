@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import InteractiveList from '../../../components/InteractiveList/InteractiveList';
 import Note from '../../../components/Note/Note';
+import { sortItems } from '../../../helpers/sortItems';
 import { useAppDispatch } from '../../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../../hooks/useAppSelector.hook';
 import { notesActions, NotesItem } from '../../../store/notes.slice';
@@ -20,9 +21,13 @@ function NotesFolder() {
 	const folderId = parseInt(folder?.split('-')[1] ?? '1');
 
 	const notes = useAppSelector(state => state.notes);
-	const folderNotes = notes.items.filter(note =>
-		note.folderId.includes(folderId)
-	);
+	const settings = useAppSelector(state => state.settings);
+	const pinnedNotes = notes.pinnedItems;
+	const unpinnedNotes = notes.items.filter(note => !note.pinned);
+	const folderNotes = [
+		...pinnedNotes,
+		...sortItems(unpinnedNotes, settings.sort)
+	].filter(note => note.folderId.includes(folderId));
 
 	useEffect(() => {
 		if (
