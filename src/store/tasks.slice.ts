@@ -43,11 +43,21 @@ export const tasksSlice = createSlice({
 			state.items = state.items.filter(item => item.id !== action.payload);
 		},
 		toggleSelect: (state, action: PayloadAction<number>) => {
-			const existed = state.items.find(item => item.id === action.payload);
+			const unpinnedExisted = state.items.find(
+				item => item.id === action.payload
+			);
+			const pinnedExisted = state.pinnedItems.find(
+				item => item.id === action.payload
+			);
 
-			if (!existed) return;
+			toggleTaskSelect(unpinnedExisted);
+			toggleTaskSelect(pinnedExisted);
 
-			existed.selected = !existed.selected;
+			function toggleTaskSelect(task?: TasksItem) {
+				if (!task) return;
+
+				task.selected = !task.selected;
+			}
 		},
 		togglePin: (state, action: PayloadAction<number>) => {
 			const existed = state.items.find(item => item.id === action.payload);
@@ -66,11 +76,21 @@ export const tasksSlice = createSlice({
 			existed.pinned = !existed.pinned;
 		},
 		toggleComplete: (state, action: PayloadAction<number>) => {
-			const existed = state.items.find(item => item.id === action.payload);
+			const unpinnedExisted = state.items.find(
+				item => item.id === action.payload
+			);
+			const pinnedExisted = state.pinnedItems.find(
+				item => item.id === action.payload
+			);
 
-			if (!existed) return;
+			toggleTaskComplete(unpinnedExisted);
+			toggleTaskComplete(pinnedExisted);
 
-			existed.completed = !existed.completed;
+			function toggleTaskComplete(task?: TasksItem) {
+				if (!task) return;
+
+				task.completed = !task.completed;
+			}
 		},
 		update: (state, action: PayloadAction<TasksItemPayload>) => {
 			const existed = state.items.find(item => item.id === action.payload.id);
