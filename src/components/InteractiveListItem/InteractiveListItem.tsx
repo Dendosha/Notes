@@ -41,7 +41,9 @@ function InteractiveListItem({
 
 	const onContextMenuClose = () => {
 		setContextMenuVisible(false);
-		interactiveListItemRef.current?.focus();
+		setTimeout(() => {
+			interactiveListItemRef.current?.focus();
+		}, 0.5);
 	};
 
 	return (
