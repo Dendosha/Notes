@@ -37,7 +37,8 @@ export const foldersSlice = createSlice({
 	initialState,
 	reducers: {
 		clear: state => {
-			state.items = [];
+			state.items = state.items.filter(folder => folder.id === 1);
+			state.pinnedItems = [];
 		},
 		add: (state, action: PayloadAction<FoldersItemPayload>) => {
 			const existed = state.items.find(item => item.id === action.payload.id);
@@ -57,32 +58,42 @@ export const foldersSlice = createSlice({
 
 			if (!existed) return;
 
-			const allFolder = state.items.find(item => item.id === 1);
+			const allFolder = state.items[0];
 			let allFolderNotes: number[];
 
-			if (allFolder?.notes) {
-				allFolderNotes = [...allFolder?.notes];
+			allFolderNotes = [...allFolder.notes];
 
-				existed.notes.forEach(noteId => {
-					allFolderNotes.splice(
-						allFolderNotes.findIndex(
-							allFolderNoteId => allFolderNoteId === noteId
-						),
-						1
-					);
+			existed.notes.forEach(noteId => {
+				const noteToDelete = allFolderNotes.findIndex(
+					allFolderNoteId => allFolderNoteId === noteId
+				);
 
-					allFolder!.notes = allFolderNotes;
-				});
-			}
+				allFolderNotes.splice(noteToDelete, 1);
 
-			state.items = state.items.filter(item => item.id !== action.payload);
+				allFolder.notes = allFolderNotes;
+			});
+
+			state.items = state.items.filter(item => item.id !== existed.id);
+			state.pinnedItems = state.pinnedItems.filter(
+				item => item.id !== existed.id
+			);
 		},
 		toggleSelect: (state, action: PayloadAction<number>) => {
-			const existed = state.items.find(item => item.id === action.payload);
+			const unpinnedExisted = state.items.find(
+				item => item.id === action.payload
+			);
+			const pinnedExisted = state.pinnedItems.find(
+				item => item.id === action.payload
+			);
 
-			if (!existed) return;
+			toggleFolderSelect(unpinnedExisted);
+			toggleFolderSelect(pinnedExisted);
 
-			existed.selected = !existed.selected;
+			function toggleFolderSelect(folder?: FoldersItem) {
+				if (!folder) return;
+
+				folder.selected = !folder.selected;
+			}
 		},
 		togglePin: (state, action: PayloadAction<number>) => {
 			const existed = state.items.find(item => item.id === action.payload);
@@ -104,28 +115,44 @@ export const foldersSlice = createSlice({
 			state,
 			action: PayloadAction<Omit<FoldersItemPayload, 'notes'>>
 		) => {
-			const existed = state.items.find(item => item.id === action.payload.id);
+			const unpinnedExisted = state.items.find(
+				item => item.id === action.payload.id
+			);
+			const pinnedExisted = state.pinnedItems.find(
+				item => item.id === action.payload.id
+			);
 
-			if (!existed) return;
+			renameFolder(unpinnedExisted);
+			renameFolder(pinnedExisted);
 
-			existed.name = action.payload.name;
-			existed.updatedAt = new Date().toISOString();
+			function renameFolder(folder?: FoldersItem) {
+				if (!folder) return;
+
+				folder.name = action.payload.name;
+				folder.updatedAt = new Date().toISOString();
+			}
 		},
 		addNotes: (
 			state,
 			action: PayloadAction<{ id: number; notes: number[] }>
 		) => {
-			const existed = state.items.find(item => item.id === action.payload.id);
+			const unpinnedExisted = state.items.find(
+				item => item.id === action.payload.id
+			);
+			const pinnedExisted = state.pinnedItems.find(
+				item => item.id === action.payload.id
+			);
 
-			if (!existed) return;
-
-			addNotesToFolder(existed);
+			addNotesToFolder(unpinnedExisted);
+			addNotesToFolder(pinnedExisted);
 
 			if (action.payload.id !== 1) {
 				addNotesToFolder(state.items[0]);
 			}
 
-			function addNotesToFolder(folder: FoldersItem) {
+			function addNotesToFolder(folder?: FoldersItem) {
+				if (!folder) return;
+
 				const notesSet = new Set([...folder.notes, ...action.payload.notes]);
 				folder.notes = Array.from(notesSet);
 				folder.updatedAt = new Date().toISOString();
@@ -135,17 +162,23 @@ export const foldersSlice = createSlice({
 			state,
 			action: PayloadAction<{ id: number; notes: number[] }>
 		) => {
-			const existed = state.items.find(item => item.id === action.payload.id);
+			const unpinnedExisted = state.items.find(
+				item => item.id === action.payload.id
+			);
+			const pinnedExisted = state.pinnedItems.find(
+				item => item.id === action.payload.id
+			);
 
-			if (!existed) return;
-
-			removeNotesFromFolder(existed);
+			removeNotesFromFolder(unpinnedExisted);
+			removeNotesFromFolder(pinnedExisted);
 
 			if (action.payload.id !== 1) {
 				removeNotesFromFolder(state.items[0]);
 			}
 
-			function removeNotesFromFolder(folder: FoldersItem) {
+			function removeNotesFromFolder(folder?: FoldersItem) {
+				if (!folder) return;
+
 				action.payload.notes.forEach(note => {
 					folder.notes.splice(folder.notes.indexOf(note), 1);
 				});

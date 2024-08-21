@@ -28,6 +28,7 @@ export const tasksSlice = createSlice({
 	reducers: {
 		clear: state => {
 			state.items = [];
+			state.pinnedItems = [];
 		},
 		add: (state, action: PayloadAction<TasksItemPayload>) => {
 			state.items.push({
@@ -41,6 +42,9 @@ export const tasksSlice = createSlice({
 		},
 		remove: (state, action: PayloadAction<number>) => {
 			state.items = state.items.filter(item => item.id !== action.payload);
+			state.pinnedItems = state.pinnedItems.filter(
+				item => item.id !== action.payload
+			);
 		},
 		toggleSelect: (state, action: PayloadAction<number>) => {
 			const unpinnedExisted = state.items.find(
@@ -93,12 +97,22 @@ export const tasksSlice = createSlice({
 			}
 		},
 		update: (state, action: PayloadAction<TasksItemPayload>) => {
-			const existed = state.items.find(item => item.id === action.payload.id);
+			const unpinnedExisted = state.items.find(
+				item => item.id === action.payload.id
+			);
+			const pinnedExisted = state.pinnedItems.find(
+				item => item.id === action.payload.id
+			);
 
-			if (!existed) return;
+			updateTask(unpinnedExisted);
+			updateTask(pinnedExisted);
 
-			existed.content = action.payload.content;
-			existed.updatedAt = new Date().toISOString();
+			function updateTask(task?: TasksItem) {
+				if (!task) return;
+
+				task.content = action.payload.content;
+				task.updatedAt = new Date().toISOString();
+			}
 		}
 	}
 });

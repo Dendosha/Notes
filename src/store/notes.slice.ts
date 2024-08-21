@@ -31,6 +31,7 @@ export const notesSlice = createSlice({
 	reducers: {
 		clear: state => {
 			state.items = [];
+			state.pinnedItems = [];
 		},
 		add: (state, action: PayloadAction<NotesPayload>) => {
 			state.items.push({
@@ -43,11 +44,21 @@ export const notesSlice = createSlice({
 			});
 		},
 		toggleSelect: (state, action: PayloadAction<number>) => {
-			const existed = state.items.find(item => item.id === action.payload);
+			const unpinnedExisted = state.items.find(
+				item => item.id === action.payload
+			);
+			const pinnedExisted = state.pinnedItems.find(
+				item => item.id === action.payload
+			);
 
-			if (!existed) return;
+			toggleNoteSelect(unpinnedExisted);
+			toggleNoteSelect(pinnedExisted);
 
-			existed.selected = !existed.selected;
+			function toggleNoteSelect(note?: NotesItem) {
+				if (!note) return;
+
+				note.selected = !note.selected;
+			}
 		},
 		togglePin: (state, action: PayloadAction<number>) => {
 			const existed = state.items.find(item => item.id === action.payload);
@@ -67,22 +78,35 @@ export const notesSlice = createSlice({
 		},
 		remove: (state, action: PayloadAction<number>) => {
 			state.items = state.items.filter(item => item.id !== action.payload);
+			state.pinnedItems = state.pinnedItems.filter(
+				item => item.id !== action.payload
+			);
 		},
 		update: (state, action: PayloadAction<NotesPayload>) => {
-			const existed = state.items.find(item => item.id === action.payload.id);
+			const unpinnedExisted = state.items.find(
+				item => item.id === action.payload.id
+			);
+			const pinnedExisted = state.pinnedItems.find(
+				item => item.id === action.payload.id
+			);
 
-			if (!existed) return;
+			updateNote(state.items, unpinnedExisted);
+			updateNote(state.pinnedItems, pinnedExisted);
 
-			state.items.map(item => {
-				if (item.id === action.payload.id) {
-					item.title = action.payload.title;
-					item.content = action.payload.content;
-					item.updatedAt = new Date().toISOString();
-					item.folderId[1] = action.payload.folderId ?? item.folderId[1];
-				}
+			function updateNote(items: NotesItem[], note?: NotesItem) {
+				if (!note) return;
 
-				return item;
-			});
+				items.map(item => {
+					if (item.id === action.payload.id) {
+						item.title = action.payload.title;
+						item.content = action.payload.content;
+						item.updatedAt = new Date().toISOString();
+						item.folderId[1] = action.payload.folderId ?? item.folderId[1];
+					}
+
+					return item;
+				});
+			}
 		}
 	}
 });
