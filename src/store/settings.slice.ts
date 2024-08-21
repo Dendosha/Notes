@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface SettingsState {
-	notesSort: 'createDate' | 'updateDate';
+	sort: 'createDate' | 'updateDate';
 	notesLayout: 'list' | 'tiles';
 	actionConfirmations: boolean;
 }
 
-type SettingValue<
+export type SettingValue<
 	T extends SettingsState,
 	K extends keyof T = keyof T
 > = T[K] extends keyof SettingsState ? T[K] : never;
@@ -19,7 +19,7 @@ export type SettingsPayload = {
 }[keyof SettingsState];
 
 const initialState: SettingsState = {
-	notesSort: 'createDate',
+	sort: 'createDate',
 	notesLayout: 'list',
 	actionConfirmations: false
 };
