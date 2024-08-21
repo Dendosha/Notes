@@ -95,6 +95,7 @@ function FolderList<T extends HTMLElement, K extends HTMLElement>({
 							ref={ref}
 							to={href}
 							disabled={isSelection}
+							pinned={folder.pinned}
 							tabIndex={-1}
 							onClick={e => (activeFolderRef.current = e.currentTarget)}
 						>
