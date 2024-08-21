@@ -6,6 +6,7 @@ import IconButton from '../../components/IconButton/IconButton';
 import InteractiveList from '../../components/InteractiveList/InteractiveList';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import Task from '../../components/Task/Task';
+import { sortItems } from '../../helpers/sortItems';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../hooks/useAppSelector.hook';
 import {
@@ -35,8 +36,20 @@ function Tasks() {
 
 	const dispatch = useAppDispatch();
 	const tasks = useAppSelector(state => state.tasks);
-	const uncompletedTasks = tasks.items.filter(task => !task.completed);
-	const completedTasks = tasks.items.filter(task => task.completed);
+	const settings = useAppSelector(state => state.settings);
+
+	const pinnedCompletedTasks = tasks.pinnedItems.filter(task => task.completed);
+	const pinnedUncompletedTasks = tasks.pinnedItems.filter(
+		task => !task.completed
+	);
+	const upninnedCompletedTasks = sortItems(
+		tasks.items.filter(task => task.completed && !task.pinned),
+		settings.sort
+	);
+	const unpinnedUncompletedTasks = sortItems(
+		tasks.items.filter(task => !task.completed && !task.pinned),
+		settings.sort
+	);
 
 	const navigate = useNavigate();
 
@@ -182,9 +195,9 @@ function Tasks() {
 				<div className={styles['tasks__list-wrapper']}>
 					<InteractiveList
 						className={styles['tasks__list']}
-						isNotFocusable={uncompletedTasks.length === 0}
+						isNotFocusable={unpinnedUncompletedTasks.length === 0}
 					>
-						{uncompletedTasks
+						{[...pinnedUncompletedTasks, ...unpinnedUncompletedTasks]
 							.filter(task => task.content.toLowerCase().includes(searchValue))
 							.map(task => (
 								<Task
@@ -199,14 +212,19 @@ function Tasks() {
 								</Task>
 							))}
 					</InteractiveList>
-					{completedTasks.length !== 0 && (
+					{pinnedCompletedTasks.length + upninnedCompletedTasks.length !==
+						0 && (
 						<>
 							<h2 className={styles['tasks__list-title']}>Выполненные:</h2>
 							<InteractiveList
 								className={styles['tasks__list']}
-								isNotFocusable={completedTasks.length === 0}
+								isNotFocusable={
+									pinnedCompletedTasks.length +
+										upninnedCompletedTasks.length ===
+									0
+								}
 							>
-								{completedTasks
+								{[...pinnedCompletedTasks, ...upninnedCompletedTasks]
 									.filter(task =>
 										task.content.toLowerCase().includes(searchValue)
 									)
