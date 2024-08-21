@@ -5,7 +5,7 @@ import styles from './Folder.module.scss';
 import { FolderProps } from './Folder.props';
 
 const Folder = forwardRef<HTMLAnchorElement, FolderProps>(function Folder(
-	{ to, children, disabled = false, className, ...props },
+	{ to, children, disabled = false, pinned = false, className, ...props },
 	ref
 ) {
 	return (
@@ -20,7 +20,13 @@ const Folder = forwardRef<HTMLAnchorElement, FolderProps>(function Folder(
 			}
 			{...props}
 		>
-			{children}
+			<p className={styles['folder__text']}>{children}</p>
+			{pinned && (
+				<img
+					src='/public/icons/pin.svg'
+					className={styles['folder__pin']}
+				></img>
+			)}
 		</NavLink>
 	);
 });

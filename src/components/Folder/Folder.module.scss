@@ -5,9 +5,10 @@
 	user-select: none;
 
 	text-decoration: none;
-	display: inline-block;
+	display: inline-flex;
+	align-items: center;
+	gap: rem(10);
 	@extend %button;
-	@extend %font-medium;
 
 	&_disabled {
 		user-select: none;
@@ -19,5 +20,14 @@
 	&_active {
 		background-color: var(--element-active-color);
 		color: var(--text-color);
+	}
+
+	&__pin {
+		width: rem(20);
+		height: rem(20);
+	}
+
+	&__text {
+		@extend %font-medium;
 	}
 }
