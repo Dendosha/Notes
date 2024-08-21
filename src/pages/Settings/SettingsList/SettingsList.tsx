@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { useAppDispatch } from '../../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../../hooks/useAppSelector.hook';
-import { settingsActions } from '../../../store/settings.slice';
+import {
+	settingsActions,
+	SettingsState,
+	SettingValue
+} from '../../../store/settings.slice';
 import Setting from '../Setting/Setting';
 import styles from './SettingsList.module.scss';
 import {
@@ -12,9 +16,11 @@ import {
 
 function SettingsList() {
 	const dispatch = useAppDispatch();
-	const { notesSort, notesLayout, actionConfirmations } = useAppSelector(
-		state => state.settings
-	);
+	const {
+		sort: notesSort,
+		notesLayout,
+		actionConfirmations
+	} = useAppSelector(state => state.settings);
 
 	const [notesSortValue, setNotesSortValue] = useState<
 		'createDate' | 'updateDate'
@@ -29,20 +35,20 @@ function SettingsList() {
 	return (
 		<div className={styles['settings-list']}>
 			<Setting
-				inputName='notes-sort'
+				inputName='sort'
 				items={notesSortItems}
 				defaultSelectValue={notesSortValue}
 				setSelectValue={setNotesSortValue}
 				onSelectChange={() =>
 					dispatch(
 						settingsActions.update({
-							key: 'notesSort',
-							value: notesSortValue
+							key: 'sort',
+							value: notesSortValue as SettingValue<SettingsState, 'sort'>
 						})
 					)
 				}
 			>
-				Сортировка заметок
+				Сортировка по дате
 			</Setting>
 			<div className={styles['settings-list__separator']}></div>
 			<Setting
@@ -54,7 +60,10 @@ function SettingsList() {
 					dispatch(
 						settingsActions.update({
 							key: 'notesLayout',
-							value: notesLayoutValue
+							value: notesLayoutValue as SettingValue<
+								SettingsState,
+								'notesLayout'
+							>
 						})
 					)
 				}
@@ -71,7 +80,10 @@ function SettingsList() {
 					dispatch(
 						settingsActions.update({
 							key: 'actionConfirmations',
-							value: Boolean(actionConfirmationsValue)
+							value: Boolean(actionConfirmationsValue) as SettingValue<
+								SettingsState,
+								'actionConfirmations'
+							>
 						})
 					)
 				}
