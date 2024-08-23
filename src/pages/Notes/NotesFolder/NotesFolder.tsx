@@ -22,12 +22,9 @@ function NotesFolder() {
 
 	const notes = useAppSelector(state => state.notes);
 	const settings = useAppSelector(state => state.settings);
-	const pinnedNotes = notes.pinnedItems;
-	const unpinnedNotes = notes.items.filter(note => !note.pinned);
-	const folderNotes = [
-		...pinnedNotes,
-		...sortItems(unpinnedNotes, settings.sort)
-	].filter(note => note.folderId.includes(folderId));
+	const folderNotes = sortItems(notes.items, settings.sort).filter(note =>
+		note.folderId.includes(folderId)
+	);
 
 	useEffect(() => {
 		if (

@@ -22,12 +22,9 @@ function FolderList<T extends HTMLElement, K extends HTMLElement>({
 	const settings = useAppSelector(state => state.settings);
 
 	const folderAll = folders.items.find(folder => folder.id === 1)!;
-	const pinnedFolders = folders.pinnedItems;
-	const unpinnedFolders = folders.items.filter(folder => !folder.pinned);
-	const folderList = [
-		...pinnedFolders,
-		...sortItems(unpinnedFolders, settings.sort, true)
-	].filter(folder => folder.id !== 1);
+	const folderList = sortItems(folders.items, settings.sort, true).filter(
+		folder => folder.id !== 1
+	);
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		if (!e.currentTarget.contains(e.target as Node | null)) {
@@ -117,7 +114,7 @@ function FolderList<T extends HTMLElement, K extends HTMLElement>({
 							ref={ref}
 							to={href}
 							disabled={isSelection}
-							pinned={folder.pinned}
+							pinned={folder.pinned.state}
 							tabIndex={-1}
 							onClick={handleFolderClick}
 						>
