@@ -28,12 +28,11 @@ function Folders() {
 	const settings = useAppSelector(state => state.settings);
 
 	const folderAll = folders.items.find(folder => folder.id === 1)!;
-	const pinnedFolders = folders.pinnedItems;
-	const unpinnedFolders = folders.items.filter(folder => !folder.pinned);
-	const folderList = [
-		...pinnedFolders,
-		...sortItems(unpinnedFolders, settings.sort, true)
-	].filter(folder => folder.id !== 1);
+	const folderList = sortItems(
+		folders.items.filter(folder => folder.id !== 1),
+		settings.sort,
+		true
+	).filter(folder => folder.id !== 1);
 
 	const navigate = useNavigate();
 
