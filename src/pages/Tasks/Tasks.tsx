@@ -25,29 +25,33 @@ export function useTasksContext() {
 }
 
 function Tasks() {
+	const dispatch = useAppDispatch();
+	const tasks = useAppSelector(state => state.tasks);
+	const settings = useAppSelector(state => state.settings);
+
 	const [isAnyTaskSelected, setIsAnyTaskSelected] = useState(false);
 	const [selectAllButtonState, setSelectAllButtonState] = useState(false);
+	const [uncompletedTasksCount, setUncompletedTasksCount] = useState(
+		tasks.items.filter(task => !task.completed).length
+	);
+	const [completedTasksCount, setCompletedTasksCount] = useState(
+		tasks.items.filter(task => task.completed).length
+	);
 
 	const { searchValue, isSelection, setIsSelection } = useRootContext();
 
 	const firstSidebarButtonRef = useRef<HTMLButtonElement>(null);
 	const focusFromUpsertTaskRef = useRef<HTMLElement | null>(null);
-	const newlyUpdatedTask = useRef<HTMLLIElement | null>(null);
+	const uncompletedTasksListRef = useRef<HTMLUListElement>(null);
+	const completedTasksListRef = useRef<HTMLUListElement>(null);
+	const updatedTasksListRef = useRef<HTMLUListElement | null>(null);
 
-	const dispatch = useAppDispatch();
-	const tasks = useAppSelector(state => state.tasks);
-	const settings = useAppSelector(state => state.settings);
-
-	const pinnedCompletedTasks = tasks.pinnedItems.filter(task => task.completed);
-	const pinnedUncompletedTasks = tasks.pinnedItems.filter(
-		task => !task.completed
-	);
-	const upninnedCompletedTasks = sortItems(
-		tasks.items.filter(task => task.completed && !task.pinned),
+	const uncompletedTasks = sortItems(
+		tasks.items.filter(task => !task.completed),
 		settings.sort
 	);
-	const unpinnedUncompletedTasks = sortItems(
-		tasks.items.filter(task => !task.completed && !task.pinned),
+	const completedTasks = sortItems(
+		tasks.items.filter(task => task.completed),
 		settings.sort
 	);
 
@@ -89,17 +93,20 @@ function Tasks() {
 	}, [tasks.items]);
 
 	useEffect(() => {
-		if (newlyUpdatedTask.current) {
-			const taskToFocus = document.querySelector(
-				`[data-key="${newlyUpdatedTask.current.dataset.key}"]`
-			) as HTMLLIElement | null;
-
-			if (taskToFocus) {
-				taskToFocus.focus();
-				taskToFocus.parentElement!.tabIndex = -1;
-			}
+		if (uncompletedTasks.length < uncompletedTasksCount) {
+			uncompletedTasksListRef.current?.focus();
 		}
-	}, [newlyUpdatedTask.current]);
+
+		setUncompletedTasksCount(uncompletedTasks.length);
+	}, [uncompletedTasks]);
+
+	useEffect(() => {
+		if (completedTasks.length < completedTasksCount) {
+			completedTasksListRef.current?.focus();
+		}
+
+		setCompletedTasksCount(completedTasks.length);
+	}, [completedTasks]);
 
 	const upsertTask = (
 		e: React.MouseEvent | React.KeyboardEvent,
@@ -161,8 +168,8 @@ function Tasks() {
 		}
 
 		if (e.code === 'KeyC' && !e.ctrlKey && !e.altKey && !e.metaKey) {
-			newlyUpdatedTask.current = e.currentTarget as HTMLLIElement;
-			newlyUpdatedTask.current.parentElement!.tabIndex = 0;
+			updatedTasksListRef.current = e.currentTarget
+				.parentElement as HTMLUListElement;
 			dispatch(tasksActions.toggleComplete(task.id));
 		}
 	};
@@ -194,42 +201,39 @@ function Tasks() {
 					/>
 				)}
 				<div className={styles['tasks__list-wrapper']}>
-					<InteractiveList
-						className={styles['tasks__list']}
-						isNotFocusable={
-							pinnedUncompletedTasks.length +
-								unpinnedUncompletedTasks.length ===
-							0
-						}
-					>
-						{[...pinnedUncompletedTasks, ...unpinnedUncompletedTasks]
-							.filter(task => task.content.toLowerCase().includes(searchValue))
-							.map(task => (
-								<Task
-									data={task}
-									isSelection={isSelection}
-									key={task.id}
-									data-key={task.id}
-									onKeyDown={e => handleTaskKeyDown(e, task)}
-									onClick={e => upsertTask(e, task.id)}
-								>
-									{task.content}
-								</Task>
-							))}
-					</InteractiveList>
-					{pinnedCompletedTasks.length + upninnedCompletedTasks.length !==
-						0 && (
+					{uncompletedTasks.length !== 0 && (
+						<InteractiveList
+							ref={uncompletedTasksListRef}
+							className={styles['tasks__list']}
+							isNotFocusable={uncompletedTasks.length === 0}
+						>
+							{uncompletedTasks
+								.filter(task =>
+									task.content.toLowerCase().includes(searchValue)
+								)
+								.map(task => (
+									<Task
+										data={task}
+										isSelection={isSelection}
+										key={task.id}
+										data-key={task.id}
+										onKeyDown={e => handleTaskKeyDown(e, task)}
+										onClick={e => upsertTask(e, task.id)}
+									>
+										{task.content}
+									</Task>
+								))}
+						</InteractiveList>
+					)}
+					{completedTasks.length !== 0 && (
 						<>
 							<h2 className={styles['tasks__list-title']}>Выполненные:</h2>
 							<InteractiveList
+								ref={completedTasksListRef}
 								className={styles['tasks__list']}
-								isNotFocusable={
-									pinnedCompletedTasks.length +
-										upninnedCompletedTasks.length ===
-									0
-								}
+								isNotFocusable={completedTasks.length === 0}
 							>
-								{[...pinnedCompletedTasks, ...upninnedCompletedTasks]
+								{completedTasks
 									.filter(task =>
 										task.content.toLowerCase().includes(searchValue)
 									)
