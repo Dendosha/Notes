@@ -17,12 +17,25 @@ export const sortItems = <T extends ItemType>(
 		firstItem: I,
 		secondItem: I
 	) {
+		let result: number = 0;
 		const firstDate = ISOStringToDate(firstItem[sortType]);
 		const secondDate = ISOStringToDate(secondItem[sortType]);
 
-		return increasing
-			? firstDate.getTime() - secondDate.getTime()
-			: secondDate.getTime() - firstDate.getTime();
+		if (increasing) {
+			result = firstDate.getTime() - secondDate.getTime();
+		} else {
+			result = secondDate.getTime() - firstDate.getTime();
+		}
+
+		if (firstItem.pinned.state && secondItem.pinned.state) {
+			result = secondItem.pinned.priority - firstItem.pinned.priority;
+		} else if (firstItem.pinned.state) {
+			result = -1;
+		} else if (secondItem.pinned.state) {
+			result = 1;
+		}
+
+		return result;
 	}
 
 	return [...state].sort(compareItemsDates);
