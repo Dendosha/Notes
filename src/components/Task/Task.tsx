@@ -23,7 +23,7 @@ function Task({
 		const completeButtonName = data.completed
 			? 'Отменить выполнение'
 			: 'Выполнить';
-		const pinButtonName = data.pinned ? 'Открепить' : 'Закрепить';
+		const pinButtonName = data.pinned.state ? 'Открепить' : 'Закрепить';
 
 		return [
 			{
@@ -73,7 +73,7 @@ function Task({
 			)}
 			<p className={styles['task__content']}>
 				<span className={styles['task__text']}>{children}</span>
-				{data.pinned && (
+				{data.pinned.state && (
 					<img
 						src='/public/icons/pin.svg'
 						className={styles['task__pin']}

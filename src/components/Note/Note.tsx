@@ -28,7 +28,7 @@ function Note({
 
 	const setContextMenuItems = (): MenuItem[] => {
 		const selectButtonName = data.selected ? 'Снять выделение' : 'Выделить';
-		const pinButtonName = data.pinned ? 'Открепить' : 'Закрепить';
+		const pinButtonName = data.pinned.state ? 'Открепить' : 'Закрепить';
 
 		return [
 			{
@@ -80,7 +80,7 @@ function Note({
 				<span className={styles['note__date']}>
 					{formatDate(ISOStringToDate(date))}
 				</span>
-				{data.pinned && (
+				{data.pinned.state && (
 					<img
 						src='/public/icons/pin.svg'
 						className={styles['note__pin']}

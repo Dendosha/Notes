@@ -23,7 +23,7 @@ function EditableFolder({
 
 	const setContextMenuItems = (): MenuItem[] => {
 		const selectButtonName = data.selected ? 'Снять выделение' : 'Выделить';
-		const pinButtonName = data.pinned ? 'Открепить' : 'Закрепить';
+		const pinButtonName = data.pinned.state ? 'Открепить' : 'Закрепить';
 
 		return [
 			{
@@ -75,7 +75,7 @@ function EditableFolder({
 				<span className={styles['editable-folder__note-count']}>
 					Заметок: {data.notes.length}
 				</span>
-				{data.pinned && (
+				{data.pinned.state && (
 					<img
 						src='/public/icons/pin.svg'
 						className={styles['editable-folder__pin']}
