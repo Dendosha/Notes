@@ -5,7 +5,10 @@ export interface NotesItem {
 	title: string;
 	content: string;
 	selected: boolean;
-	pinned: boolean;
+	pinned: {
+		state: boolean;
+		priority: number;
+	};
 	folderId: [number, number | undefined];
 	createdAt: string;
 	updatedAt: string;
@@ -13,7 +16,10 @@ export interface NotesItem {
 
 export interface NotesState {
 	items: NotesItem[];
-	pinnedItems: NotesItem[];
+	pin: {
+		count: number;
+		lastPriority: number;
+	};
 }
 
 export type NotesPayload = {
@@ -22,7 +28,10 @@ export type NotesPayload = {
 
 const initialState: NotesState = {
 	items: [],
-	pinnedItems: []
+	pin: {
+		count: 0,
+		lastPriority: 0
+	}
 };
 
 export const notesSlice = createSlice({
@@ -31,82 +40,87 @@ export const notesSlice = createSlice({
 	reducers: {
 		clear: state => {
 			state.items = [];
-			state.pinnedItems = [];
+			state.pin.count = 0;
+			state.pin.lastPriority = 0;
 		},
 		add: (state, action: PayloadAction<NotesPayload>) => {
 			state.items.push({
 				...action.payload,
 				folderId: [1, action.payload.folderId],
 				selected: false,
-				pinned: false,
+				pinned: {
+					state: false,
+					priority: -1
+				},
 				createdAt: new Date().toISOString(),
 				updatedAt: new Date().toISOString()
 			});
 		},
-		toggleSelect: (state, action: PayloadAction<number>) => {
-			const unpinnedExisted = state.items.find(
-				item => item.id === action.payload
-			);
-			const pinnedExisted = state.pinnedItems.find(
-				item => item.id === action.payload
-			);
+		remove: (state, action: PayloadAction<number>) => {
+			const existed = state.items.find(item => item.id === action.payload);
 
-			toggleNoteSelect(unpinnedExisted);
-			toggleNoteSelect(pinnedExisted);
+			if (!existed) return;
 
-			function toggleNoteSelect(note?: NotesItem) {
-				if (!note) return;
-
-				note.selected = !note.selected;
+			if (existed.pinned.state) {
+				state.pin.count--;
+				if (state.pin.count === 0) {
+					state.pin.lastPriority = 0;
+				} else {
+					state.pin.lastPriority =
+						state.pin.lastPriority > existed.pinned.priority
+							? state.pin.lastPriority
+							: existed.pinned.priority - 1;
+				}
 			}
+
+			state.items = state.items.filter(item => item.id !== existed.id);
+		},
+		update: (state, action: PayloadAction<NotesPayload>) => {
+			const existed = state.items.find(item => item.id === action.payload.id);
+
+			if (!existed) return;
+
+			state.items.map(item => {
+				if (item.id === action.payload.id) {
+					item.title = action.payload.title;
+					item.content = action.payload.content;
+					item.updatedAt = new Date().toISOString();
+					item.folderId[1] = action.payload.folderId ?? item.folderId[1];
+				}
+
+				return item;
+			});
+		},
+		toggleSelect: (state, action: PayloadAction<number>) => {
+			const existed = state.items.find(item => item.id === action.payload);
+
+			if (!existed) return;
+
+			existed.selected = !existed.selected;
 		},
 		togglePin: (state, action: PayloadAction<number>) => {
 			const existed = state.items.find(item => item.id === action.payload);
 
 			if (!existed) return;
 
-			if (existed.pinned) {
-				const existedIndex = state.pinnedItems.findIndex(
-					item => item.id === existed.id
-				);
-				state.pinnedItems.splice(existedIndex, 1);
+			if (existed.pinned.state) {
+				state.pin.count--;
+				if (state.pin.count === 0) {
+					state.pin.lastPriority = 0;
+				} else {
+					state.pin.lastPriority =
+						state.pin.lastPriority > existed.pinned.priority
+							? state.pin.lastPriority
+							: existed.pinned.priority - 1;
+				}
+				existed.pinned.priority = -1;
 			} else {
-				state.pinnedItems.unshift(existed);
+				state.pin.count++;
+				state.pin.lastPriority++;
+				existed.pinned.priority = state.pin.lastPriority;
 			}
 
-			existed.pinned = !existed.pinned;
-		},
-		remove: (state, action: PayloadAction<number>) => {
-			state.items = state.items.filter(item => item.id !== action.payload);
-			state.pinnedItems = state.pinnedItems.filter(
-				item => item.id !== action.payload
-			);
-		},
-		update: (state, action: PayloadAction<NotesPayload>) => {
-			const unpinnedExisted = state.items.find(
-				item => item.id === action.payload.id
-			);
-			const pinnedExisted = state.pinnedItems.find(
-				item => item.id === action.payload.id
-			);
-
-			updateNote(state.items, unpinnedExisted);
-			updateNote(state.pinnedItems, pinnedExisted);
-
-			function updateNote(items: NotesItem[], note?: NotesItem) {
-				if (!note) return;
-
-				items.map(item => {
-					if (item.id === action.payload.id) {
-						item.title = action.payload.title;
-						item.content = action.payload.content;
-						item.updatedAt = new Date().toISOString();
-						item.folderId[1] = action.payload.folderId ?? item.folderId[1];
-					}
-
-					return item;
-				});
-			}
+			existed.pinned.state = !existed.pinned.state;
 		}
 	}
 });

@@ -4,7 +4,10 @@ export interface FoldersItem {
 	id: number;
 	name: string;
 	notes: number[];
-	pinned: boolean;
+	pinned: {
+		state: boolean;
+		priority: number;
+	};
 	selected: boolean;
 	createdAt: string;
 	updatedAt: string;
@@ -12,7 +15,10 @@ export interface FoldersItem {
 
 export interface FoldersState {
 	items: FoldersItem[];
-	pinnedItems: FoldersItem[];
+	pin: {
+		count: number;
+		lastPriority: number;
+	};
 }
 
 const initialState: FoldersState = {
@@ -23,11 +29,17 @@ const initialState: FoldersState = {
 			notes: [],
 			createdAt: new Date().toISOString(),
 			updatedAt: new Date().toISOString(),
-			pinned: false,
+			pinned: {
+				state: false,
+				priority: -1
+			},
 			selected: false
 		}
 	],
-	pinnedItems: []
+	pin: {
+		count: 0,
+		lastPriority: 0
+	}
 };
 
 export type FoldersItemPayload = Pick<FoldersItem, 'id' | 'name' | 'notes'>;
@@ -38,7 +50,8 @@ export const foldersSlice = createSlice({
 	reducers: {
 		clear: state => {
 			state.items = state.items.filter(folder => folder.id === 1);
-			state.pinnedItems = [];
+			state.pin.count = 0;
+			state.pin.lastPriority = 0;
 		},
 		add: (state, action: PayloadAction<FoldersItemPayload>) => {
 			const existed = state.items.find(item => item.id === action.payload.id);
@@ -47,7 +60,10 @@ export const foldersSlice = createSlice({
 
 			state.items.push({
 				...action.payload,
-				pinned: false,
+				pinned: {
+					state: false,
+					priority: -1
+				},
 				selected: false,
 				createdAt: new Date().toISOString(),
 				updatedAt: new Date().toISOString()
@@ -57,6 +73,18 @@ export const foldersSlice = createSlice({
 			const existed = state.items.find(item => item.id === action.payload);
 
 			if (!existed) return;
+
+			if (existed.pinned.state) {
+				state.pin.count--;
+				if (state.pin.count === 0) {
+					state.pin.lastPriority = 0;
+				} else {
+					state.pin.lastPriority =
+						state.pin.lastPriority > existed.pinned.priority
+							? state.pin.lastPriority
+							: existed.pinned.priority - 1;
+				}
+			}
 
 			const allFolder = state.items[0];
 			let allFolderNotes: number[];
@@ -74,77 +102,25 @@ export const foldersSlice = createSlice({
 			});
 
 			state.items = state.items.filter(item => item.id !== existed.id);
-			state.pinnedItems = state.pinnedItems.filter(
-				item => item.id !== existed.id
-			);
-		},
-		toggleSelect: (state, action: PayloadAction<number>) => {
-			const unpinnedExisted = state.items.find(
-				item => item.id === action.payload
-			);
-			const pinnedExisted = state.pinnedItems.find(
-				item => item.id === action.payload
-			);
-
-			toggleFolderSelect(unpinnedExisted);
-			toggleFolderSelect(pinnedExisted);
-
-			function toggleFolderSelect(folder?: FoldersItem) {
-				if (!folder) return;
-
-				folder.selected = !folder.selected;
-			}
-		},
-		togglePin: (state, action: PayloadAction<number>) => {
-			const existed = state.items.find(item => item.id === action.payload);
-
-			if (!existed) return;
-
-			if (existed.pinned) {
-				const existedIndex = state.pinnedItems.findIndex(
-					item => item.id === existed.id
-				);
-				state.pinnedItems.splice(existedIndex, 1);
-			} else {
-				state.pinnedItems.unshift(existed);
-			}
-
-			existed.pinned = !existed.pinned;
 		},
 		rename: (
 			state,
 			action: PayloadAction<Omit<FoldersItemPayload, 'notes'>>
 		) => {
-			const unpinnedExisted = state.items.find(
-				item => item.id === action.payload.id
-			);
-			const pinnedExisted = state.pinnedItems.find(
-				item => item.id === action.payload.id
-			);
+			const existed = state.items.find(item => item.id === action.payload.id);
 
-			renameFolder(unpinnedExisted);
-			renameFolder(pinnedExisted);
+			if (!existed) return;
 
-			function renameFolder(folder?: FoldersItem) {
-				if (!folder) return;
-
-				folder.name = action.payload.name;
-				folder.updatedAt = new Date().toISOString();
-			}
+			existed.name = action.payload.name;
+			existed.updatedAt = new Date().toISOString();
 		},
 		addNotes: (
 			state,
 			action: PayloadAction<{ id: number; notes: number[] }>
 		) => {
-			const unpinnedExisted = state.items.find(
-				item => item.id === action.payload.id
-			);
-			const pinnedExisted = state.pinnedItems.find(
-				item => item.id === action.payload.id
-			);
+			const existed = state.items.find(item => item.id === action.payload.id);
 
-			addNotesToFolder(unpinnedExisted);
-			addNotesToFolder(pinnedExisted);
+			addNotesToFolder(existed);
 
 			if (action.payload.id !== 1) {
 				addNotesToFolder(state.items[0]);
@@ -162,15 +138,9 @@ export const foldersSlice = createSlice({
 			state,
 			action: PayloadAction<{ id: number; notes: number[] }>
 		) => {
-			const unpinnedExisted = state.items.find(
-				item => item.id === action.payload.id
-			);
-			const pinnedExisted = state.pinnedItems.find(
-				item => item.id === action.payload.id
-			);
+			const existed = state.items.find(item => item.id === action.payload.id);
 
-			removeNotesFromFolder(unpinnedExisted);
-			removeNotesFromFolder(pinnedExisted);
+			removeNotesFromFolder(existed);
 
 			if (action.payload.id !== 1) {
 				removeNotesFromFolder(state.items[0]);
@@ -184,6 +154,37 @@ export const foldersSlice = createSlice({
 				});
 				folder.updatedAt = new Date().toISOString();
 			}
+		},
+		toggleSelect: (state, action: PayloadAction<number>) => {
+			const existed = state.items.find(item => item.id === action.payload);
+
+			if (!existed) return;
+
+			existed.selected = !existed.selected;
+		},
+		togglePin: (state, action: PayloadAction<number>) => {
+			const existed = state.items.find(item => item.id === action.payload);
+
+			if (!existed) return;
+
+			if (existed.pinned.state) {
+				state.pin.count--;
+				if (state.pin.count === 0) {
+					state.pin.lastPriority = 0;
+				} else {
+					state.pin.lastPriority =
+						state.pin.lastPriority > existed.pinned.priority
+							? state.pin.lastPriority
+							: existed.pinned.priority - 1;
+				}
+				existed.pinned.priority = -1;
+			} else {
+				state.pin.count++;
+				state.pin.lastPriority++;
+				existed.pinned.priority = state.pin.lastPriority;
+			}
+
+			existed.pinned.state = !existed.pinned.state;
 		}
 	}
 });
