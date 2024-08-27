@@ -15,16 +15,22 @@ function RenameFolderModal({
 	id,
 	name,
 	modalState,
-	setModalState
+	setModalState,
+	confirmAction
 }: RenameFolderModalProps) {
 	const dispatch = useAppDispatch();
 	const folders = useAppSelector(state => state.folders);
+	const settings = useAppSelector(state => state.settings);
 
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	const [folderNamesCollision, setFolderNamesCollision] = useState(false);
 	const [folderName, setFolderName] = useState(name);
 	const [renameButtonDisabled, setRenameButtonDisabled] = useState(true);
+
+	useEffect(() => {
+		setFolderName(name);
+	}, [name]);
 
 	useEffect(() => {
 		if (folderName !== '') {
@@ -59,14 +65,22 @@ function RenameFolderModal({
 			return;
 		}
 
-		dispatch(
-			foldersActions.rename({
-				id,
-				name: folderName
-			})
-		);
+		if (settings.actionConfirmations === 'all') {
+			confirmAction({ message: 'Подтвердить изменения', onConfirm: rename });
+		} else {
+			rename();
+		}
 
 		setModalState(false);
+
+		function rename() {
+			dispatch(
+				foldersActions.rename({
+					id,
+					name: folderName
+				})
+			);
+		}
 	};
 
 	return (
