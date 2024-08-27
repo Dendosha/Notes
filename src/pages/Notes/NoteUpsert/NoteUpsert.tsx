@@ -110,6 +110,8 @@ function NoteUpsert() {
 					notes: [note.id]
 				})
 			);
+
+			handleExit();
 		}
 	};
 
@@ -119,6 +121,7 @@ function NoteUpsert() {
 				titleRef.current?.value === noteExist.title &&
 				descriptionRef.current?.value === noteExist.content
 			) {
+				handleExit();
 				return;
 			}
 
