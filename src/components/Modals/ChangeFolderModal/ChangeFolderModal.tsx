@@ -15,10 +15,12 @@ const CHANGE_FOLDER_MODAL_TITLE = 'change-folder-modal-title';
 function ChangeFolderModal({
 	notes,
 	modalState,
-	setModalState
+	setModalState,
+	confirmAction
 }: ChangeFolderModalProps) {
 	const dispatch = useAppDispatch();
 	const folders = useAppSelector(state => state.folders);
+	const settings = useAppSelector(state => state.settings);
 
 	const [newFolder, setNewFodler] = useState<string | number>('');
 
@@ -33,36 +35,48 @@ function ChangeFolderModal({
 		e.preventDefault();
 
 		const formData = new FormData(e.currentTarget);
-		const folderId = parseInt(formData.get('folder') as string);
 
-		notes.forEach(note => {
-			if (note.folderId[1]) {
-				dispatch(
-					foldersActions.removeNotes({
-						id: note.folderId[1],
-						notes: [note.id]
-					})
-				);
-			}
-		});
-
-		dispatch(
-			foldersActions.addNotes({
-				id: folderId,
-				notes: notes.map(note => note.id)
-			})
-		);
-
-		notes.forEach(note => {
-			dispatch(
-				notesActions.update({
-					...note,
-					folderId: folderId
-				})
-			);
-		});
+		if (settings.actionConfirmations === 'all') {
+			confirmAction({
+				message: 'Подтвердить изменения',
+				onConfirm: changeFolder
+			});
+		} else {
+			changeFolder();
+		}
 
 		setModalState(false);
+
+		function changeFolder() {
+			const folderId = parseInt(formData.get('folder') as string);
+
+			notes.forEach(note => {
+				if (note.folderId[1]) {
+					dispatch(
+						foldersActions.removeNotes({
+							id: note.folderId[1],
+							notes: [note.id]
+						})
+					);
+				}
+			});
+
+			dispatch(
+				foldersActions.addNotes({
+					id: folderId,
+					notes: notes.map(note => note.id)
+				})
+			);
+
+			notes.forEach(note => {
+				dispatch(
+					notesActions.update({
+						...note,
+						folderId: folderId
+					})
+				);
+			});
+		}
 	};
 
 	const closeModal = () => {
