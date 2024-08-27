@@ -22,13 +22,19 @@ export const notesLayoutItems: CustomSelectItem<'list' | 'tiles'>[] = [
 	}
 ];
 
-export const actionConfirmationsItems: CustomSelectItem<number>[] = [
+export const actionConfirmationsItems: CustomSelectItem<
+	'all' | 'deleteOnly' | 'none'
+>[] = [
 	{
-		label: 'Не подтверждать',
-		value: 0
+		label: 'Спрашивать всегда',
+		value: 'all'
 	},
 	{
-		label: 'Подтверждать',
-		value: 1
+		label: 'Только удаление',
+		value: 'deleteOnly'
+	},
+	{
+		label: 'Не спрашивать',
+		value: 'none'
 	}
 ];

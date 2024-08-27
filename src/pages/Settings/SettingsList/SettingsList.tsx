@@ -8,29 +8,18 @@ import {
 } from '../../../store/settings.slice';
 import Setting from '../Setting/Setting';
 import styles from './SettingsList.module.scss';
-import {
-	actionConfirmationsItems,
-	notesLayoutItems,
-	notesSortItems
-} from './setting-data';
+import { actionConfirmationsItems, notesSortItems } from './setting-data';
 
 function SettingsList() {
 	const dispatch = useAppDispatch();
-	const {
-		sort: notesSort,
-		notesLayout,
-		actionConfirmations
-	} = useAppSelector(state => state.settings);
+	const { sort, actionConfirmations } = useAppSelector(state => state.settings);
 
 	const [notesSortValue, setNotesSortValue] = useState<
 		'createDate' | 'updateDate'
-	>(notesSort);
-	const [notesLayoutValue, setNotesLayoutValue] = useState<'list' | 'tiles'>(
-		notesLayout
-	);
-	const [actionConfirmationsValue, setActionConfirmationsValue] = useState(
-		Number(actionConfirmations)
-	);
+	>(sort);
+	const [actionConfirmationsValue, setActionConfirmationsValue] = useState<
+		'all' | 'deleteOnly' | 'none'
+	>(actionConfirmations);
 
 	return (
 		<div className={styles['settings-list']}>
@@ -52,26 +41,6 @@ function SettingsList() {
 			</Setting>
 			<div className={styles['settings-list__separator']}></div>
 			<Setting
-				inputName='notes-layout'
-				items={notesLayoutItems}
-				defaultSelectValue={notesLayoutValue}
-				setSelectValue={setNotesLayoutValue}
-				onSelectChange={() =>
-					dispatch(
-						settingsActions.update({
-							key: 'notesLayout',
-							value: notesLayoutValue as SettingValue<
-								SettingsState,
-								'notesLayout'
-							>
-						})
-					)
-				}
-			>
-				Макет заметок
-			</Setting>
-			<div className={styles['settings-list__separator']}></div>
-			<Setting
 				inputName='action-confirmations'
 				items={actionConfirmationsItems}
 				defaultSelectValue={actionConfirmationsValue}
@@ -80,7 +49,7 @@ function SettingsList() {
 					dispatch(
 						settingsActions.update({
 							key: 'actionConfirmations',
-							value: Boolean(actionConfirmationsValue) as SettingValue<
+							value: actionConfirmationsValue as SettingValue<
 								SettingsState,
 								'actionConfirmations'
 							>
