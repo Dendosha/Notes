@@ -49,25 +49,6 @@
 		flex-grow: 1;
 	}
 
-	&__list {
-		display: grid;
-		grid-auto-rows: min-content;
-		row-gap: rem(20);
-
-		&:not(:last-child) {
-			margin-bottom: rem(20);
-		}
-	}
-
-	&__list-title {
-		padding-left: rem(35);
-		@extend %font-big;
-
-		&:not(:last-child) {
-			margin-bottom: rem(20);
-		}
-	}
-
 	&__buttons {
 		position: fixed;
 		right: rem(40);

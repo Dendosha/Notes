@@ -13,8 +13,9 @@ import styles from './TaskUpsert.module.scss';
 function TaskUpsert() {
 	const dispatch = useAppDispatch();
 	const tasks = useAppSelector(state => state.tasks);
+	const settings = useAppSelector(state => state.settings);
 
-	const { focusFromUpsertTaskRef } = useTasksContext();
+	const { confirmAction, focusFromUpsertTaskRef } = useTasksContext();
 
 	const navigate = useNavigate();
 	const { task } = useParams();
@@ -80,21 +81,41 @@ function TaskUpsert() {
 	};
 
 	const createTask = () => {
-		dispatch(
-			tasksActions.add({
-				id: taskId,
-				content: inputValue
-			})
-		);
+		if (settings.actionConfirmations === 'all') {
+			confirmAction({ message: 'Подтвердить создание', onConfirm: create });
+		} else {
+			create();
+		}
+
+		function create() {
+			dispatch(
+				tasksActions.add({
+					id: taskId,
+					content: inputValue
+				})
+			);
+
+			handleExit();
+		}
 	};
 
 	const updateTask = () => {
-		dispatch(
-			tasksActions.update({
-				id: taskId,
-				content: inputValue
-			})
-		);
+		if (settings.actionConfirmations === 'all') {
+			confirmAction({ message: 'Подтвердить изменения', onConfirm: update });
+		} else {
+			update();
+		}
+
+		function update() {
+			dispatch(
+				tasksActions.update({
+					id: taskId,
+					content: inputValue
+				})
+			);
+
+			handleExit();
+		}
 	};
 
 	const handleExit = () => {
@@ -106,12 +127,14 @@ function TaskUpsert() {
 
 	const handleConfirm = () => {
 		if (taskExist) {
-			updateTask();
-		} else {
+			if (taskExist.content !== inputValue) {
+				updateTask();
+			} else {
+				handleExit();
+			}
+		} else if (!taskExist) {
 			createTask();
 		}
-
-		handleExit();
 	};
 
 	return (

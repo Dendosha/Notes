@@ -3,21 +3,26 @@ import { Outlet, useNavigate, useOutletContext } from 'react-router-dom';
 import AddButtonIcon from '../../assets/icons/AddButtonIcon';
 import RemoveButtonIcon from '../../assets/icons/RemoveButtonIcon';
 import IconButton from '../../components/IconButton/IconButton';
-import InteractiveList from '../../components/InteractiveList/InteractiveList';
+import ActionConfirmationModal from '../../components/Modals/ActionConfirmationModal/ActionConfirmationModal';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import Task from '../../components/Task/Task';
-import { sortItems } from '../../helpers/sortItems';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../hooks/useAppSelector.hook';
 import {
 	RootContextType,
 	useRootContext
 } from '../../layout/RootLayout/RootLayout';
-import { tasksActions, TasksItem } from '../../store/tasks.slice';
+import { tasksActions } from '../../store/tasks.slice';
 import styles from './Tasks.module.scss';
+import TasksList from './TasksList/TasksList';
+
+export interface ActionConfirmationProps {
+	message: string;
+	onConfirm: () => void;
+}
 
 export interface TasksContextType {
 	focusFromUpsertTaskRef: React.MutableRefObject<HTMLElement | null>;
+	confirmAction: ({ message, onConfirm }: ActionConfirmationProps) => void;
 }
 
 export function useTasksContext() {
@@ -29,31 +34,21 @@ function Tasks() {
 	const tasks = useAppSelector(state => state.tasks);
 	const settings = useAppSelector(state => state.settings);
 
+	const [actionConfirmationModalState, setActionConfirmationModalState] =
+		useState(false);
+	const [actionConfirmationProps, setActionConfirmationProps] =
+		useState<ActionConfirmationProps>({
+			message: '',
+			onConfirm: () => {}
+		});
+
 	const [isAnyTaskSelected, setIsAnyTaskSelected] = useState(false);
 	const [selectAllButtonState, setSelectAllButtonState] = useState(false);
-	const [uncompletedTasksCount, setUncompletedTasksCount] = useState(
-		tasks.items.filter(task => !task.completed).length
-	);
-	const [completedTasksCount, setCompletedTasksCount] = useState(
-		tasks.items.filter(task => task.completed).length
-	);
 
-	const { searchValue, isSelection, setIsSelection } = useRootContext();
+	const { isSelection, setIsSelection } = useRootContext();
 
 	const firstSidebarButtonRef = useRef<HTMLButtonElement>(null);
 	const focusFromUpsertTaskRef = useRef<HTMLElement | null>(null);
-	const uncompletedTasksListRef = useRef<HTMLUListElement>(null);
-	const completedTasksListRef = useRef<HTMLUListElement>(null);
-	const updatedTasksListRef = useRef<HTMLUListElement | null>(null);
-
-	const uncompletedTasks = sortItems(
-		tasks.items.filter(task => !task.completed),
-		settings.sort
-	);
-	const completedTasks = sortItems(
-		tasks.items.filter(task => task.completed),
-		settings.sort
-	);
 
 	const navigate = useNavigate();
 
@@ -92,22 +87,6 @@ function Tasks() {
 		};
 	}, [tasks.items]);
 
-	useEffect(() => {
-		if (uncompletedTasks.length < uncompletedTasksCount) {
-			uncompletedTasksListRef.current?.focus();
-		}
-
-		setUncompletedTasksCount(uncompletedTasks.length);
-	}, [uncompletedTasks]);
-
-	useEffect(() => {
-		if (completedTasks.length < completedTasksCount) {
-			completedTasksListRef.current?.focus();
-		}
-
-		setCompletedTasksCount(completedTasks.length);
-	}, [completedTasks]);
-
 	const upsertTask = (
 		e: React.MouseEvent | React.KeyboardEvent,
 		taskId?: number
@@ -122,15 +101,34 @@ function Tasks() {
 		navigate(`/tasks/task-${taskId ?? newTaskId}/edit`);
 	};
 
-	const removeTask = () => {
-		const selectedTasks = tasks.items.filter(task => task.selected);
-
-		selectedTasks.forEach(task => {
-			dispatch(tasksActions.remove(task.id));
+	const confirmAction = ({ message, onConfirm }: ActionConfirmationProps) => {
+		setActionConfirmationProps({
+			message,
+			onConfirm
 		});
+		setActionConfirmationModalState(true);
+	};
 
-		setSelectAllButtonState(false);
-		setIsSelection(false);
+	const removeTasks = () => {
+		if (
+			settings.actionConfirmations === 'all' ||
+			settings.actionConfirmations === 'deleteOnly'
+		) {
+			confirmAction({ message: 'Подтвердить удаление', onConfirm: remove });
+		} else {
+			remove();
+		}
+
+		function remove() {
+			const selectedTasks = tasks.items.filter(task => task.selected);
+
+			selectedTasks.forEach(task => {
+				dispatch(tasksActions.remove(task.id));
+			});
+
+			setSelectAllButtonState(false);
+			setIsSelection(false);
+		}
 	};
 
 	const closeSidebar = () => {
@@ -162,18 +160,6 @@ function Tasks() {
 		});
 	};
 
-	const handleTaskKeyDown = (e: React.KeyboardEvent, task: TasksItem) => {
-		if (e.code === 'Enter') {
-			upsertTask(e, task.id);
-		}
-
-		if (e.code === 'KeyC' && !e.ctrlKey && !e.altKey && !e.metaKey) {
-			updatedTasksListRef.current = e.currentTarget
-				.parentElement as HTMLUListElement;
-			dispatch(tasksActions.toggleComplete(task.id));
-		}
-	};
-
 	return (
 		<div className={styles['tasks']}>
 			<div className={styles['tasks__content']}>
@@ -201,57 +187,7 @@ function Tasks() {
 					/>
 				)}
 				<div className={styles['tasks__list-wrapper']}>
-					{uncompletedTasks.length !== 0 && (
-						<InteractiveList
-							ref={uncompletedTasksListRef}
-							className={styles['tasks__list']}
-							isNotFocusable={uncompletedTasks.length === 0}
-						>
-							{uncompletedTasks
-								.filter(task =>
-									task.content.toLowerCase().includes(searchValue)
-								)
-								.map(task => (
-									<Task
-										data={task}
-										isSelection={isSelection}
-										key={task.id}
-										data-key={task.id}
-										onKeyDown={e => handleTaskKeyDown(e, task)}
-										onClick={e => upsertTask(e, task.id)}
-									>
-										{task.content}
-									</Task>
-								))}
-						</InteractiveList>
-					)}
-					{completedTasks.length !== 0 && (
-						<>
-							<h2 className={styles['tasks__list-title']}>Выполненные:</h2>
-							<InteractiveList
-								ref={completedTasksListRef}
-								className={styles['tasks__list']}
-								isNotFocusable={completedTasks.length === 0}
-							>
-								{completedTasks
-									.filter(task =>
-										task.content.toLowerCase().includes(searchValue)
-									)
-									.map(task => (
-										<Task
-											data={task}
-											isSelection={isSelection}
-											key={task.id}
-											data-key={task.id}
-											onKeyDown={e => handleTaskKeyDown(e, task)}
-											onClick={e => upsertTask(e, task.id)}
-										>
-											{task.content}
-										</Task>
-									))}
-							</InteractiveList>
-						</>
-					)}
+					<TasksList confirmAction={confirmAction} upsertTask={upsertTask} />
 				</div>
 			</div>
 			<div className={styles['tasks__buttons']}>
@@ -269,7 +205,7 @@ function Tasks() {
 						appearance='circle'
 						colorScheme='primary'
 						className={styles['tasks__remove-button']}
-						onClick={removeTask}
+						onClick={removeTasks}
 						disabled={!isAnyTaskSelected}
 					>
 						<RemoveButtonIcon />
@@ -281,10 +217,19 @@ function Tasks() {
 					{
 						isSelection,
 						setIsSelection,
-						focusFromUpsertTaskRef
+						focusFromUpsertTaskRef,
+						confirmAction
 					} satisfies Omit<RootContextType, 'searchValue'> & TasksContextType
 				}
 			/>
+			{settings.actionConfirmations !== 'none' && (
+				<ActionConfirmationModal
+					message={actionConfirmationProps.message}
+					modalState={actionConfirmationModalState}
+					onConfirm={actionConfirmationProps.onConfirm}
+					setModalState={setActionConfirmationModalState}
+				/>
+			)}
 		</div>
 	);
 }

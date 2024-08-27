@@ -1,0 +1,21 @@
+@use '/src/styles/functions' as *;
+@use '/src/styles/general' as *;
+
+.tasks-list {
+	display: grid;
+	grid-auto-rows: min-content;
+	row-gap: rem(20);
+
+	&:not(:last-child) {
+		margin-bottom: rem(20);
+	}
+
+	&__title {
+		padding-left: rem(35);
+		@extend %font-big;
+
+		&:not(:last-child) {
+			margin-bottom: rem(20);
+		}
+	}
+}
