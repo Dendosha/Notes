@@ -1,6 +1,8 @@
 import cn from 'classnames';
 import { useNavigate } from 'react-router-dom';
+import { formatDate, ISOStringToDate } from '../../helpers/dateTime';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
+import { useAppSelector } from '../../hooks/useAppSelector.hook';
 import { tasksActions } from '../../store/tasks.slice';
 import Checkbox from '../Checkbox/Checkbox';
 import { MenuItem } from '../ContextMenu/ContextMenu.props';
@@ -16,7 +18,11 @@ function Task({
 	...props
 }: TaskProps) {
 	const dispatch = useAppDispatch();
+	const settings = useAppSelector(state => state.settings);
+
 	const navigate = useNavigate();
+
+	const date = settings.sort === 'createDate' ? data.createdAt : data.updatedAt;
 
 	const setContextMenuItems = (): MenuItem[] => {
 		const selectButtonName = data.selected ? 'Снять выделение' : 'Выделить';
@@ -71,15 +77,18 @@ function Task({
 					onChange={() => dispatch(tasksActions.toggleSelect(data.id))}
 				/>
 			)}
-			<p className={styles['task__content']}>
-				<span className={styles['task__text']}>{children}</span>
+			<div className={styles['task__text']}>
+				<span className={styles['task__title']}>{children}</span>
+				<span className={styles['task__date']}>
+					{formatDate(ISOStringToDate(date))}
+				</span>
 				{data.pinned.state && (
 					<img
 						src='/public/icons/pin.svg'
 						className={styles['task__pin']}
 					></img>
 				)}
-			</p>
+			</div>
 		</InteractiveListItem>
 	);
 }

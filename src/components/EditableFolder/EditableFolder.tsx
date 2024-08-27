@@ -1,6 +1,8 @@
 import cn from 'classnames';
 import { useState } from 'react';
+import { formatDate, ISOStringToDate } from '../../helpers/dateTime';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
+import { useAppSelector } from '../../hooks/useAppSelector.hook';
 import { foldersActions } from '../../store/folders.slice';
 import { notesActions } from '../../store/notes.slice';
 import Checkbox from '../Checkbox/Checkbox';
@@ -20,6 +22,10 @@ function EditableFolder({
 }: EditableFolderProps) {
 	const dispatch = useAppDispatch();
 	const [renameFolderModalState, setRenameFolderModalState] = useState(false);
+
+	const settings = useAppSelector(state => state.settings);
+
+	const date = settings.sort === 'createDate' ? data.createdAt : data.updatedAt;
 
 	const setContextMenuItems = (): MenuItem[] => {
 		const selectButtonName = data.selected ? 'Снять выделение' : 'Выделить';
@@ -74,6 +80,9 @@ function EditableFolder({
 				<span className={styles['editable-folder__title']}>{children}</span>
 				<span className={styles['editable-folder__note-count']}>
 					Заметок: {data.notes.length}
+				</span>
+				<span className={styles['editable-folder__date']}>
+					{formatDate(ISOStringToDate(date))}
 				</span>
 				{data.pinned.state && (
 					<img

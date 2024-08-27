@@ -42,8 +42,25 @@
 	// .task__text
 
 	&__text {
-		@extend %font-big;
 		flex: 1;
+
+		display: grid;
+		grid-template-columns: auto 1fr;
+		align-items: center;
+		gap: rem(5) rem(10);
+	}
+
+	// .task__title
+
+	&__title {
+		grid-column: 1 / -1;
+		@extend %font-big;
+	}
+
+	// .task__date
+
+	&__date {
+		@extend %font-small;
 	}
 
 	// .task__pin

@@ -35,7 +35,8 @@
 		flex: 1;
 
 		display: grid;
-		grid-template-columns: auto 1fr;
+		grid-auto-columns: auto 1fr;
+		grid-template-areas: 'title title' 'note-count note-count' 'date pin';
 		align-items: center;
 		gap: rem(5) rem(10);
 	}
@@ -43,19 +44,28 @@
 	// .editable-folder__title
 
 	&__title {
-		grid-column: 1 / -1;
+		grid-area: title;
 		@extend %font-big;
 	}
 
 	// .editable-folder__note-count
 
 	&__note-count {
+		grid-area: note-count;
+		@extend %font-small;
+	}
+
+	// .editable-folder__date
+
+	&__date {
+		grid-area: date;
 		@extend %font-small;
 	}
 
 	// .editable-folder__pin
 
 	&__pin {
+		grid-area: pin;
 		width: rem(20);
 		height: rem(20);
 	}
