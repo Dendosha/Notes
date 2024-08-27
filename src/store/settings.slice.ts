@@ -2,8 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface SettingsState {
 	sort: 'createDate' | 'updateDate';
-	notesLayout: 'list' | 'tiles';
-	actionConfirmations: boolean;
+	actionConfirmations: 'all' | 'deleteOnly' | 'none';
 }
 
 export type SettingValue<
@@ -20,8 +19,7 @@ export type SettingsPayload = {
 
 const initialState: SettingsState = {
 	sort: 'createDate',
-	notesLayout: 'list',
-	actionConfirmations: false
+	actionConfirmations: 'deleteOnly'
 };
 
 export const settingsSlice = createSlice({
