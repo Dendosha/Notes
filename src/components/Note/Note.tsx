@@ -1,17 +1,15 @@
 import cn from 'classnames';
-import { useNavigate, useParams } from 'react-router-dom';
 import { formatDate, ISOStringToDate } from '../../helpers/dateTime';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../hooks/useAppSelector.hook';
-import { foldersActions } from '../../store/folders.slice';
 import { notesActions } from '../../store/notes.slice';
 import Checkbox from '../Checkbox/Checkbox';
-import { MenuItem } from '../ContextMenu/ContextMenu.props';
 import InteractiveListItem from '../InteractiveListItem/InteractiveListItem';
 import styles from './Note.module.scss';
 import { NoteProps } from './Note.props';
 
 function Note({
+	contextMenuItems,
 	children,
 	data,
 	isSelection = false,
@@ -21,47 +19,12 @@ function Note({
 	const dispatch = useAppDispatch();
 	const settings = useAppSelector(state => state.settings);
 
-	const navigate = useNavigate();
-	const { folder } = useParams();
-
 	const date = settings.sort === 'createDate' ? data.createdAt : data.updatedAt;
-
-	const setContextMenuItems = (): MenuItem[] => {
-		const selectButtonName = data.selected ? 'Снять выделение' : 'Выделить';
-		const pinButtonName = data.pinned.state ? 'Открепить' : 'Закрепить';
-
-		return [
-			{
-				name: selectButtonName,
-				action: () => dispatch(notesActions.toggleSelect(data.id))
-			},
-			{
-				name: pinButtonName,
-				action: () => dispatch(notesActions.togglePin(data.id))
-			},
-			{
-				name: 'Редактировать',
-				action: () => navigate(`/notes/${folder}/note-${data.id}/edit`)
-			},
-			{
-				name: 'Удалить',
-				action: () => {
-					dispatch(notesActions.remove(data.id));
-					dispatch(
-						foldersActions.removeNotes({
-							id: data.folderId[1] ?? data.folderId[0],
-							notes: [data.id]
-						})
-					);
-				}
-			}
-		];
-	};
 
 	return (
 		<InteractiveListItem
 			{...props}
-			contextMenuItems={setContextMenuItems()}
+			contextMenuItems={contextMenuItems}
 			isSelection={isSelection}
 			className={cn(styles['note'], className)}
 		>

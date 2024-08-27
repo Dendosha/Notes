@@ -1,18 +1,15 @@
 import cn from 'classnames';
-import { useState } from 'react';
 import { formatDate, ISOStringToDate } from '../../helpers/dateTime';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../hooks/useAppSelector.hook';
 import { foldersActions } from '../../store/folders.slice';
-import { notesActions } from '../../store/notes.slice';
 import Checkbox from '../Checkbox/Checkbox';
-import { MenuItem } from '../ContextMenu/ContextMenu.props';
 import InteractiveListItem from '../InteractiveListItem/InteractiveListItem';
-import RenameFolderModal from '../Modals/RenameFolderModal/RenameFolderModal';
 import styles from './EditableFolder.module.scss';
 import { EditableFolderProps } from './EditableFolder.props';
 
 function EditableFolder({
+	contextMenuItems,
 	children,
 	data,
 	isSelectable = true,
@@ -21,50 +18,16 @@ function EditableFolder({
 	...props
 }: EditableFolderProps) {
 	const dispatch = useAppDispatch();
-	const [renameFolderModalState, setRenameFolderModalState] = useState(false);
-
 	const settings = useAppSelector(state => state.settings);
 
 	const date = settings.sort === 'createDate' ? data.createdAt : data.updatedAt;
 
-	const setContextMenuItems = (): MenuItem[] => {
-		const selectButtonName = data.selected ? 'Снять выделение' : 'Выделить';
-		const pinButtonName = data.pinned.state ? 'Открепить' : 'Закрепить';
-
-		return [
-			{
-				name: selectButtonName,
-				action: () => dispatch(foldersActions.toggleSelect(data.id))
-			},
-			{
-				name: pinButtonName,
-				action: () => dispatch(foldersActions.togglePin(data.id))
-			},
-			{ name: 'Переименовать', action: () => setRenameFolderModalState(true) },
-			{
-				name: 'Удалить',
-				action: () => {
-					data.notes.forEach(noteId => {
-						dispatch(notesActions.remove(noteId));
-					});
-					dispatch(foldersActions.remove(data.id));
-				}
-			}
-		];
-	};
-
-	const openRenameFolderModal = () => {
-		data.id !== 1 && setRenameFolderModalState(true);
-	};
-
 	return (
 		<InteractiveListItem
 			{...props}
-			contextMenuItems={isSelectable ? setContextMenuItems() : undefined}
+			contextMenuItems={contextMenuItems}
 			isSelection={isSelection}
 			className={cn(styles['editable-folder'], className)}
-			onClick={openRenameFolderModal}
-			onKeyDown={e => e.key === 'Enter' && openRenameFolderModal()}
 		>
 			{isSelectable && isSelection && (
 				<Checkbox
@@ -91,12 +54,6 @@ function EditableFolder({
 					></img>
 				)}
 			</div>
-			<RenameFolderModal
-				modalState={renameFolderModalState}
-				setModalState={setRenameFolderModalState}
-				id={data.id}
-				name={data.name}
-			/>
 		</InteractiveListItem>
 	);
 }
