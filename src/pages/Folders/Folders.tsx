@@ -3,18 +3,31 @@ import { useNavigate } from 'react-router-dom';
 import AddButtonIcon from '../../assets/icons/AddButtonIcon';
 import BackButtonIcon from '../../assets/icons/BackButtonIcon';
 import RemoveButtonIcon from '../../assets/icons/RemoveButtonIcon';
-import EditableFolder from '../../components/EditableFolder/EditableFolder';
 import IconButton from '../../components/IconButton/IconButton';
-import InteractiveList from '../../components/InteractiveList/InteractiveList';
+import ActionConfirmationModal from '../../components/Modals/ActionConfirmationModal/ActionConfirmationModal';
 import CreateFolderModal from '../../components/Modals/CreateFolderModal/CreateFolderModal';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import { sortItems } from '../../helpers/sortItems';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../hooks/useAppSelector.hook';
 import { foldersActions } from '../../store/folders.slice';
+import FolderList from './FolderList/FolderList';
 import styles from './Folders.module.scss';
 
+export interface ActionConfirmationProps {
+	message: string;
+	onConfirm: () => void;
+}
+
 function Folders() {
+	const [actionConfirmationModalState, setActionConfirmationModalState] =
+		useState(false);
+	const [actionConfirmationProps, setActionConfirmationProps] =
+		useState<ActionConfirmationProps>({
+			message: '',
+			onConfirm: () => {}
+		});
+
 	const [isAnyFolderSelected, setIsAnyFolderSelected] = useState(false);
 	const [selectAllButtonState, setSelectAllButtonState] = useState(false);
 	const [createFolderModalState, setCreateFolderModalState] = useState(false);
@@ -79,12 +92,31 @@ function Folders() {
 		setCreateFolderModalState(true);
 	};
 
-	const removeFolder = () => {
-		const selectedFolders = folders.items.filter(folder => folder.selected);
-
-		selectedFolders.forEach(folder => {
-			dispatch(foldersActions.remove(folder.id));
+	const confirmAction = ({ message, onConfirm }: ActionConfirmationProps) => {
+		setActionConfirmationProps({
+			message,
+			onConfirm
 		});
+		setActionConfirmationModalState(true);
+	};
+
+	const removeFolder = () => {
+		if (
+			settings.actionConfirmations === 'all' ||
+			settings.actionConfirmations === 'deleteOnly'
+		) {
+			confirmAction({ message: 'Подтвердить удаление', onConfirm: remove });
+		} else {
+			remove();
+		}
+
+		function remove() {
+			const selectedFolders = folders.items.filter(folder => folder.selected);
+
+			selectedFolders.forEach(folder => {
+				dispatch(foldersActions.remove(folder.id));
+			});
+		}
 	};
 
 	const closeSidebar = () => {
@@ -154,25 +186,7 @@ function Folders() {
 						}}
 					/>
 				)}
-				<InteractiveList className={styles['folders__list']}>
-					<EditableFolder
-						data={folderAll}
-						isSelection={isSelection}
-						isSelectable={false}
-						key={folderAll.id}
-					>
-						{folderAll.name}
-					</EditableFolder>
-					{folderList.map(folder => (
-						<EditableFolder
-							data={folder}
-							isSelection={isSelection}
-							key={folder.id}
-						>
-							{folder.name}
-						</EditableFolder>
-					))}
-				</InteractiveList>
+				<FolderList isSelection={isSelection} confirmAction={confirmAction} />
 			</div>
 			<div className={styles['folders__buttons']}>
 				{!isSelection ? (
@@ -200,6 +214,14 @@ function Folders() {
 				modalState={createFolderModalState}
 				setModalState={setCreateFolderModalState}
 			/>
+			{settings.actionConfirmations !== 'none' && (
+				<ActionConfirmationModal
+					message={actionConfirmationProps.message}
+					modalState={actionConfirmationModalState}
+					onConfirm={actionConfirmationProps.onConfirm}
+					setModalState={setActionConfirmationModalState}
+				/>
+			)}
 		</div>
 	);
 }

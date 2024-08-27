@@ -41,18 +41,6 @@
 		row-gap: rem(20);
 	}
 
-	&__list {
-		border-radius: rem(15);
-		overflow-y: auto;
-		overflow-x: hidden;
-
-		flex-grow: 1;
-
-		display: grid;
-		grid-auto-rows: min-content;
-		row-gap: rem(20);
-	}
-
 	&__buttons {
 		position: fixed;
 		right: rem(40);
