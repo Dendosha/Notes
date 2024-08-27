@@ -86,7 +86,7 @@ function EditableFolder({
 				</span>
 				{data.pinned.state && (
 					<img
-						src='/public/icons/pin.svg'
+						src='/icons/pin.svg'
 						className={styles['editable-folder__pin']}
 					></img>
 				)}

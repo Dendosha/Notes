@@ -22,10 +22,7 @@ const Folder = forwardRef<HTMLAnchorElement, FolderProps>(function Folder(
 		>
 			<p className={styles['folder__text']}>{children}</p>
 			{pinned && (
-				<img
-					src='/public/icons/pin.svg'
-					className={styles['folder__pin']}
-				></img>
+				<img src='/icons/pin.svg' className={styles['folder__pin']}></img>
 			)}
 		</NavLink>
 	);

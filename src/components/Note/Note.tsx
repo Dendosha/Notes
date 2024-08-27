@@ -81,10 +81,7 @@ function Note({
 					{formatDate(ISOStringToDate(date))}
 				</span>
 				{data.pinned.state && (
-					<img
-						src='/public/icons/pin.svg'
-						className={styles['note__pin']}
-					></img>
+					<img src='/icons/pin.svg' className={styles['note__pin']}></img>
 				)}
 			</div>
 		</InteractiveListItem>

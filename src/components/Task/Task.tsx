@@ -83,10 +83,7 @@ function Task({
 					{formatDate(ISOStringToDate(date))}
 				</span>
 				{data.pinned.state && (
-					<img
-						src='/public/icons/pin.svg'
-						className={styles['task__pin']}
-					></img>
+					<img src='/icons/pin.svg' className={styles['task__pin']}></img>
 				)}
 			</div>
 		</InteractiveListItem>
