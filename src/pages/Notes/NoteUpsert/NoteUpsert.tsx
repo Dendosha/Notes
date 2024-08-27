@@ -6,15 +6,16 @@ import TextField from '../../../components/TextField/TextField';
 import { useAppDispatch } from '../../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../../hooks/useAppSelector.hook';
 import { foldersActions } from '../../../store/folders.slice';
-import { notesActions } from '../../../store/notes.slice';
+import { notesActions, NotesItem } from '../../../store/notes.slice';
 import { useNotesContext } from '../Notes';
 import styles from './NoteUpsert.module.scss';
 
 function NoteUpsert() {
 	const dispatch = useAppDispatch();
 	const notes = useAppSelector(state => state.notes);
+	const settings = useAppSelector(state => state.settings);
 
-	const { focusFromUpsertNoteRef } = useNotesContext();
+	const { focusFromUpsertNoteRef, confirmAction } = useNotesContext();
 
 	const navigate = useNavigate();
 	const { folder, note } = useParams();
@@ -32,7 +33,7 @@ function NoteUpsert() {
 
 		function handleEscape(e: KeyboardEvent) {
 			if (e.key === 'Escape') {
-				handleExit();
+				handleUpsert();
 			}
 		}
 
@@ -44,43 +45,75 @@ function NoteUpsert() {
 	}, [titleRef.current]);
 
 	const createNote = () => {
-		dispatch(
-			notesActions.add({
-				id: noteId,
-				title: titleRef.current?.value ?? '',
-				content: descriptionRef.current?.value ?? '',
-				folderId: folderId !== 1 ? folderId : undefined
-			})
-		);
+		if (settings.actionConfirmations === 'all') {
+			confirmAction({ message: 'Подтвердить создание', onConfirm: create });
+		} else {
+			create();
+		}
 
-		dispatch(
-			foldersActions.addNotes({
-				id: folderId,
-				notes: [noteId]
-			})
-		);
+		function create() {
+			dispatch(
+				notesActions.add({
+					id: noteId,
+					title: titleRef.current?.value ?? '',
+					content: descriptionRef.current?.value ?? '',
+					folderId: folderId !== 1 ? folderId : undefined
+				})
+			);
+
+			dispatch(
+				foldersActions.addNotes({
+					id: folderId,
+					notes: [noteId]
+				})
+			);
+
+			handleExit();
+		}
 	};
 
 	const updateNote = () => {
-		dispatch(
-			notesActions.update({
-				id: noteId,
-				title: titleRef.current?.value!,
-				content: descriptionRef.current?.value!
-			})
-		);
-	};
-
-	const handleExit = () => {
-		navigate(-1);
-		setTimeout(() => {
-			focusFromUpsertNoteRef.current?.focus();
-		}, 0.5);
-
-		if (!titleRef.current?.value && !descriptionRef.current?.value) {
-			return;
+		if (settings.actionConfirmations === 'all') {
+			confirmAction({ message: 'Подтвердить создание', onConfirm: update });
+		} else {
+			update();
 		}
 
+		function update() {
+			dispatch(
+				notesActions.update({
+					id: noteId,
+					title: titleRef.current?.value!,
+					content: descriptionRef.current?.value!
+				})
+			);
+
+			handleExit();
+		}
+	};
+
+	const removeNote = (note: NotesItem) => {
+		if (
+			settings.actionConfirmations === 'all' ||
+			settings.actionConfirmations === 'deleteOnly'
+		) {
+			confirmAction({ message: 'Подтвердить удаление', onConfirm: remove });
+		} else {
+			remove();
+		}
+
+		function remove() {
+			dispatch(notesActions.remove(note.id));
+			dispatch(
+				foldersActions.removeNotes({
+					id: note.folderId[1] ?? note.folderId[0],
+					notes: [note.id]
+				})
+			);
+		}
+	};
+
+	const handleUpsert = () => {
 		if (noteExist) {
 			if (
 				titleRef.current?.value === noteExist.title &&
@@ -89,10 +122,21 @@ function NoteUpsert() {
 				return;
 			}
 
-			updateNote();
-		} else {
+			if (!titleRef.current?.value && !descriptionRef.current?.value) {
+				removeNote(noteExist);
+			} else {
+				updateNote();
+			}
+		} else if (titleRef.current?.value || descriptionRef.current?.value) {
 			createNote();
 		}
+	};
+
+	const handleExit = () => {
+		navigate(-1);
+		setTimeout(() => {
+			focusFromUpsertNoteRef.current?.focus();
+		}, 0.5);
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -115,7 +159,7 @@ function NoteUpsert() {
 	return (
 		<div className={styles['note-upsert']} onKeyDown={handleKeyDown}>
 			<div className={styles['note-upsert__header']}>
-				<IconButton iconType='stroke' onClick={handleExit} ref={buttonRef}>
+				<IconButton iconType='stroke' onClick={handleUpsert} ref={buttonRef}>
 					<BackButtonIcon />
 				</IconButton>
 				<TextField
