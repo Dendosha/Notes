@@ -3,6 +3,7 @@ import CancelButtonIcon from '../../assets/icons/CancelButtonIcon';
 import ChangeFolderButtonIcon from '../../assets/icons/ChangeFolderButtonIcon';
 import PinButtonIcon from '../../assets/icons/PinButtonIcon';
 import SelectAllButtonIcon from '../../assets/icons/SelectAllButtonIcon';
+import UnpinButtonIcon from '../../assets/icons/UnpinButtonIcon';
 import UnselectAllButtonIcon from '../../assets/icons/UnselectAllButtonIcon';
 import IconButton from '../IconButton/IconButton';
 import styles from './Sidebar.module.scss';
@@ -53,7 +54,11 @@ function Sidebar({
 					disabled={togglePinState.disabled}
 					onClick={togglePinState.action}
 				>
-					<PinButtonIcon />
+					{togglePinState.pinAllButtonState ? (
+						<PinButtonIcon />
+					) : (
+						<UnpinButtonIcon />
+					)}
 				</IconButton>
 			)}
 			{changeFolder.exist && (

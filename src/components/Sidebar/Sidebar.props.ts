@@ -10,6 +10,6 @@ export interface SidebarButton {
 export interface SidebarProps extends HTMLAttributes<HTMLElement> {
 	closeSidebar: SidebarButton;
 	toggleSelectState: SidebarButton & { selectAllButtonState: boolean };
-	togglePinState: SidebarButton;
+	togglePinState: SidebarButton & { pinAllButtonState: boolean };
 	changeFolder: SidebarButton;
 }
