@@ -77,7 +77,9 @@ function CreateFolderModal({
 						ref={inputRef}
 						name='folder-name'
 						placeholder='Название папки'
-						onChange={e => setFolderName(e.target.value)}
+						onChange={e =>
+							setFolderName((e.target as EventTarget & HTMLInputElement).value)
+						}
 					/>
 					<div className={styles['modal-buttons']}>
 						<TextButton

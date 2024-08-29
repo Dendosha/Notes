@@ -220,6 +220,7 @@ function Tasks() {
 			<div className={styles['tasks__buttons']}>
 				{!isSelection ? (
 					<IconButton
+						aria-label='Создать задачу'
 						appearance='circle'
 						colorScheme='primary'
 						className={styles['tasks__add-button']}
@@ -229,6 +230,7 @@ function Tasks() {
 					</IconButton>
 				) : (
 					<IconButton
+						aria-label='Удалить выделенные задачи'
 						appearance='circle'
 						colorScheme='primary'
 						className={styles['tasks__remove-button']}

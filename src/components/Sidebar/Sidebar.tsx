@@ -22,6 +22,7 @@ function Sidebar({
 		<div className={cn(styles['sidebar'], className)} {...props}>
 			{closeSidebar.exist && (
 				<IconButton
+					aria-label='Закрыть сайдбар'
 					iconType='fill'
 					className={styles['sidebar__button']}
 					ref={closeSidebar.ref}
@@ -33,6 +34,11 @@ function Sidebar({
 			)}
 			{toggleSelectState.exist && (
 				<IconButton
+					aria-label={
+						!toggleSelectState.selectAllButtonState
+							? 'Выделить все элементы'
+							: 'Снять выделение со всех элементов'
+					}
 					iconType='both'
 					className={styles['sidebar__button']}
 					ref={toggleSelectState.ref}
@@ -48,6 +54,11 @@ function Sidebar({
 			)}
 			{togglePinState.exist && (
 				<IconButton
+					aria-label={
+						togglePinState.pinAllButtonState
+							? 'Закрепить выделенные элементы'
+							: 'Открепить выделенные элементы'
+					}
 					iconType='stroke'
 					className={styles['sidebar__button']}
 					ref={togglePinState.ref}
@@ -63,6 +74,7 @@ function Sidebar({
 			)}
 			{changeFolder.exist && (
 				<IconButton
+					aria-label='Поменять папку для выделенных заметок'
 					iconType='stroke'
 					className={styles['sidebar__button']}
 					ref={changeFolder.ref}

@@ -101,6 +101,9 @@ function NotesFolder() {
 	return (
 		<>
 			<InteractiveList
+				role='tabpanel'
+				aria-description='Заметки'
+				id={`note-folder-${folderId}`}
 				className={style['notes-list']}
 				isNotFocusable={folderNotes.length === 0}
 			>

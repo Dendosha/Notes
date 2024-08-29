@@ -48,7 +48,7 @@ function Task({
 			)}
 			<div className={styles['task__text']}>
 				<span className={styles['task__title']}>{children}</span>
-				<span className={styles['task__date']}>
+				<span aria-hidden={true} className={styles['task__date']}>
 					{formatDate(ISOStringToDate(date))}
 				</span>
 				{data.pinned.state && (

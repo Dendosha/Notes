@@ -1,7 +1,6 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Folder from '../../../components/Folder/Folder';
-import InteractiveList from '../../../components/InteractiveList/InteractiveList';
 import { handleListFocus } from '../../../helpers/handleListFocus';
 import { sortItems } from '../../../helpers/sortItems';
 import { useAppSelector } from '../../../hooks/useAppSelector.hook';
@@ -12,6 +11,8 @@ function FolderList<T extends HTMLElement, K extends HTMLElement>({
 	className
 }: FolderListProps<T, K>) {
 	const location = useLocation();
+
+	const [tabIndex, setTabIndex] = useState<0 | -1>(0);
 
 	const firstFolderRef = useRef<HTMLAnchorElement>(null);
 	const lastFolderRef = useRef<HTMLAnchorElement>(null);
@@ -31,28 +32,50 @@ function FolderList<T extends HTMLElement, K extends HTMLElement>({
 			return;
 		}
 
-		const currentLink = e.target as HTMLAnchorElement;
-		const currentListItem = currentLink.parentElement as HTMLLIElement;
+		const currentListItem = e.target as HTMLAnchorElement;
+		let itemToFocus: HTMLAnchorElement;
 
 		switch (e.key) {
 			case 'ArrowUp':
 			case 'ArrowLeft':
+				e.preventDefault();
+
 				if (currentListItem === e.currentTarget.firstElementChild) {
-					lastFolderRef.current?.focus();
+					itemToFocus = e.currentTarget.lastElementChild as HTMLAnchorElement;
 				} else {
-					(
-						currentListItem.previousElementSibling
-							?.firstElementChild as HTMLAnchorElement
-					).focus();
+					itemToFocus =
+						currentListItem.previousElementSibling as HTMLAnchorElement;
 				}
+				itemToFocus?.focus({ preventScroll: true });
+				itemToFocus?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 				break;
 			case 'ArrowDown':
 			case 'ArrowRight':
+				e.preventDefault();
+
 				if (currentListItem === e.currentTarget.lastElementChild) {
-					firstFolderRef.current?.focus();
+					itemToFocus = e.currentTarget.firstElementChild as HTMLAnchorElement;
 				} else {
-					(currentListItem.nextElementSibling as HTMLLIElement).focus();
+					itemToFocus = currentListItem.nextElementSibling as HTMLAnchorElement;
 				}
+				itemToFocus?.focus({ preventScroll: true });
+				itemToFocus?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+				break;
+			case 'Home':
+				e.preventDefault();
+				itemToFocus = currentListItem.parentElement
+					?.firstElementChild as HTMLAnchorElement;
+
+				itemToFocus?.focus({ preventScroll: true });
+				itemToFocus?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+				break;
+			case 'End':
+				e.preventDefault();
+				itemToFocus = currentListItem.parentElement
+					?.lastElementChild as HTMLAnchorElement;
+
+				itemToFocus?.focus({ preventScroll: true });
+				itemToFocus?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 				break;
 		}
 	};
@@ -60,7 +83,7 @@ function FolderList<T extends HTMLElement, K extends HTMLElement>({
 	const handleFolderListFocus = (e: React.FocusEvent) => {
 		if (!activeFolderRef.current) {
 			for (const listItem of e.currentTarget.childNodes) {
-				const anchorItem = listItem.firstChild as HTMLAnchorElement;
+				const anchorItem = listItem as HTMLAnchorElement;
 
 				if (anchorItem.href.includes(location.pathname)) {
 					activeFolderRef.current = anchorItem;
@@ -72,34 +95,41 @@ function FolderList<T extends HTMLElement, K extends HTMLElement>({
 		handleListFocus(e, activeFolderRef.current);
 	};
 
-	const handleListItemFocus = (e: React.FocusEvent) => {
-		(e.currentTarget.firstElementChild as HTMLAnchorElement).focus();
-	};
-
 	const handleFolderClick = (
 		e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
 	) => {
+		if (activeFolderRef.current) {
+			activeFolderRef.current.ariaSelected = 'false';
+		}
+		e.currentTarget.ariaSelected = 'true';
 		activeFolderRef.current = e.currentTarget;
 	};
 
 	return (
-		<InteractiveList
-			isNotFocusable={isSelection}
+		<div
+			role='tablist'
+			aria-label='Список папок'
+			tabIndex={isSelection ? -1 : tabIndex}
 			className={className}
+			onFocus={e => {
+				setTabIndex(-1);
+				handleFolderListFocus(e);
+			}}
+			onBlur={() => setTabIndex(0)}
 			onKeyDown={handleKeyDown}
-			onFocus={handleFolderListFocus}
 		>
-			<li tabIndex={-1} onFocus={handleListItemFocus}>
-				<Folder
-					ref={firstFolderRef}
-					to={'/notes/all'}
-					disabled={isSelection}
-					tabIndex={-1}
-					onClick={handleFolderClick}
-				>
-					{folderAll.name}
-				</Folder>
-			</li>
+			<Folder
+				role='tab'
+				aria-selected={true}
+				aria-controls={'note-folder-1'}
+				ref={firstFolderRef}
+				to={'/notes/all'}
+				disabled={isSelection}
+				tabIndex={-1}
+				onClick={handleFolderClick}
+			>
+				{folderAll.name}
+			</Folder>
 			{folderList.map((folder, index, array) => {
 				let ref = null;
 				const href = `/notes/folder-${folder.id}`;
@@ -109,21 +139,23 @@ function FolderList<T extends HTMLElement, K extends HTMLElement>({
 				}
 
 				return (
-					<li key={folder.id} tabIndex={-1} onFocus={handleListItemFocus}>
-						<Folder
-							ref={ref}
-							to={href}
-							disabled={isSelection}
-							pinned={folder.pinned.state}
-							tabIndex={-1}
-							onClick={handleFolderClick}
-						>
-							{folder.name}
-						</Folder>
-					</li>
+					<Folder
+						role='tab'
+						aria-selected={false}
+						aria-controls={`note-folder-${folder.id}`}
+						ref={ref}
+						to={href}
+						disabled={isSelection}
+						pinned={folder.pinned.state}
+						tabIndex={-1}
+						onClick={handleFolderClick}
+						key={folder.id}
+					>
+						{folder.name}
+					</Folder>
 				);
 			})}
-		</InteractiveList>
+		</div>
 	);
 }
 

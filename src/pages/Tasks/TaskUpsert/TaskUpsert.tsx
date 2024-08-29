@@ -158,6 +158,7 @@ function TaskUpsert() {
 					placeholder='Описание задачи'
 				/>
 				<IconButton
+					aria-label='Отменить'
 					ref={cancelButtonRef}
 					colorScheme='primary'
 					appearance='circle'
@@ -167,6 +168,7 @@ function TaskUpsert() {
 					<CancelButtonIcon />
 				</IconButton>
 				<IconButton
+					aria-label='Сохранить'
 					ref={confirmButtonRef}
 					colorScheme='primary'
 					appearance='circle'

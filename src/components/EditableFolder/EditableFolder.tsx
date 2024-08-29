@@ -42,9 +42,9 @@ function EditableFolder({
 			<div className={styles['editable-folder__text']}>
 				<span className={styles['editable-folder__title']}>{children}</span>
 				<span className={styles['editable-folder__note-count']}>
-					Заметок: {data.notes.length}
+					Количество заметок: {data.notes.length}
 				</span>
-				<span className={styles['editable-folder__date']}>
+				<span aria-hidden={true} className={styles['editable-folder__date']}>
 					{formatDate(ISOStringToDate(date))}
 				</span>
 				{data.pinned.state && (

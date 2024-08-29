@@ -37,6 +37,7 @@ function RootLayout() {
 				>
 					<li className={styles['navigation__item']}>
 						<IconNavLink
+							aria-label='Заметки'
 							appearance='polygon'
 							to={'/notes'}
 							disabled={isSelection}
@@ -46,6 +47,7 @@ function RootLayout() {
 					</li>
 					<li className={styles['navigation__item']}>
 						<IconNavLink
+							aria-label='Задачи'
 							appearance='polygon'
 							to={'/tasks'}
 							disabled={isSelection}
@@ -63,6 +65,7 @@ function RootLayout() {
 					disabled={isSelection}
 				/>
 				<IconNavLink
+					aria-label='Настройки'
 					className={styles['root-layout__settings-link']}
 					appearance='polygon'
 					iconType='stroke'

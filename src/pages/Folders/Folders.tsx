@@ -172,6 +172,7 @@ function Folders() {
 		<div className={styles['folders']}>
 			<div className={styles['folders__header']}>
 				<IconButton
+					aria-label='Вернуться к заметкам'
 					iconType='stroke'
 					onClick={() => navigate(-1)}
 					tabIndex={isSelection ? -1 : 0}
@@ -210,6 +211,7 @@ function Folders() {
 			<div className={styles['folders__buttons']}>
 				{!isSelection ? (
 					<IconButton
+						aria-label='Создать папку'
 						appearance='circle'
 						colorScheme='primary'
 						className={styles['folders__add-button']}
@@ -219,6 +221,7 @@ function Folders() {
 					</IconButton>
 				) : (
 					<IconButton
+						aria-label='Удалить выделенные папки'
 						appearance='circle'
 						colorScheme='primary'
 						className={styles['folders__remove-button']}

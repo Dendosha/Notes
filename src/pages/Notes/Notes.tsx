@@ -214,6 +214,7 @@ function Notes() {
 		<div className={styles['notes']}>
 			<div ref={foldersParentRef} className={styles['notes__folders']}>
 				<NavLink
+					aria-label='Папки'
 					ref={foldersPageAnchorRef}
 					to={'/folders'}
 					className={cn(styles['notes__edit-folders'], {
@@ -271,6 +272,7 @@ function Notes() {
 			<div className={styles['notes__buttons']}>
 				{!isSelection ? (
 					<IconButton
+						aria-label='Создать заметку'
 						appearance='circle'
 						colorScheme='primary'
 						className={styles['notes__add-button']}
@@ -280,6 +282,7 @@ function Notes() {
 					</IconButton>
 				) : (
 					<IconButton
+						aria-label='Удалить выделенные заметки'
 						appearance='circle'
 						colorScheme='primary'
 						className={styles['notes__remove-button']}

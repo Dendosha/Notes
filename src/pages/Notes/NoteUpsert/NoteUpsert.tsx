@@ -132,6 +132,8 @@ function NoteUpsert() {
 			}
 		} else if (titleRef.current?.value || descriptionRef.current?.value) {
 			createNote();
+		} else {
+			handleExit();
 		}
 	};
 
@@ -162,7 +164,12 @@ function NoteUpsert() {
 	return (
 		<div className={styles['note-upsert']} onKeyDown={handleKeyDown}>
 			<div className={styles['note-upsert__header']}>
-				<IconButton iconType='stroke' onClick={handleUpsert} ref={buttonRef}>
+				<IconButton
+					aria-label='Сохранить изменения и вернуться к заметкам'
+					iconType='stroke'
+					onClick={handleUpsert}
+					ref={buttonRef}
+				>
 					<BackButtonIcon />
 				</IconButton>
 				<TextField
@@ -171,7 +178,7 @@ function NoteUpsert() {
 					autoComplete='off'
 					name='note-title'
 					defaultValue={noteExist?.title}
-					placeholder='Заголовок'
+					placeholder='Заголовок заметки'
 				/>
 			</div>
 			<div className={styles['note-upsert__content']}>
@@ -180,7 +187,7 @@ function NoteUpsert() {
 					ref={descriptionRef}
 					name='note-description'
 					defaultValue={noteExist?.content}
-					placeholder='Описание'
+					placeholder='Описание заметки'
 					className={styles['note-upsert__description']}
 				/>
 			</div>

@@ -10,7 +10,11 @@ function Settings() {
 	return (
 		<div className={styles['settings']}>
 			<div className={styles['settings__header']}>
-				<IconButton iconType='stroke' onClick={() => navigate(-1)}>
+				<IconButton
+					aria-label='Закрыть настройки'
+					iconType='stroke'
+					onClick={() => navigate(-1)}
+				>
 					<BackButtonIcon />
 				</IconButton>
 				<h2 className={styles['settings__title']}>Настройки</h2>

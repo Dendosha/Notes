@@ -40,7 +40,7 @@ function Note({
 			)}
 			<div className={styles['note__text']}>
 				<span className={styles['note__title']}>{children}</span>
-				<span className={styles['note__date']}>
+				<span aria-hidden={true} className={styles['note__date']}>
 					{formatDate(ISOStringToDate(date))}
 				</span>
 				{data.pinned.state && (

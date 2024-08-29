@@ -45,6 +45,22 @@ const InteractiveList = forwardRef<HTMLUListElement, InteractiveListProps>(
 					itemToFocus?.focus({ preventScroll: true });
 					itemToFocus?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 					break;
+				case 'Home':
+					e.preventDefault();
+					itemToFocus = currentListItem.parentElement
+						?.firstElementChild as HTMLLIElement;
+
+					itemToFocus?.focus({ preventScroll: true });
+					itemToFocus?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+					break;
+				case 'End':
+					e.preventDefault();
+					itemToFocus = currentListItem.parentElement
+						?.lastElementChild as HTMLLIElement;
+
+					itemToFocus?.focus({ preventScroll: true });
+					itemToFocus?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+					break;
 			}
 		};
 

@@ -17,6 +17,12 @@
 		column-gap: rem(10);
 	}
 
+	&__folders-list {
+		&:focus {
+			outline: none;
+		}
+	}
+
 	&__edit-folders {
 		flex-shrink: 0;
 		max-height: rem(60);
