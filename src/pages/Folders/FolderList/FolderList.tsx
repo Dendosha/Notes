@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { MenuItem } from '../../../components/ContextMenu/ContextMenu.props';
 import EditableFolder from '../../../components/EditableFolder/EditableFolder';
 import InteractiveList from '../../../components/InteractiveList/InteractiveList';
@@ -31,8 +30,6 @@ function FolderList({ isSelection, confirmAction }: FolderListProps) {
 		settings.sort,
 		true
 	).filter(folder => folder.id !== 1);
-
-	const navigate = useNavigate();
 
 	const openRenameFolder = (folder: FoldersItem) => {
 		setRenameFolderProps({
