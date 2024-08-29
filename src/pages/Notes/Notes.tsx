@@ -50,6 +50,7 @@ function Notes() {
 
 	const [isAnyNoteSelected, setIsAnyNoteSelected] = useState(false);
 	const [selectAllButtonState, setSelectAllButtonState] = useState(false);
+	const [pinAllButtonState, setPinAllButtonState] = useState(false);
 	const [changeFolderModalState, setChangeFolderModalState] = useState(false);
 
 	const firstSidebarButtonRef = useRef<HTMLButtonElement>(null);
@@ -78,17 +79,37 @@ function Notes() {
 			setIsSelection(true);
 			setIsAnyNoteSelected(true);
 
-			if (
-				!notes.items
-					.filter(note => note.folderId.includes(folderId))
-					.find(note => !note.selected)
-			) {
+			const folderNotes = notes.items.filter(note =>
+				note.folderId.includes(folderId)
+			);
+			const selectedFolderNotes = folderNotes.filter(note => note.selected);
+
+			const isPinnedAndUnpinnedNotes =
+				selectedFolderNotes.find(note => note.pinned.state) &&
+				selectedFolderNotes.find(note => !note.pinned.state);
+
+			const isOnlyPinnedNotes =
+				selectedFolderNotes.filter(note => note.pinned.state).length ===
+				selectedFolderNotes.length;
+
+			const isOnlyUnpinnedNotes =
+				selectedFolderNotes.filter(note => !note.pinned.state).length ===
+				selectedFolderNotes.length;
+
+			if (!folderNotes.find(note => !note.selected)) {
 				setSelectAllButtonState(true);
 			} else {
 				setSelectAllButtonState(false);
 			}
+
+			if (isOnlyUnpinnedNotes || isPinnedAndUnpinnedNotes) {
+				setPinAllButtonState(true);
+			} else if (isOnlyPinnedNotes) {
+				setPinAllButtonState(false);
+			}
 		} else {
 			setIsAnyNoteSelected(false);
+			setPinAllButtonState(true);
 		}
 
 		const handleKeyDown = (e: KeyboardEvent) => {
@@ -175,7 +196,11 @@ function Notes() {
 
 	const toggleNotesPinState = () => {
 		notes.items.forEach(note => {
-			if (note.selected) {
+			if (!note.selected) {
+				return;
+			}
+
+			if ((pinAllButtonState && !note.pinned.state) || !pinAllButtonState) {
 				dispatch(notesActions.togglePin(note.id));
 			}
 		});
@@ -221,7 +246,8 @@ function Notes() {
 						togglePinState={{
 							exist: true,
 							action: toggleNotesPinState,
-							disabled: !isAnyNoteSelected
+							disabled: !isAnyNoteSelected,
+							pinAllButtonState: pinAllButtonState
 						}}
 						changeFolder={{
 							exist: true,
