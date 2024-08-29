@@ -1,6 +1,6 @@
 import CustomSelect from '../../../components/CustomSelect/CustomSelect';
+import styles from './Setting.module.scss';
 import { SettingProps } from './Setting.props';
-import styles from './Settings.module.scss';
 
 function Setting<T>({
 	children,
