@@ -44,6 +44,7 @@ function Tasks() {
 
 	const [isAnyTaskSelected, setIsAnyTaskSelected] = useState(false);
 	const [selectAllButtonState, setSelectAllButtonState] = useState(false);
+	const [pinAllButtonState, setPinAllButtonState] = useState(false);
 
 	const { isSelection, setIsSelection } = useRootContext();
 
@@ -63,13 +64,34 @@ function Tasks() {
 			setIsSelection(true);
 			setIsAnyTaskSelected(true);
 
+			const selectedTasks = tasks.items.filter(task => task.selected);
+
+			const isPinnedAndUnpinnedTasks =
+				selectedTasks.find(task => task.pinned.state) &&
+				selectedTasks.find(task => !task.pinned.state);
+
+			const isOnlyPinnedTasks =
+				selectedTasks.filter(task => task.pinned.state).length ===
+				selectedTasks.length;
+
+			const isOnlyUnpinnedTasks =
+				selectedTasks.filter(task => !task.pinned.state).length ===
+				selectedTasks.length;
+
 			if (!tasks.items.find(task => !task.selected)) {
 				setSelectAllButtonState(true);
 			} else {
 				setSelectAllButtonState(false);
 			}
+
+			if (isOnlyUnpinnedTasks || isPinnedAndUnpinnedTasks) {
+				setPinAllButtonState(true);
+			} else if (isOnlyPinnedTasks) {
+				setPinAllButtonState(false);
+			}
 		} else {
 			setIsAnyTaskSelected(false);
+			setPinAllButtonState(true);
 		}
 
 		const handleKeyDown = (e: KeyboardEvent) => {
@@ -154,7 +176,11 @@ function Tasks() {
 
 	const toggleTasksPinState = () => {
 		tasks.items.forEach(task => {
-			if (task.selected) {
+			if (!task.selected) {
+				return;
+			}
+
+			if ((pinAllButtonState && !task.pinned.state) || !pinAllButtonState) {
 				dispatch(tasksActions.togglePin(task.id));
 			}
 		});
@@ -179,7 +205,8 @@ function Tasks() {
 						togglePinState={{
 							exist: true,
 							action: toggleTasksPinState,
-							disabled: !isAnyTaskSelected
+							disabled: !isAnyTaskSelected,
+							pinAllButtonState: pinAllButtonState
 						}}
 						changeFolder={{
 							exist: false
