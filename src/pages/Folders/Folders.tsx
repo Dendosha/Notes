@@ -7,7 +7,6 @@ import IconButton from '../../components/IconButton/IconButton';
 import ActionConfirmationModal from '../../components/Modals/ActionConfirmationModal/ActionConfirmationModal';
 import CreateFolderModal from '../../components/Modals/CreateFolderModal/CreateFolderModal';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import { sortItems } from '../../helpers/sortItems';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../hooks/useAppSelector.hook';
 import { foldersActions } from '../../store/folders.slice';
@@ -30,6 +29,7 @@ function Folders() {
 
 	const [isAnyFolderSelected, setIsAnyFolderSelected] = useState(false);
 	const [selectAllButtonState, setSelectAllButtonState] = useState(false);
+	const [pinAllButtonState, setPinAllButtonState] = useState(false);
 	const [createFolderModalState, setCreateFolderModalState] = useState(false);
 
 	const [isSelection, setIsSelection] = useState(false);
@@ -39,13 +39,6 @@ function Folders() {
 	const dispatch = useAppDispatch();
 	const folders = useAppSelector(state => state.folders);
 	const settings = useAppSelector(state => state.settings);
-
-	const folderAll = folders.items.find(folder => folder.id === 1)!;
-	const folderList = sortItems(
-		folders.items.filter(folder => folder.id !== 1),
-		settings.sort,
-		true
-	).filter(folder => folder.id !== 1);
 
 	const navigate = useNavigate();
 
@@ -60,6 +53,20 @@ function Folders() {
 			setIsSelection(true);
 			setIsAnyFolderSelected(true);
 
+			const selectedFolders = folders.items.filter(folder => folder.selected);
+
+			const isPinnedAndUnpinnedFolders =
+				selectedFolders.find(folder => folder.pinned.state) &&
+				selectedFolders.find(folder => !folder.pinned.state);
+
+			const isOnlyPinnedFolders =
+				selectedFolders.filter(folder => folder.pinned.state).length ===
+				selectedFolders.length;
+
+			const isOnlyUnpinnedFolders =
+				selectedFolders.filter(folder => !folder.pinned.state).length ===
+				selectedFolders.length;
+
 			if (
 				!folders.items
 					.filter(folder => folder.id !== 1)
@@ -69,8 +76,15 @@ function Folders() {
 			} else {
 				setSelectAllButtonState(false);
 			}
+
+			if (isOnlyUnpinnedFolders || isPinnedAndUnpinnedFolders) {
+				setPinAllButtonState(true);
+			} else if (isOnlyPinnedFolders) {
+				setPinAllButtonState(false);
+			}
 		} else {
 			setIsAnyFolderSelected(false);
+			setPinAllButtonState(true);
 		}
 
 		const handleKeyDown = (e: KeyboardEvent) => {
@@ -144,7 +158,11 @@ function Folders() {
 
 	const toggleFoldersPinState = () => {
 		folders.items.forEach(folder => {
-			if (folder.selected) {
+			if (!folder.selected) {
+				return;
+			}
+
+			if ((pinAllButtonState && !folder.pinned.state) || !pinAllButtonState) {
 				dispatch(foldersActions.togglePin(folder.id));
 			}
 		});
@@ -179,7 +197,8 @@ function Folders() {
 						togglePinState={{
 							exist: true,
 							action: toggleFoldersPinState,
-							disabled: !isAnyFolderSelected
+							disabled: !isAnyFolderSelected,
+							pinAllButtonState: pinAllButtonState
 						}}
 						changeFolder={{
 							exist: false
