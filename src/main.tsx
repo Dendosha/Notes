@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -6,14 +6,24 @@ import { PersistGate } from 'redux-persist/integration/react';
 import BaseRouteNavigate from './helpers/BaseRouteNavigate.tsx';
 import './index.scss';
 import RootLayout from './layout/RootLayout/RootLayout.tsx';
-import Folders from './pages/Folders/Folders.tsx';
-import NoteUpsert from './pages/Notes/NoteUpsert/NoteUpsert.tsx';
-import Notes from './pages/Notes/Notes.tsx';
-import NotesFolder from './pages/Notes/NotesFolder/NotesFolder.tsx';
-import Settings from './pages/Settings/Settings.tsx';
-import TaskUpsert from './pages/Tasks/TaskUpsert/TaskUpsert.tsx';
-import Tasks from './pages/Tasks/Tasks.tsx';
+import Loading from './pages/Loading/Loading.tsx';
 import { persistor, store } from './store/store.ts';
+
+const Notes = lazy(() => import('./pages/Notes/Notes.tsx'));
+const NotesFolder = lazy(
+	() => import('./pages/Notes/NotesFolder/NotesFolder.tsx')
+);
+const NoteUpsert = lazy(
+	() => import('./pages/Notes/NoteUpsert/NoteUpsert.tsx')
+);
+const Folders = lazy(() => import('./pages/Folders/Folders.tsx'));
+
+const Tasks = lazy(() => import('./pages/Tasks/Tasks.tsx'));
+const TaskUpsert = lazy(
+	() => import('./pages/Tasks/TaskUpsert/TaskUpsert.tsx')
+);
+
+const Settings = lazy(() => import('./pages/Settings/Settings.tsx'));
 
 const router = createBrowserRouter([
 	{
@@ -26,15 +36,27 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: 'notes',
-				element: <Notes />,
+				element: (
+					<Suspense fallback={<Loading />}>
+						<Notes />
+					</Suspense>
+				),
 				children: [
 					{
 						path: ':folder',
-						element: <NotesFolder />,
+						element: (
+							<Suspense fallback={<Loading />}>
+								<NotesFolder />
+							</Suspense>
+						),
 						children: [
 							{
 								path: ':note/edit',
-								element: <NoteUpsert />
+								element: (
+									<Suspense fallback={<Loading />}>
+										<NoteUpsert />
+									</Suspense>
+								)
 							}
 						]
 					}
@@ -42,11 +64,19 @@ const router = createBrowserRouter([
 			},
 			{
 				path: 'tasks',
-				element: <Tasks />,
+				element: (
+					<Suspense fallback={<Loading />}>
+						<Tasks />
+					</Suspense>
+				),
 				children: [
 					{
 						path: ':task/edit',
-						element: <TaskUpsert />
+						element: (
+							<Suspense fallback={<Loading />}>
+								<TaskUpsert />
+							</Suspense>
+						)
 					}
 				]
 			}
@@ -54,11 +84,19 @@ const router = createBrowserRouter([
 	},
 	{
 		path: '/settings',
-		element: <Settings />
+		element: (
+			<Suspense fallback={<Loading />}>
+				<Settings />
+			</Suspense>
+		)
 	},
 	{
 		path: '/folders',
-		element: <Folders />
+		element: (
+			<Suspense fallback={<Loading />}>
+				<Folders />
+			</Suspense>
+		)
 	},
 	{
 		path: '*',
