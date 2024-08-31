@@ -59,7 +59,7 @@ const Button = forwardRef(function Button<
 	const { ownerState, ...others } = props;
 	return (
 		<button type='button' {...others} ref={ref}>
-			{others.children}
+			<span>{others.children}</span>
 			<ArrowIcon
 				className={cn(styles['custom-select__icon'], {
 					[styles['custom-select__icon_open']]: ownerState.open
