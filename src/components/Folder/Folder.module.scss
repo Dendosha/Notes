@@ -7,6 +7,7 @@
 	text-decoration: none;
 	display: inline-flex;
 	align-items: center;
+	justify-content: center;
 	gap: rem(10);
 	@extend %button;
 
@@ -25,9 +26,18 @@
 	&__pin {
 		width: rem(20);
 		height: rem(20);
+
+		@media screen and (max-width: em(768)) {
+			width: rem(15);
+			height: rem(15);
+		}
 	}
 
 	&__text {
 		@extend %font-medium;
+	}
+
+	@media screen and (max-width: em(768)) {
+		gap: rem(5);
 	}
 }

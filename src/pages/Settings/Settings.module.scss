@@ -2,7 +2,7 @@
 @use '../../styles/general' as *;
 
 .settings {
-	padding: rem(40);
+	grid-column: content-start / content-end;
 	height: 100%;
 	overflow: hidden;
 
@@ -14,6 +14,18 @@
 		display: flex;
 		align-items: center;
 		column-gap: rem(40);
+
+		@media screen and (max-width: em(1200)) {
+			column-gap: rem(30);
+		}
+
+		@media screen and (max-width: em(1024)) {
+			column-gap: rem(20);
+		}
+
+		@media screen and (max-width: em(768)) {
+			column-gap: rem(10);
+		}
 	}
 
 	&__title {
@@ -26,7 +38,6 @@
 		overflow: hidden;
 
 		display: flex;
-		column-gap: rem(40);
 	}
 
 	&__sidebar {
@@ -50,5 +61,23 @@
 	&__add-button,
 	&__remove-button {
 		box-shadow: 0 0 rem(10) var(--shadow-color);
+	}
+
+	@media screen and (max-width: em(1200)) {
+		row-gap: rem(30);
+	}
+
+	@media screen and (max-width: em(1024)) {
+		max-height: calc(100vh - rem(60));
+		row-gap: rem(10);
+	}
+
+	@media screen and (max-width: em(768)) {
+		max-height: calc(100vh - rem(40));
+		row-gap: rem(0);
+	}
+
+	@media screen and (max-width: em(480)) {
+		max-height: calc(100vh - rem(20));
 	}
 }

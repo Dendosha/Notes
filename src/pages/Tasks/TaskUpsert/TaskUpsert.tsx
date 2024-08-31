@@ -156,6 +156,7 @@ function TaskUpsert() {
 					onKeyDown={handleFieldKeyDown}
 					autoComplete='off'
 					placeholder='Описание задачи'
+					className={styles['task-upsert__input']}
 				/>
 				<IconButton
 					aria-label='Отменить'

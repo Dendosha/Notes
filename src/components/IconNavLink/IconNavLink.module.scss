@@ -16,6 +16,7 @@
 	transition: background-color var(--transition-duration);
 
 	& svg {
+		max-height: 100%;
 		--color: var(--primary-color);
 	}
 
@@ -86,6 +87,27 @@
 		height: rem(105);
 
 		border-radius: rem(15);
+
+		@media screen and (max-width: em(1200)) {
+			width: rem(85);
+			height: rem(85);
+
+			padding: rem(12);
+		}
+
+		@media screen and (max-width: em(1024)) {
+			width: rem(75);
+			height: rem(75);
+
+			border-radius: rem(10);
+		}
+
+		@media screen and (max-width: em(768)) {
+			width: rem(55);
+			height: rem(55);
+
+			padding: rem(10);
+		}
 	}
 
 	// icon-button_circle
@@ -95,6 +117,27 @@
 		height: rem(150);
 
 		border-radius: 50%;
+
+		@media screen and (max-width: em(1200)) {
+			width: rem(120);
+			height: rem(120);
+
+			padding: rem(30);
+		}
+
+		@media screen and (max-width: em(1024)) {
+			width: rem(100);
+			height: rem(100);
+
+			padding: rem(25);
+		}
+
+		@media screen and (max-width: em(768)) {
+			width: rem(80);
+			height: rem(80);
+
+			padding: rem(20);
+		}
 	}
 
 	& svg {

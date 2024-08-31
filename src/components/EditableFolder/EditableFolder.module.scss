@@ -46,6 +46,12 @@
 	&__title {
 		grid-area: title;
 		@extend %font-big;
+
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-line-clamp: 1;
+		line-clamp: 1;
+		-webkit-box-orient: vertical;
 	}
 
 	// .editable-folder__note-count
@@ -68,10 +74,32 @@
 		grid-area: pin;
 		width: rem(20);
 		height: rem(20);
+
+		@media screen and (max-width: em(768)) {
+			width: rem(15);
+			height: rem(15);
+		}
 	}
 
 	// .editable-folder__select-checkbox
 
 	&__select-checkbox {
+	}
+
+	@media screen and (max-width: em(1200)) {
+		gap: rem(20);
+
+		padding: rem(20) rem(24);
+		border-radius: rem(10);
+	}
+
+	@media screen and (max-width: em(1024)) {
+		padding: rem(16) rem(20);
+	}
+
+	@media screen and (max-width: em(768)) {
+		gap: rem(15);
+
+		padding: rem(14) rem(16);
 	}
 }

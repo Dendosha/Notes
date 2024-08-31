@@ -13,26 +13,143 @@
 	overflow: hidden;
 }
 
+%root-outlet {
+	@media screen and (max-width: em(1024)) {
+		row-gap: rem(15);
+	}
+}
+
+%root-outlet-content {
+	height: 100%;
+	overflow: hidden;
+
+	display: flex;
+	column-gap: rem(40);
+
+	@media screen and (max-width: em(1200)) {
+		column-gap: rem(30);
+	}
+
+	@media screen and (max-width: em(1024)) {
+		column-gap: rem(20);
+	}
+
+	@media screen and (max-width: em(768)) {
+		column-gap: rem(15);
+	}
+
+	@media screen and (max-width: em(480)) {
+		flex-direction: column;
+		row-gap: rem(15);
+	}
+}
+
+%sidebar {
+	height: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
+
+	flex-shrink: 0;
+
+	display: grid;
+	grid-auto-rows: min-content;
+	row-gap: rem(20);
+
+	@media screen and (max-width: em(768)) {
+		row-gap: rem(15);
+	}
+
+	@media screen and (max-width: em(480)) {
+		height: auto;
+		overflow-y: hidden;
+		overflow-x: auto;
+
+		grid-auto-flow: column;
+		justify-items: center;
+		justify-content: space-between;
+		grid-auto-columns: min-content;
+		column-gap: rem(15);
+	}
+}
+
+%primary-circle-button {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+}
+
 %font-small {
 	font-size: rem(24);
+
+	@media screen and (max-width: em(1200)) {
+		font-size: rem(22);
+	}
+
+	@media screen and (max-width: em(480)) {
+		font-size: rem(18);
+	}
 }
 
 %font-medium {
 	font-size: rem(32);
+
+	@media screen and (max-width: em(1200)) {
+		font-size: rem(28);
+	}
+
+	@media screen and (max-width: em(1024)) {
+		font-size: rem(24);
+	}
+
+	@media screen and (max-width: em(768)) {
+		font-size: rem(20);
+	}
+
+	@media screen and (max-width: em(480)) {
+		font-size: rem(18);
+	}
 }
 
 %font-big {
 	font-size: rem(48);
+
+	@media screen and (max-width: em(1200)) {
+		font-size: rem(38);
+	}
+
+	@media screen and (max-width: em(1024)) {
+		font-size: rem(34);
+	}
+
+	@media screen and (max-width: em(768)) {
+		font-size: rem(30);
+	}
+
+	@media screen and (max-width: em(480)) {
+		font-size: rem(24);
+	}
 }
 
 %font-huge {
 	font-size: rem(80);
+
+	@media screen and (max-width: em(1200)) {
+		font-size: rem(70);
+	}
+
+	@media screen and (max-width: em(1024)) {
+		font-size: rem(60);
+	}
+
+	@media screen and (max-width: em(768)) {
+		font-size: rem(40);
+	}
 }
 
 %button {
 	cursor: pointer;
 
-	border-radius: rem(10);
+	border-radius: rem(15);
 	border: none;
 
 	padding: rem(10) rem(15);
@@ -66,5 +183,18 @@
 
 		background-color: var(--element-disabled-color);
 		color: var(--text-disabled-color);
+	}
+
+	@media screen and (max-width: em(1200)) {
+		padding: rem(8) rem(12);
+	}
+
+	@media screen and (max-width: em(1024)) {
+		border-radius: rem(10);
+	}
+
+	@media screen and (max-width: em(768)) {
+		padding: rem(4) rem(8);
+		border-radius: rem(8);
 	}
 }

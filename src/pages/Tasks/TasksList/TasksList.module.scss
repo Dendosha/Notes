@@ -11,11 +11,14 @@
 	}
 
 	&__title {
-		padding-left: rem(35);
 		@extend %font-big;
 
 		&:not(:last-child) {
 			margin-bottom: rem(20);
 		}
+	}
+
+	@media screen and (max-width: em(1024)) {
+		row-gap: rem(15);
 	}
 }

@@ -2,6 +2,8 @@
 @use '../../styles/general' as *;
 
 .notes {
+	position: relative;
+
 	height: 100%;
 	overflow: hidden;
 
@@ -17,17 +19,10 @@
 		column-gap: rem(10);
 	}
 
-	&__folders-list {
-		&:focus {
-			outline: none;
-		}
-	}
-
 	&__edit-folders {
 		flex-shrink: 0;
 		max-height: rem(60);
 
-		padding: rem(8);
 		border-radius: rem(15);
 		padding: rem(10);
 		background-color: var(--element-color);
@@ -81,6 +76,21 @@
 				stroke: var(--primary-disabled-color);
 			}
 		}
+
+		@media screen and (max-width: em(1200)) {
+			max-height: rem(50);
+		}
+
+		@media screen and (max-width: em(1024)) {
+			max-height: rem(45);
+			padding: rem(6);
+			border-radius: rem(10);
+		}
+
+		@media screen and (max-width: em(768)) {
+			max-height: rem(35);
+			border-radius: rem(8);
+		}
 	}
 
 	&__folders-list {
@@ -99,36 +109,30 @@
 			flex-shrink: 0;
 			width: max-content;
 		}
+
+		@media screen and (max-width: em(768)) {
+			border-radius: rem(8);
+		}
 	}
 
 	&__content {
-		height: 100%;
-		overflow: hidden;
-
-		display: flex;
-		column-gap: rem(40);
+		@extend %root-outlet-content;
 	}
 
 	&__sidebar {
-		height: fit-content;
-		max-height: 100%;
-		overflow-y: auto;
-		overflow-x: hidden;
-
-		flex-shrink: 0;
-
-		display: grid;
-		row-gap: rem(20);
+		@extend %sidebar;
 	}
 
 	&__buttons {
-		position: fixed;
-		right: rem(40);
-		bottom: rem(40);
+		@extend %primary-circle-button;
 	}
 
 	&__add-button,
 	&__remove-button {
 		box-shadow: 0 0 rem(10) var(--shadow-color);
+	}
+
+	@media screen and (max-width: em(1024)) {
+		row-gap: rem(15);
 	}
 }

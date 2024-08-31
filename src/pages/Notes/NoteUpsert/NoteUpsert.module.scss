@@ -13,9 +13,33 @@
 
 	background-color: var(--bg-color);
 
+	@media screen and (max-width: em(1200)) {
+		gap: rem(30);
+	}
+
+	@media screen and (max-width: em(1024)) {
+		gap: rem(20);
+	}
+
+	@media screen and (max-width: em(768)) {
+		gap: rem(15);
+	}
+
 	&__header {
 		display: flex;
 		gap: rem(40);
+
+		@media screen and (max-width: em(1200)) {
+			gap: rem(30);
+		}
+
+		@media screen and (max-width: em(1024)) {
+			gap: rem(20);
+		}
+
+		@media screen and (max-width: em(768)) {
+			gap: rem(15);
+		}
 	}
 
 	&__description {
@@ -36,5 +60,25 @@
 		&::placeholder {
 			color: currentColor;
 		}
+
+		@media screen and (max-width: em(1200)) {
+			padding: rem(10) rem(15);
+		}
+
+		@media screen and (max-width: em(1024)) {
+			border-radius: rem(10);
+		}
+	}
+
+	@media screen and (max-width: em(1024)) {
+		padding: rem(30);
+	}
+
+	@media screen and (max-width: em(768)) {
+		padding: rem(20);
+	}
+
+	@media screen and (max-width: em(480)) {
+		padding: rem(15);
 	}
 }

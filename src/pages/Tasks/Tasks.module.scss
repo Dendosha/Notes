@@ -2,6 +2,8 @@
 @use '../../styles/general' as *;
 
 .tasks {
+	position: relative;
+
 	height: 100%;
 	overflow: hidden;
 
@@ -20,23 +22,11 @@
 	}
 
 	&__content {
-		height: 100%;
-		overflow: hidden;
-
-		display: flex;
-		column-gap: rem(40);
+		@extend %root-outlet-content;
 	}
 
 	&__sidebar {
-		height: fit-content;
-		max-height: 100%;
-		overflow-y: auto;
-		overflow-x: hidden;
-
-		flex-shrink: 0;
-
-		display: grid;
-		row-gap: rem(20);
+		@extend %sidebar;
 	}
 
 	&__list-wrapper {
@@ -47,12 +37,14 @@
 		overflow-x: hidden;
 
 		flex-grow: 1;
+
+		@media screen and (max-width: em(1200)) {
+			border-radius: rem(10);
+		}
 	}
 
 	&__buttons {
-		position: fixed;
-		right: rem(40);
-		bottom: rem(40);
+		@extend %primary-circle-button;
 	}
 
 	&__add-button,

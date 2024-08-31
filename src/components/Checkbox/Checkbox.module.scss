@@ -7,6 +7,10 @@
 		&::before {
 			border-radius: rem(5);
 		}
+
+		@media screen and (max-width: em(768)) {
+			border-radius: rem(10);
+		}
 	}
 
 	&_circle .custom-checkbox,
@@ -66,5 +70,35 @@
 
 	&:active {
 		background-color: var(--primary-active-color);
+	}
+
+	@media screen and (max-width: em(1200)) {
+		width: rem(45);
+		height: rem(45);
+
+		&::before {
+			width: rem(28);
+			height: rem(28);
+		}
+	}
+
+	@media screen and (max-width: em(1024)) {
+		width: rem(40);
+		height: rem(40);
+
+		&::before {
+			width: rem(23);
+			height: rem(23);
+		}
+	}
+
+	@media screen and (max-width: em(768)) {
+		width: rem(35);
+		height: rem(35);
+
+		&::before {
+			width: rem(21);
+			height: rem(21);
+		}
 	}
 }

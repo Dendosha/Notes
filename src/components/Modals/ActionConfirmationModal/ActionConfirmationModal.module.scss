@@ -15,6 +15,10 @@
 
 		display: flex;
 		gap: rem(20);
+
+		@media screen and (max-width: em(480)) {
+			gap: rem(15);
+		}
 	}
 
 	&__button {

@@ -12,7 +12,17 @@
 	display: flex;
 	gap: rem(20);
 
+	@media screen and (max-width: em(480)) {
+		justify-self: stretch;
+		gap: rem(15);
+	}
+
 	&__button {
+		min-height: rem(40);
 		box-shadow: 0 0 rem(10) 0 var(--shadow-color);
+
+		@media screen and (max-width: em(480)) {
+			flex-basis: 100%;
+		}
 	}
 }

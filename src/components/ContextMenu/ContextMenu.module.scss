@@ -22,6 +22,10 @@
 
 	background-color: var(--context-menu-bg-color);
 
+	@media screen and (max-width: em(768)) {
+		border-radius: rem(13);
+	}
+
 	// .context-menu__item
 
 	&__item {

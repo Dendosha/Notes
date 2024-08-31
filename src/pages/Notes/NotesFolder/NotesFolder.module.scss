@@ -17,4 +17,12 @@
 	&:focus {
 		outline: none;
 	}
+
+	@media screen and (max-width: em(1200)) {
+		border-radius: rem(10);
+	}
+
+	@media screen and (max-width: em(1024)) {
+		row-gap: rem(15);
+	}
 }

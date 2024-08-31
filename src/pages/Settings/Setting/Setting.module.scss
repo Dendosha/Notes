@@ -4,12 +4,23 @@
 .settings-list-item {
 	display: grid;
 	align-items: center;
-	grid-template-columns: 1fr rem(700);
+	grid-template-columns: 1fr rem(600);
+	column-gap: rem(30);
 
 	&__title {
 		@extend %font-big;
 	}
 
 	&__select {
+	}
+
+	@media screen and (max-width: em(1200)) {
+		grid-template-columns: 1fr rem(500);
+	}
+
+	@media screen and (max-width: em(1024)) {
+		grid-template-columns: revert;
+		grid-template-rows: repeat(2, 1fr);
+		row-gap: rem(10);
 	}
 }

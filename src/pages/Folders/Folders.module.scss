@@ -2,7 +2,10 @@
 @use '../../styles/general' as *;
 
 .folders {
-	padding: rem(40);
+	position: relative;
+
+	grid-column: content-start / content-end;
+
 	height: 100%;
 	overflow: hidden;
 
@@ -14,6 +17,18 @@
 		display: flex;
 		align-items: center;
 		column-gap: rem(40);
+
+		@media screen and (max-width: em(1200)) {
+			column-gap: rem(30);
+		}
+
+		@media screen and (max-width: em(1024)) {
+			column-gap: rem(20);
+		}
+
+		@media screen and (max-width: em(768)) {
+			column-gap: rem(10);
+		}
 	}
 
 	&__title {
@@ -22,33 +37,37 @@
 	}
 
 	&__content {
-		height: 100%;
-		overflow: hidden;
-
-		display: flex;
-		column-gap: rem(40);
+		@extend %root-outlet-content;
 	}
 
 	&__sidebar {
-		height: fit-content;
-		max-height: 100%;
-		overflow-y: auto;
-		overflow-x: hidden;
-
-		flex-shrink: 0;
-
-		display: grid;
-		row-gap: rem(20);
+		@extend %sidebar;
 	}
 
 	&__buttons {
-		position: fixed;
-		right: rem(40);
-		bottom: rem(40);
+		@extend %primary-circle-button;
 	}
 
 	&__add-button,
 	&__remove-button {
 		box-shadow: 0 0 rem(10) var(--shadow-color);
+	}
+
+	@media screen and (max-width: em(1200)) {
+		row-gap: rem(30);
+	}
+
+	@media screen and (max-width: em(1024)) {
+		height: calc(100vh - rem(60));
+		row-gap: rem(20);
+	}
+
+	@media screen and (max-width: em(768)) {
+		height: calc(100vh - rem(40));
+		column-gap: rem(15);
+	}
+
+	@media screen and (max-width: em(480)) {
+		height: calc(100vh - rem(30));
 	}
 }
