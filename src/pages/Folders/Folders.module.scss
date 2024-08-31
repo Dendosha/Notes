@@ -50,7 +50,7 @@
 
 	&__add-button,
 	&__remove-button {
-		box-shadow: 0 0 rem(10) var(--shadow-color);
+		border: rem(4) solid #8a6500;
 	}
 
 	@media screen and (max-width: em(1200)) {

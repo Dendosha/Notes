@@ -47,6 +47,7 @@
 	}
 
 	&__button {
+		border: rem(4) solid #8a6500;
 		&:last-child {
 			justify-self: end;
 		}
