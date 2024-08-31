@@ -140,7 +140,9 @@ function TasksList({ confirmAction, upsertTask }: TasksListProps) {
 						))}
 				</InteractiveList>
 			)}
-			{completedTasks.length !== 0 && (
+			{completedTasks.filter(task =>
+				task.content.toLowerCase().includes(searchValue)
+			).length !== 0 && (
 				<>
 					<h2 className={styles['tasks-list__title']}>Выполненные:</h2>
 					<InteractiveList
