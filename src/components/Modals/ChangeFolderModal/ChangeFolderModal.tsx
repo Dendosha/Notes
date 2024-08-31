@@ -24,12 +24,14 @@ function ChangeFolderModal({
 
 	const [newFolder, setNewFodler] = useState<string | number>('');
 
-	const customSelectItems = folders.items.map(
-		(item): CustomSelectItem<number> => ({
-			value: item.id,
-			label: item.name
-		})
-	);
+	const customSelectItems = folders.items
+		.map(
+			(item): CustomSelectItem<number> => ({
+				value: item.id,
+				label: item.name
+			})
+		)
+		.filter(folder => folder.value !== 1);
 
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
