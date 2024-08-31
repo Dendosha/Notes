@@ -71,6 +71,7 @@ function RootLayout() {
 						placeholder='Поиск'
 						name='search'
 						value={searchValue}
+						onKeyDown={e => e.code === 'Escape' && e.currentTarget.blur()}
 						onChange={handleSearch}
 						autoComplete='off'
 						disabled={isSelection}
