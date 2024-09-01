@@ -52,7 +52,10 @@ function Task({
 					{formatDate(ISOStringToDate(date))}
 				</span>
 				{data.pinned.state && (
-					<img src='/icons/pin.svg' className={styles['task__pin']}></img>
+					<img
+						src='/note-app/icons/pin.svg'
+						className={styles['task__pin']}
+					></img>
 				)}
 			</div>
 		</InteractiveListItem>

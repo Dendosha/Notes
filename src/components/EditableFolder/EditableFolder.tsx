@@ -49,7 +49,7 @@ function EditableFolder({
 				</span>
 				{data.pinned.state && (
 					<img
-						src='/icons/pin.svg'
+						src='/note-app/icons/pin.svg'
 						className={styles['editable-folder__pin']}
 					></img>
 				)}
