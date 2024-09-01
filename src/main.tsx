@@ -25,84 +25,89 @@ const TaskUpsert = lazy(
 
 const Settings = lazy(() => import('./pages/Settings/Settings.tsx'));
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+	[
+		{
+			path: '/',
+			element: (
+				<BaseRouteNavigate>
+					<RootLayout />
+				</BaseRouteNavigate>
+			),
+			children: [
+				{
+					path: 'notes',
+					element: (
+						<Suspense fallback={<Loading />}>
+							<Notes />
+						</Suspense>
+					),
+					children: [
+						{
+							path: ':folder',
+							element: (
+								<Suspense fallback={<Loading />}>
+									<NotesFolder />
+								</Suspense>
+							),
+							children: [
+								{
+									path: ':note/edit',
+									element: (
+										<Suspense fallback={<Loading />}>
+											<NoteUpsert />
+										</Suspense>
+									)
+								}
+							]
+						}
+					]
+				},
+				{
+					path: 'tasks',
+					element: (
+						<Suspense fallback={<Loading />}>
+							<Tasks />
+						</Suspense>
+					),
+					children: [
+						{
+							path: ':task/edit',
+							element: (
+								<Suspense fallback={<Loading />}>
+									<TaskUpsert />
+								</Suspense>
+							)
+						}
+					]
+				}
+			]
+		},
+		{
+			path: '/settings',
+			element: (
+				<Suspense fallback={<Loading />}>
+					<Settings />
+				</Suspense>
+			)
+		},
+		{
+			path: '/folders',
+			element: (
+				<Suspense fallback={<Loading />}>
+					<Folders />
+				</Suspense>
+			)
+		},
+		{
+			path: '*',
+			element: <>Error</>
+		}
+	],
 	{
-		path: '/',
-		element: (
-			<BaseRouteNavigate>
-				<RootLayout />
-			</BaseRouteNavigate>
-		),
-		children: [
-			{
-				path: 'notes',
-				element: (
-					<Suspense fallback={<Loading />}>
-						<Notes />
-					</Suspense>
-				),
-				children: [
-					{
-						path: ':folder',
-						element: (
-							<Suspense fallback={<Loading />}>
-								<NotesFolder />
-							</Suspense>
-						),
-						children: [
-							{
-								path: ':note/edit',
-								element: (
-									<Suspense fallback={<Loading />}>
-										<NoteUpsert />
-									</Suspense>
-								)
-							}
-						]
-					}
-				]
-			},
-			{
-				path: 'tasks',
-				element: (
-					<Suspense fallback={<Loading />}>
-						<Tasks />
-					</Suspense>
-				),
-				children: [
-					{
-						path: ':task/edit',
-						element: (
-							<Suspense fallback={<Loading />}>
-								<TaskUpsert />
-							</Suspense>
-						)
-					}
-				]
-			}
-		]
-	},
-	{
-		path: '/settings',
-		element: (
-			<Suspense fallback={<Loading />}>
-				<Settings />
-			</Suspense>
-		)
-	},
-	{
-		path: '/folders',
-		element: (
-			<Suspense fallback={<Loading />}>
-				<Folders />
-			</Suspense>
-		)
-	},
-	{
-		path: '*',
-		element: <>Error</>
+		basename: import.meta.env.BASE_URL
 	}
-]);
+);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
