@@ -69,15 +69,18 @@
 
 	@media screen and (max-width: em(1024)) {
 		max-height: calc(100vh - rem(60));
+		max-height: calc(100dvh - rem(60));
 		row-gap: rem(10);
 	}
 
 	@media screen and (max-width: em(768)) {
 		max-height: calc(100vh - rem(40));
+		max-height: calc(100dvh - rem(40));
 		row-gap: rem(0);
 	}
 
 	@media screen and (max-width: em(480)) {
 		max-height: calc(100vh - rem(20));
+		max-height: calc(100dvh - rem(20));
 	}
 }

@@ -4,6 +4,7 @@
 .root-layout {
 	grid-column: content-start / content-end;
 	height: calc(100vh - rem(80));
+	height: calc(100dvh - rem(80));
 
 	display: grid;
 	grid-template-rows: auto 1fr;
@@ -164,11 +165,13 @@
 
 	@media screen and (max-width: em(1024)) {
 		height: calc(100vh - rem(60));
+		height: calc(100dvh - rem(60));
 		row-gap: rem(20);
 	}
 
 	@media screen and (max-width: em(768)) {
 		height: calc(100vh - rem(40));
+		height: calc(100dvh - rem(40));
 		column-gap: rem(15);
 	}
 }
