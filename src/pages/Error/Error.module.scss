@@ -1,0 +1,22 @@
+@use '/src/styles/functions' as *;
+@use '/src/styles/general' as *;
+
+.error-page {
+	grid-column: content-start / content-end;
+
+	display: grid;
+	grid-auto-rows: min-content;
+	gap: rem(20);
+
+	&__link {
+		justify-self: start;
+
+		@extend %button;
+		@extend %font-medium;
+		text-decoration: none;
+	}
+
+	&__message {
+		@extend %font-medium;
+	}
+}
