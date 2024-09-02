@@ -6,6 +6,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import BaseRouteNavigate from './helpers/BaseRouteNavigate.tsx';
 import './index.scss';
 import RootLayout from './layout/RootLayout/RootLayout.tsx';
+import Error from './pages/Error/Error.tsx';
 import Loading from './pages/Loading/Loading.tsx';
 import { persistor, store } from './store/store.ts';
 
@@ -34,6 +35,7 @@ const router = createBrowserRouter(
 					<RootLayout />
 				</BaseRouteNavigate>
 			),
+			errorElement: <Error />,
 			children: [
 				{
 					path: 'notes',
@@ -42,6 +44,7 @@ const router = createBrowserRouter(
 							<Notes />
 						</Suspense>
 					),
+					errorElement: <Error />,
 					children: [
 						{
 							path: ':folder',
@@ -50,6 +53,7 @@ const router = createBrowserRouter(
 									<NotesFolder />
 								</Suspense>
 							),
+							errorElement: <Error />,
 							children: [
 								{
 									path: ':note/edit',
@@ -57,7 +61,8 @@ const router = createBrowserRouter(
 										<Suspense fallback={<Loading />}>
 											<NoteUpsert />
 										</Suspense>
-									)
+									),
+									errorElement: <Error />
 								}
 							]
 						}
@@ -70,6 +75,7 @@ const router = createBrowserRouter(
 							<Tasks />
 						</Suspense>
 					),
+					errorElement: <Error />,
 					children: [
 						{
 							path: ':task/edit',
@@ -77,7 +83,8 @@ const router = createBrowserRouter(
 								<Suspense fallback={<Loading />}>
 									<TaskUpsert />
 								</Suspense>
-							)
+							),
+							errorElement: <Error />
 						}
 					]
 				}
@@ -89,7 +96,8 @@ const router = createBrowserRouter(
 				<Suspense fallback={<Loading />}>
 					<Settings />
 				</Suspense>
-			)
+			),
+			errorElement: <Error />
 		},
 		{
 			path: '/folders',
@@ -97,11 +105,12 @@ const router = createBrowserRouter(
 				<Suspense fallback={<Loading />}>
 					<Folders />
 				</Suspense>
-			)
+			),
+			errorElement: <Error />
 		},
 		{
 			path: '*',
-			element: <>Error</>
+			element: <Error />
 		}
 	],
 	{
