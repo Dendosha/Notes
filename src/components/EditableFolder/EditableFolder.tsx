@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import PinIcon from '../../assets/icons/PinIcon';
 import { formatDate, ISOStringToDate } from '../../helpers/dateTime';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../hooks/useAppSelector.hook';
@@ -48,10 +49,7 @@ function EditableFolder({
 					{formatDate(ISOStringToDate(date))}
 				</span>
 				{data.pinned.state && (
-					<img
-						src='/note-app/icons/pin.svg'
-						className={styles['editable-folder__pin']}
-					></img>
+					<PinIcon className={styles['editable-folder__pin']} />
 				)}
 			</div>
 		</InteractiveListItem>

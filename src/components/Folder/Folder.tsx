@@ -1,6 +1,7 @@
 import cn from 'classnames';
 import { forwardRef } from 'react';
 import { NavLink } from 'react-router-dom';
+import PinIcon from '../../assets/icons/PinIcon';
 import styles from './Folder.module.scss';
 import { FolderProps } from './Folder.props';
 
@@ -21,12 +22,7 @@ const Folder = forwardRef<HTMLAnchorElement, FolderProps>(function Folder(
 			{...props}
 		>
 			<p className={styles['folder__text']}>{children}</p>
-			{pinned && (
-				<img
-					src='/note-app/icons/pin.svg'
-					className={styles['folder__pin']}
-				></img>
-			)}
+			{pinned && <PinIcon className={styles['folder__pin']} />}
 		</NavLink>
 	);
 });

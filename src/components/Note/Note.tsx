@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import PinIcon from '../../assets/icons/PinIcon';
 import { formatDate, ISOStringToDate } from '../../helpers/dateTime';
 import { useAppDispatch } from '../../hooks/useAppDispatch.hook';
 import { useAppSelector } from '../../hooks/useAppSelector.hook';
@@ -43,12 +44,7 @@ function Note({
 				<span aria-hidden={true} className={styles['note__date']}>
 					{formatDate(ISOStringToDate(date))}
 				</span>
-				{data.pinned.state && (
-					<img
-						src='/note-app/icons/pin.svg'
-						className={styles['note__pin']}
-					></img>
-				)}
+				{data.pinned.state && <PinIcon className={styles['note__pin']} />}
 			</div>
 		</InteractiveListItem>
 	);
